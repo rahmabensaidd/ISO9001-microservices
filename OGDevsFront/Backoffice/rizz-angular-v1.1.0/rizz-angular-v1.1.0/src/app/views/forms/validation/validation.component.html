@@ -1,0 +1,390 @@
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Bootstrap Custom Styles</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <form
+          class="row g-3 needs-validation"
+          novalidate
+          (ngSubmit)="validSubmit()"
+          [formGroup]="validationform"
+        >
+          <div class="col-md-4">
+            <label for="validationCustom01" class="form-label"
+              >First name</label
+            >
+            <input
+              formControlName="firstName"
+              [ngClass]="{ 'is-valid': submit && !form['firstName'].errors }"
+              type="text"
+              class="form-control"
+              id="validationCustom01"
+              value="Mark"
+              required
+            />
+            <div class="valid-feedback">Looks good!</div>
+          </div>
+          <div class="col-md-4">
+            <label for="validationCustom02" class="form-label">Last name</label>
+            <input
+              type="text"
+              formControlName="lastName"
+              [ngClass]="{ 'is-valid': submit && !form['lastName'].errors }"
+              class="form-control"
+              id="validationCustom02"
+              value="Otto"
+              required
+            />
+            <div class="valid-feedback">Looks good!</div>
+          </div>
+          <div class="col-md-4">
+            <label for="validationCustomUsername" class="form-label"
+              >Username</label
+            >
+            <div class="input-group has-validation">
+              <span class="input-group-text" id="inputGroupPrepend">&#64;</span>
+              <input
+                type="text"
+                formControlName="username"
+                [ngClass]="{
+                  'is-invalid': submit && form['username'].errors,
+                  'is-valid': submit && !form['username'].errors,
+                }"
+                class="form-control"
+                id="validationCustomUsername"
+                aria-describedby="inputGroupPrepend"
+                required
+              />
+              <div class="invalid-feedback">Please choose a username.</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="validationCustom03" class="form-label">City</label>
+            <input
+              type="text"
+              formControlName="city"
+              [ngClass]="{
+                'is-invalid': submit && form['city'].errors,
+                'is-valid': submit && !form['city'].errors,
+              }"
+              class="form-control"
+              id="validationCustom03"
+              required
+            />
+            <div class="invalid-feedback">Please provide a valid city.</div>
+          </div>
+          <div class="col-md-3">
+            <label for="validationCustom04" class="form-label">State</label>
+            <select
+              formControlName="state"
+              [ngClass]="{
+                'is-invalid': submit && form['state'].errors,
+                'is-valid': submit && !form['state'].errors,
+              }"
+              class="form-select"
+              id="validationCustom04"
+              required
+            >
+              <option selected disabled value="">Choose...</option>
+              <option>...</option>
+            </select>
+            <div class="invalid-feedback">Please select a valid state.</div>
+          </div>
+          <div class="col-md-3">
+            <label for="validationCustom05" class="form-label">Zip</label>
+            <input
+              type="text"
+              formControlName="zip"
+              [ngClass]="{
+                'is-invalid': submit && form['zip'].errors,
+                'is-valid': submit && !form['zip'].errors,
+              }"
+              class="form-control"
+              id="validationCustom05"
+              required
+            />
+            <div class="invalid-feedback">Please provide a valid zip.</div>
+          </div>
+          <div class="col-12">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value=""
+                id="invalidCheck"
+                required
+              />
+              <label class="form-check-label" for="invalidCheck">
+                Agree to terms and conditions
+              </label>
+              <div class="invalid-feedback">
+                You must agree before submitting.
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <button class="btn btn-primary" type="submit">Submit form</button>
+          </div>
+        </form>
+        <!--end form-->
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Validation Tooltips</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <form
+          class="row g-3 needs-validation"
+          novalidate
+          (ngSubmit)="formSubmit()"
+          [formGroup]="tooltipvalidationform"
+        >
+          <div class="col-md-4 position-relative">
+            <label for="validationTooltip01" class="form-label"
+              >First name</label
+            >
+            <input
+              type="text"
+              formControlName="firstName"
+              [ngClass]="{
+                'is-valid': formsubmit && !formData['firstName'].errors,
+              }"
+              class="form-control"
+              id="validationTooltip01"
+              value="Mark"
+              required
+            />
+            <div class="valid-tooltip">Looks good!</div>
+          </div>
+          <div class="col-md-4 position-relative">
+            <label for="validationTooltip02" class="form-label"
+              >Last name</label
+            >
+            <input
+              type="text"
+              formControlName="lastName"
+              [ngClass]="{
+                'is-valid': formsubmit && !formData['firstName'].errors,
+              }"
+              class="form-control"
+              id="validationTooltip02"
+              value="Otto"
+              required
+            />
+            <div class="valid-tooltip">Looks good!</div>
+          </div>
+          <div class="col-md-4 position-relative">
+            <label for="validationTooltipUsername" class="form-label"
+              >Username</label
+            >
+            <div class="input-group has-validation">
+              <span
+                class="input-group-text"
+                id="validationTooltipUsernamePrepend"
+                >&#64;</span
+              >
+              <input
+                type="text"
+                formControlName="userName"
+                [ngClass]="{
+                  'is-invalid': formsubmit && formData['userName'].errors,
+                  'is-valid': formsubmit && !formData['userName'].errors,
+                }"
+                class="form-control"
+                id="validationTooltipUsername"
+                aria-describedby="validationTooltipUsernamePrepend"
+                required
+              />
+              <div class="invalid-tooltip">
+                Please choose a unique and valid username.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 position-relative">
+            <label for="validationTooltip03" class="form-label">City</label>
+            <input
+              type="text"
+              formControlName="city"
+              [ngClass]="{
+                'is-invalid': formsubmit && formData['city'].errors,
+                'is-valid': formsubmit && !formData['city'].errors,
+              }"
+              class="form-control"
+              id="validationTooltip03"
+              required
+            />
+            <div class="invalid-tooltip">Please provide a valid city.</div>
+          </div>
+          <div class="col-md-3 position-relative">
+            <label for="validationTooltip04" class="form-label">State</label>
+            <select
+              class="form-select"
+              formControlName="state"
+              [ngClass]="{
+                'is-invalid': formsubmit && formData['state'].errors,
+                'is-valid': formsubmit && !formData['state'].errors,
+              }"
+              id="validationTooltip04"
+              required
+            >
+              <option selected disabled value="">Choose...</option>
+              <option>...</option>
+            </select>
+            <div class="invalid-tooltip">Please select a valid state.</div>
+          </div>
+          <div class="col-md-3 position-relative">
+            <label for="validationTooltip05" class="form-label">Zip</label>
+            <input
+              type="text"
+              formControlName="zip"
+              [ngClass]="{
+                'is-invalid': formsubmit && formData['zip'].errors,
+                'is-valid': formsubmit && !formData['zip'].errors,
+              }"
+              class="form-control"
+              id="validationTooltip05"
+              required
+            />
+            <div class="invalid-tooltip">Please provide a valid zip.</div>
+          </div>
+          <div class="col-12">
+            <button class="btn btn-primary" type="submit">Submit form</button>
+          </div>
+        </form>
+        <!--end form-->
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Custom Validation Form</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <form
+          id="form-validation-2"
+          class="form"
+          novalidate
+          (ngSubmit)="customSubmit()"
+          [formGroup]="customValidationForm"
+        >
+          <div class="mb-2">
+            <label for="username" class="form-label">Username</label>
+            <input
+              class="form-control"
+              type="text"
+              formControlName="userName"
+              [ngClass]="{
+                'is-invalid': cuSubmit && customData['userName'].errors,
+              }"
+              id="username"
+              placeholder="Enter Username"
+            />
+            <small
+              [ngClass]="{ error: cuSubmit && customData['userName'].errors }"
+              >Username must be at least 3 characters</small
+            >
+          </div>
+          <div class="mb-2">
+            <label for="email" class="form-label">Email</label>
+            <input
+              class="form-control"
+              type="text"
+              formControlName="email"
+              [ngClass]="{
+                'is-invalid': cuSubmit && customData['email'].errors,
+              }"
+              id="email"
+              placeholder="Enter email"
+            />
+            <small [ngClass]="{ error: cuSubmit && customData['email'].errors }"
+              >Email is not invalid</small
+            >
+          </div>
+          <div class="mb-2">
+            <label for="password" class="form-label">Password</label>
+            <input
+              class="form-control"
+              formControlName="password"
+              [ngClass]="{
+                'is-invalid': cuSubmit && customData['password'].errors,
+              }"
+              type="password"
+              id="password"
+              placeholder="Enter password"
+            />
+            <small
+              [ngClass]="{ error: cuSubmit && customData['password'].errors }"
+              >Password must be at least 6 characters
+            </small>
+          </div>
+          <div class="mb-3">
+            <label for="password2" class="form-label">Confirm Password</label>
+            <input
+              class="form-control"
+              formControlName="confirmpwd"
+              [ngClass]="{
+                'is-invalid':
+                  customValidationForm.get('confirmpwd')?.touched &&
+                  customValidationForm.errors?.['notSame'],
+              }"
+              type="password"
+              id="password2"
+              placeholder="Enter password again"
+            />
+            <small
+              [ngClass]="{
+                error:
+                  customValidationForm.get('confirmpwd')?.touched &&
+                  customValidationForm.errors?.['notSame'],
+              }"
+              >New password and confirm password doesn't match</small
+            >
+          </div>
+          <button type="submit" class="btn btn-primary">Submit form</button>
+        </form>
+        <!--end form-->
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->

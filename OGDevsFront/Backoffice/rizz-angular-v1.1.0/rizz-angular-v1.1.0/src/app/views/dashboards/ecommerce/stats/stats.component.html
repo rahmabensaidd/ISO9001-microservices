@@ -1,0 +1,107 @@
+<div class="container">
+  <!-- Statistiques générales -->
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Total Documents</h4>
+        </div>
+        <div class="card-body pt-0">
+          <h2 class="text-center">{{ totalDocuments }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Salaire Brut Moyen</h4>
+        </div>
+        <div class="card-body pt-0">
+          <h2 class="text-center">{{ avgSalary | number:'1.0-2' }} €</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Durée Moyenne (jours)</h4>
+        </div>
+        <div class="card-body pt-0">
+          <h2 class="text-center">{{ avgDuration | number:'1.0-2' }}</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Graphiques -->
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-6">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Taux de Complétion</h4>
+        </div>
+        <div class="card-body pt-0">
+          <canvas
+            baseChart
+            [data]="documentDonutChartConfig.data"
+            [options]="documentDonutChartConfig.options"
+            [type]="'doughnut'"
+            height="300"
+          ></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-6">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Documents par Catégorie</h4>
+        </div>
+        <div class="card-body pt-0">
+          <canvas
+            baseChart
+            [datasets]="barChartCategory.data.datasets"
+            [labels]="barChartCategory.data.labels"
+            [options]="barChartCategory.options"
+            [type]="'bar'"
+            height="300"
+          ></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-6">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Corrélation Salaire-Durée</h4>
+        </div>
+        <div class="card-body pt-0">
+          <h2 class="text-center">{{ documentCorrelation | number:'1.0-2' }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-6">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Documents par Créateur</h4>
+        </div>
+        <div class="card-body pt-0">
+          <canvas
+            baseChart
+            [datasets]="barChartCreator.data.datasets"
+            [labels]="barChartCreator.data.labels"
+            [options]="barChartCreator.options"
+            [type]="'bar'"
+            height="300"
+          ></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Message d'erreur -->
+  <div *ngIf="errorMessage" class="alert alert-danger text-center">
+    {{ errorMessage }}
+  </div>
+</div>

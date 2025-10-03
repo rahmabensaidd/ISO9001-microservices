@@ -1,0 +1,46 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+export interface User {
+  id: string;
+  username: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  role?: string;
+
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class KeycloakUserService {
+  private baseUrl = 'http://localhost:8089/api/users';
+
+  constructor(private http: HttpClient) {}
+
+  // Fetch all users
+  getAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.baseUrl}/all`);
+  }
+
+  // Create user
+  createUser(username: string, email: string, password: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/create`, null, {
+      params: { username, email, password },
+    });
+  }
+
+  // Delete user
+  deleteUser(userId: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/delete/${userId}`);
+  }
+
+  // Update user email
+  updateUserEmail(userId: string, newEmail: string): Observable<any> {
+    return this.http.put(`${this.baseUrl}/update-email/${userId}`, null, {
+      params: { newEmail },
+    });
+  }
+}

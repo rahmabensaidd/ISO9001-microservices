@@ -1,0 +1,329 @@
+<div class="row justify-content-center">
+  <div class="col-md-12 col-lg-12">
+    <!-- User Management Card -->
+    <div class="card mt-4">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">User Management</h4>
+          </div>
+        </div>
+      </div>
+      <div class="card-body pt-0">
+        <div class="table-responsive">
+          <table class="table table-striped mb-0">
+            <thead class="table-light">
+            <tr>
+              <th>Profile Photo</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Enabled</th>
+              <th>Roles</th>
+              <th class="text-end">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let user of users; trackBy: trackByUserId">
+              <td>
+                <img
+                  [src]="user.profilePhotoPath || defaultProfilePhoto"
+                  alt="Profile Photo for {{ user.username }}"
+                  class="img-thumbnail"
+                  style="max-width: 50px; max-height: 50px;"
+                  (error)="user.profilePhotoPath = defaultProfilePhoto"
+                />
+              </td>
+              <td>{{ user.username }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.enabled ? 'Yes' : 'No' }}</td>
+              <td>
+                  <span
+                    *ngFor="let role of user.roles; let last = last"
+                    class="badge bg-transparent border border-success text-success me-1"
+                  >
+                    {{ role }}{{ last ? '' : ',' }}
+                  </span>
+                <span *ngIf="!user.roles?.length">-</span>
+              </td>
+              <td class="text-end">
+                <a
+                  href="javascript:void(0);"
+                  class="me-0.5"
+                  (click)="editUserStart(user)"
+                  attr.aria-label="Edit user {{ user.username }}"
+                >
+                  <i class="las la-pen text-secondary font-16"></i>
+                </a>
+                <a
+                  href="javascript:void(0);"
+                  (click)="deleteUser(user.id)"
+                  attr.aria-label="Delete user {{ user.username }}"
+                >
+                  <i class="las la-trash-alt text-secondary font-16"></i>
+                </a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <p *ngIf="users.length === 0" class="text-center text-danger mt-3">
+          No users found.
+        </p>
+      </div>
+    </div>
+    <!-- Add/Edit User Card -->
+    <div class="card mt-4">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">{{ newUser.id ? 'Edit User: ' + newUser.username : 'Add a User' }}</h4>
+          </div>
+        </div>
+      </div>
+      <div class="card-body pt-0">
+        <form #userForm="ngForm" (ngSubmit)="newUser.id ? updateUser(newUser.id) : addUser()" novalidate>
+          <div class="form-group mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input
+              type="text"
+              id="username"
+              class="form-control"
+              [(ngModel)]="newUser.username"
+              name="username"
+              required
+              #username="ngModel"
+              [disabled]="!!newUser.id"
+              aria-required="true"
+            />
+            <div
+              *ngIf="username.invalid && (username.dirty || username.touched)"
+              class="text-danger small mt-1"
+            >
+              Username is required.
+            </div>
+          </div>
+          <div class="form-group mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="email"
+              id="email"
+              class="form-control"
+              [(ngModel)]="newUser.email"
+              name="email"
+              required
+              email
+              #email="ngModel"
+              aria-required="true"
+            />
+            <div
+              *ngIf="email.invalid && (email.dirty || email.touched)"
+              class="text-danger small mt-1"
+            >
+              Email is required and must be valid.
+            </div>
+          </div>
+          <div class="form-group mb-3" *ngIf="!newUser.id">
+            <label for="password" class="form-label">Password</label>
+            <input
+              type="password"
+              id="password"
+              class="form-control"
+              [(ngModel)]="newUser.password"
+              name="password"
+              required
+              #password="ngModel"
+              aria-required="true"
+            />
+            <div
+              *ngIf="password.invalid && (password.dirty || password.touched)"
+              class="text-danger small mt-1"
+            >
+              Password is required.
+            </div>
+          </div>
+          <div class="form-group mb-3">
+            <label for="role" class="form-label">Role</label>
+            <select
+              id="role"
+              class="form-control"
+              [(ngModel)]="newUser.role"
+              name="role"
+              required
+              #role="ngModel"
+              aria-required="true"
+            >
+              <option value="" disabled>Select a role</option>
+              <option *ngFor="let role of availableRoles; trackBy: trackByRoleName" [value]="role">
+                {{ role }}
+              </option>
+            </select>
+            <div
+              *ngIf="role.invalid && (role.dirty || role.touched)"
+              class="text-danger small mt-1"
+            >
+              Please select a role.
+            </div>
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary me-2"
+            [disabled]="userForm.invalid"
+            attr.aria-label="{{ newUser.id ? 'Update user' : 'Add user' }}"
+          >
+            {{ newUser.id ? 'Update' : 'Add User' }}
+          </button>
+          <button
+            *ngIf="newUser.id"
+            type="button"
+            class="btn btn-secondary"
+            (click)="newUser = { username: '', email: '', password: '', role: '', roles: [] }"
+            aria-label="Cancel user edit"
+          >
+            Cancel
+          </button>
+        </form>
+      </div>
+    </div>
+    <!-- Role Management Card -->
+    <div class="card mt-4">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Role Management</h4>
+          </div>
+        </div>
+      </div>
+      <div class="card-body pt-0">
+        <div class="table-responsive">
+          <table class="table table-striped mb-0">
+            <thead class="table-light">
+            <tr>
+              <th>Role Name</th>
+              <th>Description</th>
+              <th class="text-end">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let role of roles; trackBy: trackByRoleId">
+              <td>{{ role.roleName }}</td>
+              <td>{{ role.description || '-' }}</td>
+              <td class="text-end">
+                <a
+                  href="javascript:void(0);"
+                  class="me-0.5"
+                  (click)="editRoleStart(role)"
+                  attr.aria-label="Edit role {{ role.roleName }}"
+                >
+                  <i class="las la-pen text-secondary font-16"></i>
+                </a>
+                <a
+                  href="javascript:void(0);"
+                  (click)="deleteRole(role.id)"
+                  attr.aria-label="Delete role {{ role.roleName }}"
+                >
+                  <i class="las la-trash-alt text-secondary font-16"></i>
+                </a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <p *ngIf="roles.length === 0" class="text-center text-danger mt-3">
+          No roles found.
+        </p>
+      </div>
+    </div>
+    <!-- Add Role Card -->
+    <div class="card mt-4">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Add a Role</h4>
+          </div>
+        </div>
+      </div>
+      <div class="card-body pt-0">
+        <form #roleForm="ngForm" (ngSubmit)="addRole()" novalidate>
+          <div class="form-group mb-3">
+            <label for="roleName" class="form-label">Role Name</label>
+            <input
+              type="text"
+              id="roleName"
+              class="form-control"
+              [(ngModel)]="newRole.name"
+              name="roleName"
+              required
+              #roleName="ngModel"
+              aria-required="true"
+            />
+            <div
+              *ngIf="roleName.invalid && (roleName.dirty || roleName.touched)"
+              class="text-danger small mt-1"
+            >
+              Role name is required.
+            </div>
+          </div>
+          <div class="form-group mb-3">
+            <label for="roleDescription" class="form-label">Description</label>
+            <input
+              type="text"
+              id="roleDescription"
+              class="form-control"
+              [(ngModel)]="newRole.description"
+              name="roleDescription"
+              #roleDescription="ngModel"
+              aria-describedby="roleDescriptionHelp"
+            />
+            <small id="roleDescriptionHelp" class="form-text text-muted">
+              Optional role description.
+            </small>
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="roleForm.invalid"
+            aria-label="Add role"
+          >
+            Add Role
+          </button>
+        </form>
+        <!-- Edit Role Form -->
+        <div class="mt-4" *ngIf="editRole.name" role="dialog">
+          <h5>Edit Role: {{ editRole.name }}</h5>
+          <form #editRoleForm="ngForm" (ngSubmit)="updateRole()" novalidate>
+            <div class="form-group mb-3">
+              <label for="editRoleDescription" class="form-label">Description</label>
+              <input
+                type="text"
+                id="editRoleDescription"
+                class="form-control"
+                [(ngModel)]="editRole.description"
+                name="editRoleDescription"
+                #editRoleDescription="ngModel"
+                aria-describedby="editRoleDescriptionHelp"
+              />
+              <small id="editRoleDescriptionHelp" class="form-text text-muted">
+                Update the role description.
+              </small>
+            </div>
+            <button
+              type="submit"
+              class="btn btn-primary me-2"
+              aria-label="Update role"
+            >
+              Update
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="editRole = { name: '', description: '' }"
+              aria-label="Cancel role edit"
+            >
+              Cancel
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

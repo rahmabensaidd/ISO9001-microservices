@@ -1,0 +1,95 @@
+<div class="card">
+  <card-title title="Monthly Avg. Income" selected="This Year" />
+
+  <div class="card-body pt-0">
+    <div id="monthly_income" class="apex-charts">
+      <apx-chart
+        [chart]="monthlyChart.chart!"
+        [colors]="monthlyChart.colors!"
+        [plotOptions]="monthlyChart.plotOptions!"
+        [dataLabels]="monthlyChart.dataLabels!"
+        [series]="monthlyChart.series!"
+        [xaxis]="monthlyChart.xaxis!"
+        [yaxis]="monthlyChart.yaxis!"
+        [grid]="monthlyChart.grid!"
+        [legend]="monthlyChart.legend!"
+      ></apx-chart>
+    </div>
+    <div class="row">
+      <div class="col-md-6 col-lg-3">
+        <div class="card shadow-none border mb-3 mb-lg-0">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col text-center">
+                <span class="fs-18 fw-semibold">{{ currency }}24,500</span>
+                <h6 class="text-uppercase text-muted mt-2 m-0">
+                  Today's Revenue
+                </h6>
+              </div>
+              <!--end col-->
+            </div>
+          </div>
+          <!--end card-body-->
+        </div>
+        <!--end card-body-->
+      </div>
+      <!--end col-->
+      <div class="col-md-6 col-lg-3">
+        <div class="card shadow-none border mb-3 mb-lg-0">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col text-center">
+                <span class="fs-18 fw-semibold">82.8%</span>
+                <h6 class="text-uppercase text-muted mt-2 m-0">
+                  Conversion Rate
+                </h6>
+              </div>
+              <!--end col-->
+            </div>
+          </div>
+          <!--end card-body-->
+        </div>
+        <!--end card-body-->
+      </div>
+      <!--end col-->
+
+      <div class="col-md-6 col-lg-3">
+        <div class="card shadow-none border mb-3 mb-lg-0">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col text-center">
+                <span class="fs-18 fw-semibold">{{ currency }}9982.00</span>
+                <h6 class="text-uppercase text-muted mt-2 m-0">
+                  Total Expenses
+                </h6>
+              </div>
+              <!--end col-->
+            </div>
+          </div>
+          <!--end card-body-->
+        </div>
+        <!--end card-->
+      </div>
+      <!--end col-->
+      <div class="col-md-6 col-lg-3">
+        <div class="card shadow-none border mb-3 mb-lg-0">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col text-center">
+                <span class="fs-18 fw-semibold">{{ currency }}80.5</span>
+                <h6 class="text-uppercase text-muted mt-2 m-0">Avg. Value</h6>
+              </div>
+              <!--end col-->
+            </div>
+          </div>
+          <!--end card-body-->
+        </div>
+        <!--end card-body-->
+      </div>
+      <!--end col-->
+    </div>
+    <!--end row-->
+  </div>
+  <!--end card-body-->
+</div>
+<!--end card-->

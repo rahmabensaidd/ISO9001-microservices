@@ -1,0 +1,1094 @@
+<div class="invoice-container" style="background-color: white;">
+  <!-- Logo at the top left -->
+  <div class="logo-container">
+    <img src="assets/images/cropped-coconsultlogo_flood2__3_.png" alt="Logo" class="logo">
+  </div>
+
+  <h1 class="title">Document Management</h1>
+
+  <!-- Form Section -->
+  <div class="form-section">
+    <form class="document-form" #documentForm="ngForm" (ngSubmit)="document.id ? updateDocument() : saveDocument()">
+      <div class="form-group">
+        <label for="type">Document Type</label>
+        <select id="type" class="form-control" [(ngModel)]="document.type" name="type" required
+                [class.is-invalid]="documentForm.controls['type']?.invalid && documentForm.controls['type']?.touched">
+          <option *ngFor="let key of typeDocumentKeys" [value]="key">{{ typeDocumentLabels[key] }}</option>
+        </select>
+        <div class="invalid-feedback">Document type is required.</div>
+      </div>
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" id="title" class="form-control" [(ngModel)]="document.title" name="title" placeholder="Document title" required
+               [class.is-invalid]="documentForm.controls['title']?.invalid && documentForm.controls['title']?.touched">
+        <div class="invalid-feedback">Title is required.</div>
+      </div>
+      <div class="form-group">
+        <label for="content">Content</label>
+        <textarea id="content" class="form-control" [(ngModel)]="document.content" name="content" placeholder="Document content" rows="4" required
+                  [class.is-invalid]="documentForm.controls['content']?.invalid && documentForm.controls['content']?.touched"></textarea>
+        <div class="invalid-feedback">Content is required.</div>
+      </div>
+
+      <!-- Specific Fields for PAYSLIP -->
+      <div *ngIf="document.type === TypeDocument.FICHE_PAIE" class="specific-section">
+        <h3>Payslip</h3>
+        <div class="form-group">
+          <label for="employe">Employee</label>
+          <input type="text" id="employe" class="form-control" [(ngModel)]="document.employe" name="employe" placeholder="Employee name" required
+                 [class.is-invalid]="documentForm.controls['employe']?.invalid && documentForm.controls['employe']?.touched">
+          <div class="invalid-feedback">Employee name is required.</div>
+        </div>
+        <div class="form-group">
+          <label for="postePaie">Position</label>
+          <input type="text" id="postePaie" class="form-control" [(ngModel)]="document.poste" name="postePaie" placeholder="Employee position">
+        </div>
+        <div class="form-group">
+          <label for="salaireBrut">Gross Salary</label>
+          <input type="number" id="salaireBrut" class="form-control" [(ngModel)]="document.salaireBrut" name="salaireBrut" placeholder="Gross salary" step="0.01" required min="0"
+                 [class.is-invalid]="documentForm.controls['salaireBrut']?.invalid && documentForm.controls['salaireBrut']?.touched">
+          <div class="invalid-feedback">Gross salary is required and must be greater than or equal to 0.</div>
+        </div>
+        <div class="form-group">
+          <label for="salaireNet">Net Salary</label>
+          <input type="number" id="salaireNet" class="form-control" [(ngModel)]="document.salaireNet" name="salaireNet" placeholder="Net salary" step="0.01" min="0">
+        </div>
+        <div class="form-group">
+          <label for="periode">Period</label>
+          <input type="text" id="periode" class="form-control" [(ngModel)]="document.periode" name="periode" placeholder="E.g., January 2025">
+        </div>
+        <div class="form-group">
+          <label for="typeContrat">Contract Type</label>
+          <input type="text" id="typeContrat" class="form-control" [(ngModel)]="document.typeContrat" name="typeContrat" placeholder="E.g., Permanent, Fixed-term">
+        </div>
+        <div class="form-group">
+          <label for="dateDebut">Start Date</label>
+          <input type="date" id="dateDebut" class="form-control" [(ngModel)]="document.dateDebut" name="dateDebut">
+        </div>
+        <div class="form-group">
+          <label for="dateFin">End Date</label>
+          <input type="date" id="dateFin" class="form-control" [(ngModel)]="document.dateFin" name="dateFin">
+        </div>
+        <div class="form-group">
+          <label for="salaire">Salary</label>
+          <input type="number" id="salaire" class="form-control" [(ngModel)]="document.salaire" name="salaire" placeholder="Contractual salary" step="0.01" min="0">
+        </div>
+      </div>
+
+      <!-- Specific Fields for JOB_DESCRIPTION -->
+      <div *ngIf="document.type === TypeDocument.FICHE_POSTE" class="specific-section">
+        <h3>Job Description</h3>
+        <div class="form-group">
+          <label for="poste">Position</label>
+          <select id="poste" class="form-control" [(ngModel)]="selectedPoste" name="poste" (change)="onPosteChange()">
+            <option value="">-- Select a position --</option>
+            <option *ngFor="let key of defaultPostKeys" [value]="defaultPosts[key].poste">
+              {{ defaultPosts[key].poste }}
+            </option>
+            <option *ngFor="let post of customPosts" [value]="post.poste">
+              {{ post.poste }} (Custom)
+            </option>
+            <option value="custom">Add a new position</option>
+          </select>
+        </div>
+        <div *ngIf="isCustomPoste" class="custom-poste animate__animated animate__fadeIn">
+          <div class="input-group">
+            <input type="text" class="form-control" [(ngModel)]="customPoste" name="customPoste" placeholder="Name of the new position" (keyup.enter)="addCustomPoste()">
+            <button type="button" class="btn btn-primary" (click)="addCustomPoste()">Add</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="codeProcessus">Process Code</label>
+          <input type="text" id="codeProcessus" class="form-control" [(ngModel)]="document.codeProcessus" name="codeProcessus" placeholder="E.g., PCS-RET-01">
+        </div>
+        <div class="form-group">
+          <label for="exigenceDePoste">Job Requirements</label>
+          <textarea id="exigenceDePoste" class="form-control" [(ngModel)]="document.exigenceDePoste" name="exigenceDePoste" placeholder="Job requirements" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="taches">Tasks</label>
+          <textarea id="taches" class="form-control" [(ngModel)]="document.taches" name="taches" placeholder="List of tasks (comma-separated)" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="typeContrat">Contract Type</label>
+          <input type="text" id="typeContrat" class="form-control" [(ngModel)]="document.typeContrat" name="typeContrat" placeholder="E.g., Permanent, Fixed-term">
+        </div>
+        <div class="form-group">
+          <label for="dateDebut">Start Date</label>
+          <input type="date" id="dateDebut" class="form-control" [(ngModel)]="document.dateDebut" name="dateDebut">
+        </div>
+        <div class="form-group">
+          <label for="dateFin">End Date</label>
+          <input type="date" id="dateFin" class="form-control" [(ngModel)]="document.dateFin" name="dateFin">
+        </div>
+        <div class="form-group">
+          <label for="salaire">Salary</label>
+          <input type="number" id="salaire" class="form-control" [(ngModel)]="document.salaire" name="salaire" placeholder="Contractual salary" step="0.01" min="0">
+        </div>
+      </div>
+
+      <!-- Specific Fields for PROCESS_EXECUTION -->
+      <div *ngIf="document.type === TypeDocument.PROCESSUS_REALISATION" class="specific-section">
+        <h3>Process Execution</h3>
+        <div class="form-group">
+          <label for="designation">Designation</label>
+          <input type="text" id="designation" class="form-control" [(ngModel)]="document.designation" name="designation" placeholder="Process designation">
+        </div>
+        <div class="form-group">
+          <label for="axe">Axis</label>
+          <input type="text" id="axe" class="form-control" [(ngModel)]="document.axe" name="axe" placeholder="Process axis">
+        </div>
+        <div class="form-group">
+          <label for="pilote">Pilot</label>
+          <input type="text" id="pilote" class="form-control" [(ngModel)]="document.pilote" name="pilote" placeholder="Pilot name">
+        </div>
+        <div class="form-group">
+          <label for="operations">Operations</label>
+          <textarea id="operations" class="form-control" [(ngModel)]="document.operations" name="operations" placeholder="List of operations (comma-separated)" rows="3"></textarea>
+        </div>
+      </div>
+
+      <!-- Specific Fields for CONTRACT -->
+      <div *ngIf="document.type === TypeDocument.CONTRAT" class="specific-section">
+        <h3>Contract</h3>
+        <div class="form-group">
+          <label for="employeContrat">Employee</label>
+          <input type="text" id="employeContrat" class="form-control" [(ngModel)]="document.employe" name="employeContrat" placeholder="Employee name" required
+                 [class.is-invalid]="documentForm.controls['employeContrat']?.invalid && documentForm.controls['employeContrat']?.touched">
+          <div class="invalid-feedback">Employee name is required.</div>
+        </div>
+        <div class="form-group">
+          <label for="posteContrat">Position</label>
+          <select id="posteContrat" class="form-control" [(ngModel)]="selectedPoste" name="posteContrat" (change)="onPosteChange()">
+            <option value="">-- Select a position --</option>
+            <option *ngFor="let key of defaultPostKeys" [value]="defaultPosts[key].poste">
+              {{ defaultPosts[key].poste }}
+            </option>
+            <option *ngFor="let post of customPosts" [value]="post.poste">
+              {{ post.poste }} (Custom)
+            </option>
+            <option value="custom">Add a new position</option>
+          </select>
+        </div>
+        <div *ngIf="isCustomPoste" class="custom-poste animate__animated animate__fadeIn">
+          <div class="input-group">
+            <input type="text" class="form-control" [(ngModel)]="customPoste" name="customPosteContrat" placeholder="Name of the new position" (keyup.enter)="addCustomPoste()">
+            <button type="button" class="btn btn-primary" (click)="addCustomPoste()">Add</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="typeContrat">Contract Type</label>
+          <input type="text" id="typeContrat" class="form-control" [(ngModel)]="document.typeContrat" name="typeContrat" placeholder="E.g., Permanent, Fixed-term" required
+                 [class.is-invalid]="documentForm.controls['typeContrat']?.invalid && documentForm.controls['typeContrat']?.touched">
+          <div class="invalid-feedback">Contract type is required.</div>
+        </div>
+        <div class="form-group">
+          <label for="dateDebut">Start Date</label>
+          <input type="date" id="dateDebut" class="form-control" [(ngModel)]="document.dateDebut" name="dateDebut" required
+                 [class.is-invalid]="documentForm.controls['dateDebut']?.invalid && documentForm.controls['dateDebut']?.touched">
+          <div class="invalid-feedback">Start date is required.</div>
+        </div>
+        <div class="form-group">
+          <label for="dateFin">End Date</label>
+          <input type="date" id="dateFin" class="form-control" [(ngModel)]="document.dateFin" name="dateFin">
+        </div>
+        <div class="form-group">
+          <label for="salaire">Salary</label>
+          <input type="number" id="salaire" class="form-control" [(ngModel)]="document.salaire" name="salaire" placeholder="Contractual salary" step="0.01" min="0">
+        </div>
+        <div class="form-group">
+          <label for="objectifs">Objectives</label>
+          <textarea id="objectifs" class="form-control" [(ngModel)]="document.objectifs" name="objectifs" placeholder="Contract objectives" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="exigenceDePoste">Requirements</label>
+          <textarea id="exigenceDePoste" class="form-control" [(ngModel)]="document.exigenceDePoste" name="exigenceDePoste" placeholder="Job requirements" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="taches">Tasks</label>
+          <textarea id="taches" class="form-control" [(ngModel)]="document.taches" name="taches" placeholder="List of tasks (comma-separated)" rows="3"></textarea>
+        </div>
+      </div>
+
+      <!-- Form Buttons -->
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="!documentForm.valid">{{ document.id ? 'Update' : 'Add' }}</button>
+        <button type="button" class="btn btn-secondary" (click)="resetForm()">Reset</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Document List -->
+  <div class="invoices-section">
+    <h2>Existing Documents</h2>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Title</th>
+        <th>Type</th>
+        <th>Creation Date</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let invoice of invoices">
+        <td>{{ invoice.title }}</td>
+        <td>{{ typeDocumentLabels[invoice.type] }}</td>
+        <td>{{ invoice.dateCreation | date:'dd/MM/yyyy' }}</td>
+        <td>
+          <button class="btn btn-info" (click)="viewDocument(invoice)">View</button>
+          <button class="btn btn-warning" (click)="selectDocument(invoice)">Edit</button>
+          <button class="btn btn-danger" (click)="deleteDocument(invoice.id!)">Delete</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Document Preview -->
+  <div class="preview-section" *ngIf="selectedDocument">
+    <div class="preview-card" #printableContent style="background-color: white;">
+      <div class="header">
+        <img src="assets/images/cropped-coconsultlogo_flood2__3_.png" alt="Logo" class="logo">
+        <div class="header-info">
+          <h5>Document: #{{ selectedDocument.id || 'BBN2351D458' }}</h5>
+          <h5>Date: {{ selectedDocument.dateCreation || currentDate | date:'dd/MM/yyyy' }}</h5>
+          <h5>Issued by: {{ currentUser }}</h5>
+        </div>
+      </div>
+      <div class="content">
+        <h4>{{ selectedDocument.title || 'Document' }}</h4>
+        <div [innerHTML]="getFormattedContent()"></div>
+        <div class="signature-section">
+          <p><strong>Signature:</strong></p>
+          <ng-container *ngIf="isSignatureImage(selectedDocument.signature); else textSignature">
+            <img [src]="selectedDocument.signature" alt="Signature" class="signature-img">
+          </ng-container>
+          <ng-template #textSignature>
+            <p>{{ selectedDocument.signature || 'Not signed' }}</p>
+          </ng-template>
+        </div>
+      </div>
+      <div class="footer">
+        <p>CoConsult - {{ currentDate | date:'yyyy' }} - All rights reserved</p>
+      </div>
+    </div>
+    <!-- Preview Buttons -->
+    <div class="preview-actions">
+      <a href="javascript:window.print()" class="btn btn-info">Print</a>
+      <button class="btn btn-info" (click)="downloadPDF()">Download PDF</button>
+      <button class="btn btn-primary" (click)="addSignature()">Add Signature</button>
+      <button class="btn btn-secondary" (click)="cancelDocument()">Close</button>
+    </div>
+  </div>
+
+  <!-- Signature Modal -->
+  <div class="modal" *ngIf="showSignatureRequest" @fadeInOut>
+    <div class="modal-content animate__animated animate__fadeIn" style="background-color: white;">
+      <h3>Add Signature</h3>
+      <div class="signature-type">
+        <label>
+          <input type="radio" [(ngModel)]="signatureType" value="draw" (change)="clearCanvas()"> Draw
+        </label>
+        <label>
+          <input type="radio" [(ngModel)]="signatureType" value="text"> Text
+        </label>
+        <label>
+          <input type="radio" [(ngModel)]="signatureType" value="upload"> Upload
+        </label>
+      </div>
+      <div *ngIf="signatureType === 'draw'">
+        <canvas #signatureCanvas width="400" height="150"
+                (mousedown)="startDrawing($event)"
+                (mousemove)="draw($event)"
+                (mouseup)="stopDrawing()"
+                (mouseleave)="stopDrawing()"
+                class="signature-canvas"></canvas>
+        <button class="btn btn-secondary" (click)="clearCanvas()">Clear</button>
+      </div>
+      <div *ngIf="signatureType === 'text'">
+        <input type="text" [(ngModel)]="signature" placeholder="Enter your signature" class="form-control">
+      </div>
+      <div *ngIf="signatureType === 'upload'">
+        <input type="file" accept="image/*" (change)="onSignatureUpload($event)">
+        <img *ngIf="uploadedSignature" [src]="uploadedSignature" alt="Uploaded signature" class="uploaded-signature">
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-primary" [disabled]="!canSaveSignature()" (click)="saveSignature()">Save</button>
+        <button class="btn btn-secondary" (click)="cancelSignature()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Face Verification Modal -->
+  <div class="face-verification-modal" *ngIf="showFaceVerification" @fadeInOut>
+    <div class="modal-content animate__animated animate__fadeIn" style="background-color: white;">
+      <h3>Facial Verification</h3>
+      <app-face-capture [userId]="userId" (faceVerified)="onFaceVerified($event)"></app-face-capture>
+    </div>
+  </div>
+</div>
+
+<style>
+  .invoice-container {
+    background-color: white;
+    padding: 20px;
+  }
+
+  .preview-card, .modal-content, .form-section, .invoices-section, .preview-section {
+    background-color: white !important;
+  }
+</style>
+<style>
+  /* Conteneur principal avec fond blanc */
+  .invoice-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    background-color: #ffffff;
+  }
+
+  /* Positionnement du logo en haut à gauche */
+  .logo-container {
+    text-align: left;
+    margin-bottom: 20px;
+  }
+
+  .logo {
+    width: 100px;
+    height: auto;
+  }
+
+  /* Titre */
+  .title {
+    text-align: center;
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 30px;
+  }
+
+  /* Sections avec séparateurs */
+  .form-section, .invoices-section, .preview-section {
+    background: #ffffff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    margin-bottom: 30px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Formulaire */
+  .document-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-group label {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+  }
+
+  .form-control {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+
+  .form-control:focus {
+    border-color: #0078d7;
+    outline: none;
+  }
+
+  .form-control.is-invalid {
+    border-color: #dc3545;
+  }
+
+  .invalid-feedback {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 5px;
+  }
+
+  /* Section spécifique */
+  .specific-section {
+    padding: 15px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    margin-top: 15px;
+    border-radius: 4px;
+  }
+
+  .specific-section h3 {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+  }
+
+  .input-group {
+    display: flex;
+    gap: 10px;
+  }
+
+  /* Boutons avec séparation */
+  .btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .btn-success {
+    background-color: #5cb85c;
+    color: white;
+  }
+
+  .btn-success:hover {
+    background-color: #4cae4c;
+  }
+
+  .btn-primary {
+    background-color: #0078d7;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background-color: #0066b3;
+  }
+
+  .btn-warning {
+    background-color: #f0ad4e;
+    color: #333;
+  }
+
+  .btn-warning:hover {
+    background-color: #ec971f;
+  }
+
+  .btn-danger {
+    background-color: #d9534f;
+    color: white;
+  }
+
+  .btn-danger:hover {
+    background-color: #c9302c;
+  }
+
+  .btn-info {
+    background-color: #5bc0de;
+    color: white;
+  }
+
+  .btn-info:hover {
+    background-color: #31b0d5;
+  }
+
+  .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+  }
+
+  .btn-secondary:hover {
+    background-color: #5a6268;
+  }
+
+  .form-actions, .preview-actions {
+    display: flex;
+    gap: 20px;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+
+  .invoices-section td .btn {
+    margin-right: 15px;
+  }
+
+  .invoices-section td .btn:last-child {
+    margin-right: 0;
+  }
+
+  /* Tableaux */
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+  }
+
+  .table th, .table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+
+  .table th {
+    background-color: #f5f5f5;
+    color: #333;
+  }
+
+  .table tr:hover {
+    background-color: #f9f9f9;
+  }
+
+  /* Aperçu */
+  .preview-card {
+    border: 1px solid #ccc;
+    background: #ffffff;
+    padding: 15px;
+  }
+
+  .header {
+    background: #f5f5f5;
+    color: #333;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .header-info h5 {
+    margin: 5px 0;
+    font-size: 0.9rem;
+  }
+
+  .content {
+    padding: 15px;
+  }
+
+  .content h4 {
+    color: #333;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+  }
+
+  .signature-section {
+    margin-top: 20px;
+    text-align: center;
+    border-top: 1px solid #ddd;
+    padding-top: 15px;
+  }
+
+  .signature-img {
+    max-width: 150px;
+    height: auto;
+  }
+
+  .footer {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #666;
+    padding: 15px;
+    border-top: 1px solid #ccc;
+  }
+
+  /* Modal de signature */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .modal-content {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 500px;
+    max-width: 90%;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .signature-type {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .signature-canvas {
+    border: 1px solid #ccc;
+    margin: 10px 0;
+  }
+
+  .uploaded-signature {
+    max-width: 200px;
+    height: auto;
+    margin: 10px 0;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .animate__animated.animate__fadeIn {
+    animation: fadeIn 0.3s ease-in;
+  }
+
+  .face-verification-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .face-verification-modal .modal-content {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 700px;
+    max-width: 90%;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+</style>
+<style>
+  /* Conteneur principal avec fond blanc */
+  .invoice-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    background-color: #ffffff;
+  }
+
+  /* Positionnement du logo en haut à gauche */
+  .logo-container {
+    text-align: left;
+    margin-bottom: 20px;
+  }
+
+  .logo {
+    width: 100px;
+    height: auto;
+  }
+
+  /* Titre */
+  .title {
+    text-align: center;
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 30px;
+  }
+
+  /* Sections avec séparateurs */
+  .form-section, .invoices-section, .preview-section {
+    background: #ffffff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    margin-bottom: 30px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Formulaire */
+  .document-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-group label {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+  }
+
+  .form-control {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+
+  .form-control:focus {
+    border-color: #0078d7;
+    outline: none;
+  }
+
+  .form-control.is-invalid {
+    border-color: #dc3545;
+  }
+
+  .invalid-feedback {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 5px;
+  }
+
+  /* Section spécifique */
+  .specific-section {
+    padding: 15px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    margin-top: 15px;
+    border-radius: 4px;
+  }
+
+  .specific-section h3 {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+  }
+
+  .input-group {
+    display: flex;
+    gap: 10px;
+  }
+
+  /* Boutons avec séparation */
+  .btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .btn-success {
+    background-color: #5cb85c;
+    color: white;
+  }
+
+  .btn-success:hover {
+    background-color: #4cae4c;
+  }
+
+  .btn-primary {
+    background-color: #0078d7;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background-color: #0066b3;
+  }
+
+  .btn-warning {
+    background-color: #f0ad4e;
+    color: #333;
+  }
+
+  .btn-warning:hover {
+    background-color: #ec971f;
+  }
+
+  .btn-danger {
+    background-color: #d9534f;
+    color: white;
+  }
+
+  .btn-danger:hover {
+    background-color: #c9302c;
+  }
+
+  .btn-info {
+    background-color: #5bc0de;
+    color: white;
+  }
+
+  .btn-info:hover {
+    background-color: #31b0d5;
+  }
+
+  .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+  }
+
+  .btn-secondary:hover {
+    background-color: #5a6268;
+  }
+
+  .form-actions, .preview-actions {
+    display: flex;
+    gap: 20px;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+
+  .invoices-section td .btn {
+    margin-right: 15px;
+  }
+
+  .invoices-section td .btn:last-child {
+    margin-right: 0;
+  }
+
+  /* Tableaux */
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+  }
+
+  .table th, .table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+
+  .table th {
+    background-color: #f5f5f5;
+    color: #333;
+  }
+
+  .table tr:hover {
+    background-color: #f9f9f9;
+  }
+
+  /* Aperçu */
+  .preview-card {
+    border: 1px solid #ccc;
+    background: #ffffff;
+    padding: 15px;
+  }
+
+  .header {
+    background: #f5f5f5;
+    color: #333;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .header-info h5 {
+    margin: 5px 0;
+    font-size: 0.9rem;
+  }
+
+  .content {
+    padding: 15px;
+  }
+
+  .content h4 {
+    color: #333;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+  }
+
+  .signature-section {
+    margin-top: 20px;
+    text-align: center;
+    border-top: 1px solid #ddd;
+    padding-top: 15px;
+  }
+
+  .signature-img {
+    max-width: 150px;
+    height: auto;
+  }
+
+  .footer {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #666;
+    padding: 15px;
+    border-top: 1px solid #ccc;
+  }
+
+  /* Modal de signature */
+  .signature-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal-content {
+    background: #ffffff;
+    padding: 15px;
+    border: 1px solid #ccc;
+    width: 800px;
+    max-width: 90%;
+    text-align: center;
+    border-radius: 5px;
+  }
+
+  .signature-type-tabs {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+
+  .signature-type-tabs .btn {
+    flex: 1;
+  }
+
+  .signature-canvas-container {
+    border: 1px solid #ccc;
+    background: #fff;
+    margin: 15px auto;
+  }
+
+  .signature-canvas {
+    width: 100%;
+    height: 150px;
+    cursor: crosshair;
+  }
+
+  .canvas-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .modal-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .animate__animated.animate__fadeIn {
+    animation: fadeIn 0.3s ease-in;
+  }
+
+  .face-verification-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .face-verification-modal .modal-content {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 700px;
+    max-width: 90%;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Ensure existing styles for signature modal and other elements are included */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .modal-content {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 500px;
+    max-width: 90%;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .signature-type {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .signature-canvas {
+    border: 1px solid #ccc;
+    margin: 10px 0;
+  }
+
+  .uploaded-signature {
+    max-width: 200px;
+    height: auto;
+    margin: 10px 0;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+
+  .btn-primary {
+    background-color: #0078d7;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background-color: #005ba1;
+  }
+
+  .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+  }
+
+  .btn-secondary:hover {
+    background-color: #5a6268;
+  }
+
+</style>

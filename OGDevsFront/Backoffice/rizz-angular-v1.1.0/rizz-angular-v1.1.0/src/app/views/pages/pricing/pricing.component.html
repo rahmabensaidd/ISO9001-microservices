@@ -1,0 +1,85 @@
+<div class="row justify-content-center">
+  @for (item of pricingData; track $index) {
+    <div class="col-md-6 col-lg-3">
+      <div class="card">
+        <div class="card-body">
+          <div class="text-center">
+            @if (item.plan === 'Premium Plan') {
+              <span
+                class="badge bg-pink-subtle text-pink mt-0 py-1 px-2 mx-auto"
+                >Popular</span
+              >
+            }
+            <h6 class="pt-3 pb-2 m-0 fs-18 fw-medium">
+              {{ item.plan }}
+            </h6>
+            <p class="text-muted pt-2 mb-0">{{ item.description }}</p>
+            <div class="pt-3">
+              <h2 class="d-inline-block">{{ item.price }}</h2>
+              <small class="font-12 text-muted"> /month</small>
+            </div>
+            <hr class="hr-dashed" />
+            <ul
+              class="list-unstyled pricing-content text-start pt-3 border-0 mb-0"
+            >
+              @for (feature of item.features; track $index) {
+                <li>{{ feature }}</li>
+              }
+            </ul>
+            <a
+              href="javascript:void(0);"
+              [ngClass]="
+                item.plan === 'Premium Plan' ? 'btn-primary' : 'btn-dark'
+              "
+              class="btn py-2 px-5 mt-3 w-100"
+              ><span>Get Started</span></a
+            >
+          </div>
+          <!--end pricing Table-->
+        </div>
+        <!--end card-body-->
+      </div>
+      <!--end card-->
+    </div>
+  }
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row justify-content-center">
+  @for (item of pricingIconData; track $index) {
+    <div class="col-md-6 col-lg-3">
+      <div class="card">
+        <div class="card-body">
+          <div class="text-center">
+            <i
+              class="{{ item.icon }} d-inline-block mt-2 display-4"
+              style="line-height: 1"
+            ></i>
+            <h6 class="pt-3 pb-2 m-0 fs-18 fw-medium">{{ item.plan }}</h6>
+            <ul
+              class="list-unstyled pricing-content text-center pt-2 border-0 mb-3"
+            >
+              @for (feature of item.features; track $index) {
+                <li>{{ feature }}</li>
+              }
+            </ul>
+            <hr class="hr-dashed" />
+            <div class="pt-2">
+              <h2 class="d-inline-block">{{ item.price }}</h2>
+              <small class="font-12 text-muted ms-0.5">/month</small>
+            </div>
+            <a href="javascript:void(0);" class="btn btn-dark py-2 px-3 mt-2"
+              ><span>Get Started</span></a
+            >
+          </div>
+          <!--end pricing Table-->
+        </div>
+        <!--end card-body-->
+      </div>
+      <!--end card-->
+    </div>
+    <!--end col-->
+  }
+</div>
+<!--end row-->

@@ -1,0 +1,69 @@
+<div class="row justify-content-center">
+  @for (item of customerCard; track $index) {
+    <div class="col-md-6 col-lg-4">
+      <div class="card">
+        <div class="card-body">
+          <div
+            class="row d-flex justify-content-center border-dashed-bottom pb-3"
+          >
+            <div class="col-9">
+              <p class="text-dark mb-0 fw-semibold fs-14">
+                {{ item.platform }}
+              </p>
+              <h3 class="mt-2 mb-0 fw-bold">
+                {{ item.clicks }}
+                <span class="fs-13 text-muted">{{ item.clicks_text }}</span>
+              </h3>
+            </div>
+            <!--end col-->
+            <div class="col-3 align-self-center">
+              <div
+                class="d-flex justify-content-center align-items-center thumb-xl {{
+                  item.icon_background
+                }} rounded-circle mx-auto"
+              >
+                <i
+                  class="{{ item.icon }} h1 align-self-center mb-0 text-white"
+                ></i>
+              </div>
+            </div>
+            <!--end col-->
+          </div>
+          <!--end row-->
+          <div class="row d-flex justify-content-center mt-3 text-center">
+            <div class="col-6">
+              <h5 class="mb-2 fs-18 mb-0 fw-bold">
+                {{ item.audience.value }}
+                <span class="text-success fw-normal fs-12">{{
+                  item.audience.percentage
+                }}</span>
+              </h5>
+              <p class="text-muted mb-0 fw-semibold fs-14">Audiance</p>
+            </div>
+            <!--end col-->
+            <div class="col-6 align-self-center">
+              <h5 class="mb-2 fs-18 mb-0 fw-bold">
+                {{ item.commission.value }}
+                <span class="text-danger fw-normal fs-12">{{
+                  item.commission.percentage
+                }}</span>
+              </h5>
+              <p class="text-muted mb-0 fw-semibold fs-14">Comission</p>
+            </div>
+            <!--end col-->
+          </div>
+          <!--end row-->
+          <div class="text-center mt-3">
+            <button type="button" class="btn btn-outline-primary px-3">
+              {{ item.button_text }}
+            </button>
+          </div>
+        </div>
+        <!--end card-body-->
+      </div>
+      <!--end card-->
+    </div>
+  }
+  <!--end col-->
+</div>
+<!--end row-->

@@ -1,0 +1,415 @@
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Bar Chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div
+          id="bar-charts"
+          appTuiChart
+          [chartType]="'bar'"
+          [data]="chartData.data"
+          [options]="chartData.options"
+          [theme]="chartData.theme"
+        ></div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Column Chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div
+          id="column-charts"
+          dir="ltr"
+          appTuiChart
+          [chartType]="'column'"
+          [data]="columnChart.data"
+          [options]="columnChart.options"
+          [theme]="columnChart.theme"
+        ></div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Line chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div
+          id="line-charts"
+          dir="ltr"
+          appTuiChart
+          [chartType]="'line'"
+          [data]="lineChart.data"
+          [options]="lineChart.options"
+          [theme]="lineChart.theme"
+        ></div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Area chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div
+          id="area-charts"
+          dir="ltr"
+          appTuiChart
+          [chartType]="'area'"
+          [data]="areaChart.data"
+          [options]="areaChart.options"
+          [theme]="areaChart.theme"
+        ></div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Bubble chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div
+          id="bubble-charts"
+          dir="ltr"
+          appTuiChart
+          [chartType]="'bubble'"
+          [data]="bubbleChart.data"
+          [options]="bubbleChart.options"
+          [theme]="bubbleChart.theme"
+        ></div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Scatter chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div
+          id="scatter-charts"
+          appTuiChart
+          [chartType]="'scatter'"
+          [data]="scatterChart.data"
+          [options]="scatterChart.options"
+          [theme]="scatterChart.theme"
+          dir="ltr"
+        ></div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Pie chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div
+          id="pie-charts"
+          dir="ltr"
+          appTuiChart
+          [chartType]="'pie'"
+          [data]="pieChart.data"
+          [options]="pieChart.options"
+          [theme]="pieChart.theme"
+        ></div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Donut pie chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div
+          id="donut-charts"
+          dir="ltr"
+          appTuiChart
+          [chartType]="'pie'"
+          [data]="donutChart.data"
+          [options]="donutChart.options"
+          [theme]="donutChart.theme"
+        ></div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Heatmap chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div
+          id="heatmap-charts"
+          appTuiChart
+          [chartType]="'heatmap'"
+          [data]="heatMapChart.data"
+          [options]="heatMapChart.options"
+          [theme]="heatMapChart.theme"
+          dir="ltr"
+        ></div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Treemap chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div
+          id="treemap-charts"
+          appTuiChart
+          [chartType]="'treemap'"
+          [data]="treemapChart.data"
+          [options]="treemapChart.options"
+          [theme]="treemapChart.theme"
+          dir="ltr"
+        ></div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Map chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div
+          id="map-charts"
+          dir="ltr"
+          appTuiChart
+          [chartType]="'map'"
+          [data]="mapChart.data"
+          [options]="mapChart.options"
+          [theme]="mapChart.theme"
+        ></div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Boxplot chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div
+          id="boxplot-charts"
+          dir="ltr"
+          appTuiChart
+          [chartType]="'boxplot'"
+          [data]="boxPlotChart.data"
+          [options]="boxPlotChart.options"
+          [theme]="boxPlotChart.theme"
+        ></div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Bullet chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div
+          id="bullet-charts"
+          dir="ltr"
+          appTuiChart
+          [chartType]="'bullet'"
+          [data]="bulletChart.data"
+          [options]="bulletChart.options"
+          [theme]="bulletChart.theme"
+        ></div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Radial chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div
+          id="radial-charts"
+          dir="ltr"
+          appTuiChart
+          [chartType]="'radial'"
+          [data]="radialChart.data"
+          [options]="radialChart.options"
+          [theme]="radialChart.theme"
+        ></div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->

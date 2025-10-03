@@ -1,0 +1,810 @@
+package tn.esprit.examen.nomPrenomClasseExamen.services;
+
+import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
+import org.keycloak.OAuth2Constants;
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.KeycloakBuilder;
+import org.keycloak.admin.client.resource.RealmResource;
+import org.keycloak.admin.client.resource.UsersResource;
+import org.keycloak.representations.idm.CredentialRepresentation;
+import org.keycloak.representations.idm.RoleRepresentation;
+import org.keycloak.representations.idm.UserRepresentation;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import tn.esprit.examen.nomPrenomClasseExamen.entities.Role;
+import tn.esprit.examen.nomPrenomClasseExamen.entities.UserEntity;
+import tn.esprit.examen.nomPrenomClasseExamen.repositories.RoleRepository;
+import tn.esprit.examen.nomPrenomClasseExamen.repositories.UserEntityRepository;
+import tn.esprit.examen.nomPrenomClasseExamen.repositories.UserRepository;
+
+import jakarta.ws.rs.core.Response;
+
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
+
+@Slf4j
+@Service
+public class KeycloakUserService {
+    private final ReentrantLock syncLock = new ReentrantLock();
+    private final Keycloak keycloak;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final UserEntityRepository userEntityRepository;
+
+    @Value("${keycloak.realm}")
+    private String realm;
+    @Value("${file.upload-dir}")
+    private String uploadDir;
+
+    public KeycloakUserService(@Value("${keycloak.auth-server-url}") String serverUrl,
+                               @Value("${keycloak.realm}") String realm,
+                               @Value("${keycloak.resource}") String clientId,
+                               @Value("${keycloak.credentials.secret}") String clientSecret,
+                               @Value("${keycloak.username}") String adminUsername,
+                               @Value("${keycloak.password}") String adminPassword,
+                               UserRepository userRepository,
+                               RoleRepository roleRepository,
+                               UserEntityRepository userEntityRepository) {
+        this.keycloak = KeycloakBuilder.builder()
+                .serverUrl(serverUrl)
+                .realm("master")
+                .clientId("admin-cli")
+                .grantType(OAuth2Constants.PASSWORD)
+                .username(adminUsername)
+                .password(adminPassword)
+                .clientSecret(clientSecret)
+                .build();
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.userEntityRepository = userEntityRepository;
+    }
+
+    private RealmResource getRealm() {
+        return keycloak.realm(realm);
+    }
+
+    private UsersResource getUsersResource() {
+        return getRealm().users();
+    }
+
+    public String createUser(String username, String email, String password) {
+        List<UserRepresentation> existingUsersByUsername = getUsersResource().search(username);
+        if (!existingUsersByUsername.isEmpty()) {
+            log.info("User with username {} already exists", username);
+            return "User already exists with username: " + username;
+        }
+
+        List<UserRepresentation> existingUsersByEmail = getUsersResource().searchByEmail(email, true);
+        if (!existingUsersByEmail.isEmpty()) {
+            log.info("User with email {} already exists", email);
+            return "Email already exists: " + email;
+        }
+
+        UserRepresentation user = new UserRepresentation();
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setEnabled(true);
+        user.setEmailVerified(true);
+
+        CredentialRepresentation credential = new CredentialRepresentation();
+        credential.setType(CredentialRepresentation.PASSWORD);
+        credential.setValue(password);
+        credential.setTemporary(false);
+        user.setCredentials(List.of(credential));
+
+        Response response = getUsersResource().create(user);
+        if (response.getStatus() != Response.Status.CREATED.getStatusCode()) {
+            log.error("Failed to create user in Keycloak: {}", response.getStatusInfo());
+            return "Failed to create user: " + response.getStatusInfo().getReasonPhrase();
+        }
+
+        String userId = getUsersResource().search(username).get(0).getId();
+        if (userId == null || !userId.matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")) {
+            log.error("Invalid user ID generated by Keycloak: {}", userId);
+            return "Failed to create user: Invalid user ID generated";
+        }
+
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId(userId);
+        userEntity.setUsername(username);
+        userEntity.setEmail(email);
+        userEntity.setEnabled(true);
+        userRepository.save(userEntity);
+        log.info("User created with ID: {}", userId);
+
+        return "User created successfully!";
+    }
+
+    public List<UserRepresentation> getAllUsers() {
+        List<UserRepresentation> users = getUsersResource().list();
+        log.info("Fetched {} users from Keycloak", users.size());
+        return users.stream()
+                .filter(user -> {
+                    boolean isValid = user.getId() != null && user.getId().matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$");
+                    if (!isValid) {
+                        log.warn("Skipping invalid Keycloak user with ID: {}", user.getId());
+                    }
+                    return isValid;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public String deleteUser(String userId) {
+        if (userId == null || !userId.matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")) {
+            log.error("Invalid user ID for deletion: {}", userId);
+            return "Invalid user ID: " + userId;
+        }
+
+        try {
+            getUsersResource().get(userId).remove();
+            userRepository.deleteById(userId);
+            log.info("User deleted with ID: {}", userId);
+            return "User deleted successfully!";
+        } catch (Exception e) {
+            log.error("Failed to delete user with ID {}: {}", userId, e.getMessage());
+            return "Failed to delete user: " + e.getMessage();
+        }
+    }
+
+    public String updateUserEmail(String userId, String newEmail) {
+        if (userId == null || !userId.matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")) {
+            log.error("Invalid user ID for email update: {}", userId);
+            return "Invalid user ID: " + userId;
+        }
+
+        List<UserRepresentation> existingUsers = getUsersResource().searchByEmail(newEmail, true);
+        if (!existingUsers.isEmpty() && !existingUsers.get(0).getId().equals(userId)) {
+            log.info("Email {} is already used by another user", newEmail);
+            return "Email already exists: " + newEmail;
+        }
+
+        Optional<UserRepresentation> userOptional = getAllUsers().stream()
+                .filter(user -> user.getId().equals(userId))
+                .findFirst();
+
+        if (userOptional.isPresent()) {
+            UserRepresentation user = userOptional.get();
+            user.setEmail(newEmail);
+            getUsersResource().get(userId).update(user);
+            userRepository.findById(userId).ifPresent(userEntity -> {
+                userEntity.setEmail(newEmail);
+                userRepository.save(userEntity);
+            });
+            log.info("Email updated for user ID: {}", userId);
+            return "User email updated successfully!";
+        } else {
+            log.info("User not found with ID: {}", userId);
+            return "User not found with ID: " + userId;
+        }
+    }
+
+    @Scheduled(fixedDelay = 60000)
+    @Transactional
+    public void syncRolesFromKeycloak() {
+        if (!syncLock.tryLock()) {
+            log.info("syncRolesFromKeycloak already running, skipping...");
+            return;
+        }
+        try {
+            log.info("Début de la synchronisation des rôles depuis Keycloak...");
+            List<RoleRepresentation> keycloakRoles = getRealm().roles().list();
+            log.info("Nombre de rôles récupérés depuis Keycloak: {}", keycloakRoles.size());
+
+            for (RoleRepresentation roleRep : keycloakRoles) {
+                log.debug("Processing role: {} (ID: {})", roleRep.getName(), roleRep.getId());
+                if (roleRep.getId() == null || !roleRep.getId().matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")) {
+                    log.warn("Skipping role with invalid ID: {}", roleRep.getName());
+                    continue;
+                }
+                Optional<Role> existingRoleOpt = roleRepository.findById(roleRep.getId());
+
+                Role role;
+                if (existingRoleOpt.isPresent()) {
+                    role = existingRoleOpt.get();
+                    role.setRoleName(roleRep.getName());
+                    role.setDescription(roleRep.getDescription());
+                    log.info("Mise à jour du rôle existant: {} (ID: {})", roleRep.getName(), roleRep.getId());
+                } else {
+                    role = new Role();
+                    role.setId(roleRep.getId());
+                    role.setRoleName(roleRep.getName());
+                    role.setDescription(roleRep.getDescription());
+                    log.info("Création d'un nouveau rôle: {} (ID: {})", roleRep.getName(), roleRep.getId());
+                }
+                log.debug("Saving role: {} (ID: {})", role.getRoleName(), role.getId());
+                roleRepository.saveAndFlush(role);
+            }
+
+            log.info("Synchronisation des rôles terminée avec succès.");
+        } catch (Exception e) {
+            log.error("Erreur lors de la synchronisation des rôles depuis Keycloak: {}", e.getMessage(), e);
+            throw e;
+        } finally {
+            if (syncLock.isHeldByCurrentThread()) {
+                syncLock.unlock();
+            }
+        }
+    }
+
+    @Scheduled(fixedDelay = 60000)
+    @Transactional
+    public void syncUsersFromKeycloak() {
+        if (!syncLock.tryLock()) {
+            log.info("syncUsersFromKeycloak already running, skipping...");
+            return;
+        }
+        try {
+            log.info("Début de la synchronisation des utilisateurs depuis Keycloak...");
+            List<UserRepresentation> keycloakUsers = getUsersResource().list();
+            log.info("Nombre d'utilisateurs récupérés depuis Keycloak: {}", keycloakUsers.size());
+
+            List<UserEntity> existingUsers = userRepository.findAll();
+            log.info("Nombre d'utilisateurs existants dans la base locale: {}", existingUsers.size());
+
+            List<UserEntity> users = keycloakUsers.stream()
+                    .filter(user -> {
+                        boolean isValid = user.getId() != null && user.getId().matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$");
+                        if (!isValid) {
+                            log.warn("Skipping invalid Keycloak user with ID: {}", user.getId());
+                        }
+                        return isValid;
+                    })
+                    .map(user -> {
+                        List<RoleRepresentation> roles = getUsersResource().get(user.getId()).roles().realmLevel().listAll();
+                        log.debug("Processing user: {} with {} roles", user.getId(), roles.size());
+                        Set<Role> roleEntities = roles.stream()
+                                .filter(roleRep -> {
+                                    if (roleRep.getId() == null || !roleRep.getId().matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")) {
+                                        log.warn("Skipping role with invalid ID for user {}: {}", user.getId(), roleRep.getName());
+                                        return false;
+                                    }
+                                    return true;
+                                })
+                                .map(roleRep -> roleRepository.findById(roleRep.getId())
+                                        .orElseGet(() -> {
+                                            Role newRole = new Role();
+                                            newRole.setId(roleRep.getId());
+                                            newRole.setRoleName(roleRep.getName());
+                                            newRole.setDescription(roleRep.getDescription());
+                                            log.debug("Creating new role in syncUsersFromKeycloak: {} (ID: {})", roleRep.getName(), roleRep.getId());
+                                            return roleRepository.saveAndFlush(newRole);
+                                        }))
+                                .collect(Collectors.toSet());
+
+                        Optional<UserEntity> existingUserOpt = existingUsers.stream()
+                                .filter(u -> u.getId().equals(user.getId()))
+                                .findFirst();
+
+                        UserEntity userEntity;
+                        if (existingUserOpt.isPresent()) {
+                            userEntity = existingUserOpt.get();
+                            userEntity.setUsername(user.getUsername());
+                            userEntity.setEmail(user.getEmail());
+                            userEntity.setEnabled(user.isEnabled());
+                            userEntity.setRoles(roleEntities);
+                            log.info("Mise à jour de l'utilisateur existant: {}", user.getId());
+                        } else {
+                            userEntity = new UserEntity();
+                            userEntity.setId(user.getId());
+                            userEntity.setUsername(user.getUsername());
+                            userEntity.setEmail(user.getEmail());
+                            userEntity.setEnabled(user.isEnabled());
+                            userEntity.setRoles(roleEntities);
+                            log.info("Création d'un nouvel utilisateur: {}", user.getId());
+                        }
+                        return userEntity;
+                    })
+                    .collect(Collectors.toList());
+
+            userRepository.saveAll(users);
+            log.info("Synchronisation des utilisateurs terminée avec succès.");
+        } catch (Exception e) {
+            log.error("Erreur lors de la synchronisation des utilisateurs depuis Keycloak: {}", e.getMessage(), e);
+            throw e;
+        } finally {
+            if (syncLock.isHeldByCurrentThread()) {
+                syncLock.unlock();
+            }
+        }
+    }
+
+    public String createRole(String roleName, String description) {
+        try {
+            RoleRepresentation existingRole = getRealm().roles().get(roleName).toRepresentation();
+            if (existingRole != null) {
+                log.info("Role {} already exists in Keycloak", roleName);
+                return "Role already exists: " + roleName;
+            }
+        } catch (Exception e) {
+            // Role not found, proceed with creation
+        }
+
+        RoleRepresentation roleRep = new RoleRepresentation();
+        roleRep.setName(roleName);
+        roleRep.setDescription(description);
+
+        try {
+            getRealm().roles().create(roleRep);
+            RoleRepresentation createdRole = getRealm().roles().get(roleName).toRepresentation();
+            if (createdRole == null || createdRole.getId() == null || !createdRole.getId().matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")) {
+                log.error("Failed to create role: Invalid role ID after creation for role {}", roleName);
+                return "Failed to create role: Invalid role ID after creation";
+            }
+            Role role = new Role();
+            role.setId(createdRole.getId());
+            role.setRoleName(roleName);
+            role.setDescription(description);
+            log.debug("Creating new role in createRole: {} (ID: {})", roleName, createdRole.getId());
+            roleRepository.saveAndFlush(role);
+            return "Role created successfully!";
+        } catch (Exception e) {
+            log.error("Failed to create role {}: {}", roleName, e.getMessage());
+            return "Failed to create role: " + e.getMessage();
+        }
+    }
+
+    public List<RoleRepresentation> getAllRoles() {
+        List<RoleRepresentation> roles = getRealm().roles().list();
+        return roles.stream()
+                .filter(role -> {
+                    boolean isValid = role.getId() != null && role.getId().matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$");
+                    if (!isValid) {
+                        log.warn("Skipping invalid Keycloak role with ID: {}", role.getId());
+                    }
+                    return isValid;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public String deleteRoleById(String roleId) {
+        if (roleId == null || !roleId.matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")) {
+            log.error("Invalid role ID for deletion: {}", roleId);
+            return "Invalid role ID: " + roleId;
+        }
+
+        try {
+            Optional<RoleRepresentation> roleOptional = getRealm().roles().list().stream()
+                    .filter(role -> role.getId().equals(roleId))
+                    .findFirst();
+
+            if (roleOptional.isEmpty()) {
+                log.info("Role with ID {} not found in Keycloak", roleId);
+                return "Role not found with ID: " + roleId;
+            }
+
+            RoleRepresentation role = roleOptional.get();
+            getRealm().roles().get(role.getName()).remove();
+            roleRepository.deleteById(roleId);
+            log.info("Role deleted with ID: {}", roleId);
+            return "Role deleted successfully!";
+        } catch (Exception e) {
+            log.error("Failed to delete role with ID {}: {}", roleId, e.getMessage());
+            return "Failed to delete role: " + e.getMessage();
+        }
+    }
+
+    public String updateRole(String roleName, String newDescription) {
+        try {
+            RoleRepresentation role = getRealm().roles().get(roleName).toRepresentation();
+            if (role.getId() == null || !role.getId().matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")) {
+                log.error("Invalid role ID for role {}: {}", roleName, role.getId());
+                return "Invalid role ID for role: " + roleName;
+            }
+            role.setDescription(newDescription);
+            getRealm().roles().get(roleName).update(role);
+            roleRepository.findByRoleName(roleName).ifPresent(r -> {
+                r.setDescription(newDescription);
+                log.debug("Updating role: {} with new description: {}", roleName, newDescription);
+                roleRepository.saveAndFlush(r);
+            });
+            return "Role updated successfully!";
+        } catch (Exception e) {
+            log.error("Failed to update role {}: {}", roleName, e.getMessage());
+            return "Failed to update role: " + e.getMessage();
+        }
+    }
+
+    @Transactional
+    public String uploadProfilePhoto(String userId, MultipartFile file) {
+        if (userId == null || !userId.matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")) {
+            log.error("Invalid user ID for photo upload: {}", userId);
+            return "Invalid user ID: " + userId;
+        }
+
+        try {
+            Optional<UserEntity> userEntityOptional = userRepository.findById(userId);
+            if (userEntityOptional.isPresent()) {
+                UserEntity userEntity = userEntityOptional.get();
+
+                File uploadDirFile = new File(uploadDir);
+                if (!uploadDirFile.exists()) {
+                    log.info("Creating upload directory: {}", uploadDir);
+                    if (!uploadDirFile.mkdirs()) {
+                        log.error("Failed to create upload directory: {}", uploadDir);
+                        return "Failed to create upload directory: " + uploadDir;
+                    }
+                }
+                if (!uploadDirFile.canWrite()) {
+                    log.error("Upload directory is not writable: {}", uploadDir);
+                    return "Upload directory is not writable: " + uploadDir;
+                }
+
+                String fileName = userId + "_" + System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                File destFile = new File(uploadDirFile, fileName);
+
+                file.transferTo(destFile);
+                log.info("File saved to: {}", destFile.getAbsolutePath());
+
+                userEntity.setProfilePhotoPath(destFile.getAbsolutePath());
+                userRepository.save(userEntity);
+                log.info("Profile photo path updated for user ID: {}", userId);
+
+                return "Profile photo uploaded successfully!";
+            } else {
+                log.warn("User not found with ID: {}", userId);
+                return "User not found!";
+            }
+        } catch (IOException e) {
+            log.error("IOException while uploading profile photo for user {}: {}", userId, e.getMessage(), e);
+            return "Failed to upload profile photo: " + e.getMessage();
+        } catch (Exception e) {
+            log.error("Unexpected error uploading profile photo for user {}: {}", userId, e.getMessage(), e);
+            return "Failed to upload profile photo: " + e.getMessage();
+        }
+    }
+
+    public String getProfilePhotoPath(String userId) throws IOException {
+        if (userId == null || !userId.matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")) {
+            log.error("Invalid user ID for photo retrieval: {}", userId);
+            throw new IOException("Invalid user ID: " + userId);
+        }
+
+        Optional<UserEntity> userEntityOptional = userRepository.findById(userId);
+        if (!userEntityOptional.isPresent()) {
+            log.warn("User not found with ID: {}", userId);
+            throw new IOException("User not found with ID: " + userId);
+        }
+
+        UserEntity user = userEntityOptional.get();
+        String photoPath = user.getProfilePhotoPath();
+        if (photoPath == null || photoPath.isEmpty()) {
+            log.warn("No profile photo path found for user: {}", userId);
+            throw new IOException("No profile photo path found for user: " + userId);
+        }
+
+        File photoFile = new File(photoPath);
+        if (!photoFile.exists() || !photoFile.canRead()) {
+            log.warn("Profile photo file does not exist or is not readable for user {}: {}", userId, photoPath);
+            throw new IOException("Profile photo file does not exist or is not readable: " + photoPath);
+        }
+
+        return photoPath;
+    }
+
+    public String createUserWithRoles(String username, String email, String password, List<String> roleNames) {
+        List<UserRepresentation> existingUsersByUsername = getUsersResource().search(username);
+        if (!existingUsersByUsername.isEmpty()) {
+            log.info("User with username {} already exists", username);
+            return "User already exists with username: " + username;
+        }
+
+        List<UserRepresentation> existingUsersByEmail = getUsersResource().searchByEmail(email, true);
+        if (!existingUsersByEmail.isEmpty()) {
+            log.info("User with email {} already exists", email);
+            return "Email already exists: " + email;
+        }
+
+        UserRepresentation user = new UserRepresentation();
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setEnabled(true);
+        user.setEmailVerified(true);
+
+        CredentialRepresentation credential = new CredentialRepresentation();
+        credential.setType(CredentialRepresentation.PASSWORD);
+        credential.setValue(password);
+        credential.setTemporary(false);
+        user.setCredentials(List.of(credential));
+
+        Response response = getUsersResource().create(user);
+        if (response.getStatus() != Response.Status.CREATED.getStatusCode()) {
+            log.error("Failed to create user in Keycloak: {}", response.getStatusInfo());
+            return "Failed to create user: " + response.getStatusInfo().getReasonPhrase();
+        }
+
+        String userId = getUsersResource().search(username).get(0).getId();
+        if (userId == null || !userId.matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")) {
+            log.error("Invalid user ID generated by Keycloak: {}", userId);
+            return "Failed to create user: Invalid user ID generated";
+        }
+
+        List<RoleRepresentation> rolesToAssign = new ArrayList<>();
+        for (String roleName : roleNames) {
+            try {
+                RoleRepresentation role = getRealm().roles().get(roleName).toRepresentation();
+                if (role == null || role.getId() == null || !role.getId().matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")) {
+                    log.error("Invalid or missing role ID for role {} in Keycloak", roleName);
+                    return "Invalid role ID for role: " + roleName;
+                }
+                rolesToAssign.add(role);
+            } catch (Exception e) {
+                log.error("Error retrieving role {}: {}", roleName, e.getMessage());
+                return "Failed to assign roles: " + e.getMessage();
+            }
+        }
+
+        getUsersResource().get(userId).roles().realmLevel().add(rolesToAssign);
+
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId(userId);
+        userEntity.setUsername(username);
+        userEntity.setEmail(email);
+        userEntity.setEnabled(true);
+
+        Set<Role> roles = roleNames.stream()
+                .map(name -> {
+                    RoleRepresentation roleRep = getRealm().roles().get(name).toRepresentation();
+                    if (roleRep == null || roleRep.getId() == null || !roleRep.getId().matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")) {
+                        log.warn("Skipping invalid role {} during user creation", name);
+                        return null;
+                    }
+                    return roleRepository.findByRoleName(name).orElseGet(() -> {
+                        Role newRole = new Role();
+                        newRole.setId(roleRep.getId());
+                        newRole.setRoleName(name);
+                        newRole.setDescription(roleRep.getDescription());
+                        log.debug("Creating new role in createUserWithRoles: {} (ID: {})", name, roleRep.getId());
+                        return roleRepository.saveAndFlush(newRole);
+                    });
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+        userEntity.setRoles(roles);
+
+        userRepository.save(userEntity);
+        log.info("User created with roles for ID: {}", userId);
+        return "User created with roles successfully!";
+    }
+
+    public String createUserProfile(String userId, String birthdate, String position, String education, String languages, String phoneNumber) {
+        if (userId == null || !userId.matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")) {
+            log.error("Invalid user ID for profile creation: {}", userId);
+            return "Invalid user ID: " + userId;
+        }
+
+        Optional<UserEntity> userEntityOptional = userRepository.findById(userId);
+        if (!userEntityOptional.isPresent()) {
+            log.info("User not found with ID: {}", userId);
+            return "User not found with ID: " + userId;
+        }
+
+        UserEntity userEntity = userEntityOptional.get();
+        try {
+            LocalDate parsedBirthdate = birthdate != null ? LocalDate.parse(birthdate) : null;
+            userEntity.setBirthdate(parsedBirthdate);
+        } catch (DateTimeParseException e) {
+            log.error("Invalid birthdate format for user ID {}: {}", userId, birthdate, e);
+            return "Invalid birthdate format. Use YYYY-MM-DD (e.g., 1989-06-06).";
+        }
+
+        userEntity.setPosition(position);
+        userEntity.setEducation(education);
+        userEntity.setLanguages(languages);
+        userEntity.setPhoneNumber(phoneNumber);
+
+        userRepository.save(userEntity);
+        log.info("Profile created for user ID: {}", userId);
+        return "User profile created successfully!";
+    }
+
+    public String updateUserProfile(String userId, String birthdate, String position, String education, String languages, String phoneNumber) {
+        if (userId == null || !userId.matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")) {
+            log.error("Invalid user ID for profile update: {}", userId);
+            return "Invalid user ID: " + userId;
+        }
+
+        Optional<UserEntity> userEntityOptional = userRepository.findById(userId);
+        if (!userEntityOptional.isPresent()) {
+            log.info("User not found with ID: {}", userId);
+            return "User not found with ID: " + userId;
+        }
+
+        UserEntity userEntity = userEntityOptional.get();
+        if (birthdate != null) {
+            try {
+                LocalDate parsedBirthdate = LocalDate.parse(birthdate);
+                userEntity.setBirthdate(parsedBirthdate);
+            } catch (DateTimeParseException e) {
+                log.error("Invalid birthdate format for user ID {}: {}", userId, birthdate, e);
+                return "Invalid birthdate format. Use YYYY-MM-DD (e.g., 1989-06-06).";
+            }
+        }
+        if (position != null) userEntity.setPosition(position);
+        if (education != null) userEntity.setEducation(education);
+        if (languages != null) userEntity.setLanguages(languages);
+        if (phoneNumber != null) userEntity.setPhoneNumber(phoneNumber);
+
+        userRepository.save(userEntity);
+        log.info("Profile updated for user ID: {}", userId);
+        return "User profile updated successfully!";
+    }
+
+    @Transactional
+    public String followUser(String followerId, String followedId) {
+        if (followerId == null || !followerId.matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$") ||
+                followedId == null || !followedId.matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")) {
+            log.error("Invalid follower ID {} or followed ID {}", followerId, followedId);
+            return "Invalid user ID: followerId=" + followerId + ", followedId=" + followedId;
+        }
+
+        log.debug("Attempting to make user {} follow user {}", followerId, followedId);
+        try {
+            if (followerId.equals(followedId)) {
+                log.warn("User {} attempted to follow themselves", followerId);
+                return "Cannot follow yourself";
+            }
+
+            Optional<UserEntity> followerOpt = userRepository.findById(followerId);
+            Optional<UserEntity> followedOpt = userRepository.findById(followedId);
+
+            if (!followerOpt.isPresent()) {
+                log.warn("Follower user not found: {}", followerId);
+                return "Follower user not found: " + followerId;
+            }
+            if (!followedOpt.isPresent()) {
+                log.warn("Followed user not found: {}", followedId);
+                return "Followed user not found: " + followedId;
+            }
+
+            UserEntity follower = followerOpt.get();
+            UserEntity followed = followedOpt.get();
+
+            if (follower.getFollowing() == null) {
+                log.debug("Follower {} has null following set, initializing", followerId);
+                follower.setFollowing(new HashSet<>());
+            }
+            if (followed.getFollowers() == null) {
+                log.debug("Followed {} has null followers set, initializing", followedId);
+                followed.setFollowers(new HashSet<>());
+            }
+
+            if (follower.getFollowing().contains(followed)) {
+                log.info("User {} already follows user {}", followerId, followedId);
+                return "Already following this user";
+            }
+
+            follower.getFollowing().add(followed);
+            followed.getFollowers().add(follower);
+
+            userRepository.save(follower);
+            userRepository.save(followed);
+            log.info("User {} now follows user {}", followerId, followedId);
+            return "Successfully followed user";
+        } catch (Exception e) {
+            log.error("Error while user {} attempts to follow user {}: {}", followerId, followedId, e.getMessage(), e);
+            throw new RuntimeException("Failed to follow user: " + e.getMessage(), e);
+        }
+    }
+
+    @Transactional
+    public String unfollowUser(String followerId, String followedId) {
+        if (followerId == null || !followerId.matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$") ||
+                followedId == null || !followedId.matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")) {
+            log.error("Invalid follower ID {} or followed ID {}", followerId, followedId);
+            return "Invalid user ID: followerId=" + followerId + ", followedId=" + followedId;
+        }
+
+        log.debug("Attempting to make user {} unfollow user {}", followerId, followedId);
+        try {
+            Optional<UserEntity> followerOpt = userRepository.findById(followerId);
+            Optional<UserEntity> followedOpt = userRepository.findById(followedId);
+
+            if (!followerOpt.isPresent()) {
+                log.warn("Follower user not found: {}", followerId);
+                return "Follower user not found: " + followerId;
+            }
+            if (!followedOpt.isPresent()) {
+                log.warn("Followed user not found: {}", followedId);
+                return "Followed user not found: " + followedId;
+            }
+
+            UserEntity follower = followerOpt.get();
+            UserEntity followed = followedOpt.get();
+
+            if (!follower.getFollowing().contains(followed)) {
+                log.info("User {} is not following user {}", followerId, followedId);
+                return "Not following this user";
+            }
+
+            follower.getFollowing().remove(followed);
+            followed.getFollowers().remove(follower);
+
+            userRepository.save(follower);
+            userRepository.save(followed);
+            log.info("User {} unfollowed user {}", followerId, followedId);
+
+            return "Successfully unfollowed user";
+        } catch (Exception e) {
+            log.error("Error while user {} attempts to unfollow user {}: {}", followerId, followedId, e.getMessage(), e);
+            throw new RuntimeException("Failed to unfollow user: " + e.getMessage(), e);
+        }
+    }
+
+    public List<Map<String, Object>> getFollowers(String userId) {
+        if (userId == null || !userId.matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")) {
+            log.error("Invalid user ID for fetching followers: {}", userId);
+            return List.of();
+        }
+
+        log.debug("Fetching followers for user {}", userId);
+        Optional<UserEntity> userOpt = userRepository.findById(userId);
+        if (!userOpt.isPresent()) {
+            log.warn("User not found: userId={}", userId);
+            return List.of();
+        }
+
+        return userOpt.get().getFollowers().stream()
+                .map(user -> {
+                    Map<String, Object> userMap = new HashMap<>();
+                    userMap.put("id", user.getId());
+                    userMap.put("username", user.getUsername());
+                    userMap.put("email", user.getEmail());
+                    return userMap;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<Map<String, Object>> getFollowing(String userId) {
+        if (userId == null || !userId.matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")) {
+            log.error("Invalid user ID for fetching following: {}", userId);
+            return List.of();
+        }
+
+        log.debug("Fetching following for user {}", userId);
+        Optional<UserEntity> userOpt = userRepository.findById(userId);
+        if (!userOpt.isPresent()) {
+            log.warn("User not found: userId={}", userId);
+            return List.of();
+        }
+
+        return userOpt.get().getFollowing().stream()
+                .map(user -> {
+                    Map<String, Object> userMap = new HashMap<>();
+                    userMap.put("id", user.getId());
+                    userMap.put("username", user.getUsername());
+                    userMap.put("email", user.getEmail());
+                    return userMap;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<Map<String, Object>> searchUsers(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            log.warn("Search query is empty or null");
+            return List.of();
+        }
+
+        List<UserEntity> users = userEntityRepository.searchByUsernameOrEmailOrPhoneNumber(query);
+        log.info("Found {} users matching query: {}", users.size(), query);
+
+        return users.stream()
+                .filter(user -> user.getId() != null && user.getId().matches("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"))
+                .map(user -> {
+                    Map<String, Object> userMap = new HashMap<>();
+                    userMap.put("id", user.getId());
+                    userMap.put("username", user.getUsername());
+                    userMap.put("email", user.getEmail());
+                    userMap.put("phoneNumber", user.getPhoneNumber());
+                    return userMap;
+                })
+                .collect(Collectors.toList());
+    }
+}

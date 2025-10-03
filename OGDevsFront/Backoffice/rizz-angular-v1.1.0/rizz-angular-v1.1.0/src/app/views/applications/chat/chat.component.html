@@ -1,0 +1,173 @@
+<div class="chat-container">
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>Messages</h2>
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="Search..." />
+    </div>
+    <div class="room-list">
+      <div
+        *ngFor="let room of chatRooms"
+        (click)="selectRoom(room)"
+        class="room-item"
+        [class.active]="room.id === selectedRoom?.id"
+      >
+        <img
+          src="/assets/images/avatardisc.jpg"
+          alt="Room Avatar"
+          (error)="handleImageError($event)"
+        />
+        <div class="room-info">
+          <p class="room-name">{{ room.name || 'Private Chat' }}</p>
+          <p class="last-message">{{ room.lastMessage || 'No messages yet' }}</p>
+        </div>
+      </div>
+      <div class="room-item" (click)="openCreateRoomModal(createRoomModal)">
+        <img
+          src="/assets/images/roooomavatar.jpg"
+          alt="Create Room"
+          (error)="handleImageError($event)"
+        />
+        <div class="room-info">
+          <p class="room-name">Create New Room</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-area">
+    <div class="chat-header" *ngIf="selectedRoom; else noRoomHeader">
+      <h3>{{ selectedRoom?.name || 'Private Chat' }}</h3>
+      <div class="actions">
+        <button (click)="openEditRoomModal(editRoomModal)">✏️</button>
+        <button (click)="deleteRoom()">🗑️</button>
+        <button (click)="leaveRoom()">🚪</button>
+      </div>
+    </div>
+
+    <div class="messages" *ngIf="selectedRoom; else noRoom">
+      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+      <div *ngFor="let message of messages" class="message" [class.sent]="message.senderId === userId" [class.received]="message.senderId !== userId">
+        <span class="sender">{{ message.senderUsername }}:</span>
+        <span class="content">{{ message.content }}</span>
+        <div class="message-meta">
+          <span class="time">{{ message.createdAt | date:'shortTime' }}</span>
+          <span *ngIf="message.seen && message.senderId === userId" class="seen">✓✓</span>
+          <div class="message-actions">
+            <span
+              *ngIf="!message.seen && message.senderId !== userId"
+              (click)="markAsRead(message.id)"
+              class="icon icon-mark-read"
+              title="Mark as Read"
+            >✔</span>
+            <span
+              *ngIf="message.senderId === userId"
+              (click)="deleteMessage(message.id)"
+              class="icon icon-delete"
+              title="Delete"
+            >🗑️</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #noRoomHeader>
+      <div class="chat-header">
+        <h3>Select a Chat</h3>
+      </div>
+    </ng-template>
+    <ng-template #noRoom>
+      <div class="messages">
+        <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+        <p class="text-muted">Select a room to start chatting.</p>
+      </div>
+    </ng-template>
+
+    <div class="message-input" *ngIf="selectedRoom">
+      <input
+        type="text"
+        [(ngModel)]="messageContent"
+        (keyup.enter)="sendMessage()"
+        placeholder="Type a message..."
+      />
+      <button (click)="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <!-- Modal for Creating a Room -->
+  <ng-template #createRoomModal let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title m-0">Create New Room</h6>
+      <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="createRoomForm" (ngSubmit)="createRoom()">
+        <div class="mb-3 row">
+          <label for="roomName" class="col-sm-3 col-form-label text-end fw-medium">Room Name:</label>
+          <div class="col-sm-9">
+            <input
+              type="text"
+              formControlName="roomName"
+              class="form-control"
+              id="roomName"
+              placeholder="Enter room name"
+              [ngClass]="{ 'is-invalid': submitted && createForm['roomName'].errors }"
+            />
+            <div *ngIf="submitted && createForm['roomName'].errors" class="invalid-feedback">
+              Room name is required
+            </div>
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="userIds" class="col-sm-3 col-form-label text-end fw-medium">Select Users:</label>
+          <div class="col-sm-9">
+            <select
+              formControlName="userIds"
+              class="form-select"
+              id="userIds"
+              multiple
+            >
+              <option *ngFor="let user of allUsers" [value]="user.id">{{ user.username }}</option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary btn-sm" (click)="createRoom()">Save</button>
+      <button type="button" class="btn btn-outline-danger btn-sm" (click)="modal.dismiss()">Close</button>
+    </div>
+  </ng-template>
+
+  <!-- Modal for Editing a Room -->
+  <ng-template #editRoomModal let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title m-0">Edit Room Name</h6>
+      <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="editRoomForm" (ngSubmit)="editRoom()">
+        <div class="mb-3 row">
+          <label for="editRoomName" class="col-sm-3 col-form-label text-end fw-medium">Room Name:</label>
+          <div class="col-sm-9">
+            <input
+              type="text"
+              formControlName="roomName"
+              class="form-control"
+              id="editRoomName"
+              placeholder="Enter new room name"
+              [ngClass]="{ 'is-invalid': editSubmitted && editForm['roomName'].errors }"
+            />
+            <div *ngIf="editSubmitted && editForm['roomName'].errors" class="invalid-feedback">
+              Room name is required
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary btn-sm" (click)="editRoom()">Save</button>
+      <button type="button" class="btn btn-outline-danger btn-sm" (click)="modal.dismiss()">Close</button>
+    </div>
+  </ng-template>
+</div>

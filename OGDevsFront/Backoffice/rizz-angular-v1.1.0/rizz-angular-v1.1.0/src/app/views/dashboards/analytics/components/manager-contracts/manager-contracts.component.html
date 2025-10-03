@@ -1,0 +1,501 @@
+<div class="container">
+  <!-- Titre -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Manage Contracts</h2>
+    <button class="btn btn-primary custom-btn" (click)="openAddContractModal(addContractModal)">
+      Add New Contract
+    </button>
+  </div>
+
+  <!-- Table with Pagination -->
+  <div class="card custom-card">
+    <div class="card-header">
+      <div class="row align-items-center">
+        <div class="col">
+          <h4 class="card-title">Contracts List</h4>
+        </div>
+      </div>
+    </div>
+    <div class="card-body pt-0">
+      <div class="table-responsive">
+        <table class="table datatable">
+          <thead class="table-light">
+          <tr>
+            <th scope="col">Contract Number</th>
+            <th scope="col">Title</th>
+            <th scope="col">Value</th>
+            <th scope="col">Status</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">Client</th>
+            <th scope="col">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+            @for (contract of displayedContracts; track contract.id) {
+              <tr>
+                <td>{{ contract.contractNumber }}</td>
+                <td>{{ contract.title }}</td>
+                <td>{{ contract.value | currency:'EUR' }}</td>
+                <td>{{ contract.status }}</td>
+                <td>{{ contract.startDate | date }}</td>
+                <td>{{ contract.endDate | date }}</td>
+                <td>{{ contract.clientUsername }}</td>
+                <td>
+                  <button class="btn btn-primary btn-sm me-1 custom-btn" (click)="openDetailsModal(detailsModal, contract)">
+                    View Details
+                  </button>
+                  <button class="btn btn-warning btn-sm me-1 custom-btn" (click)="openEditContractModal(editContractModal, contract)">
+                    Edit
+                  </button>
+                  <button class="btn btn-danger btn-sm custom-btn" (click)="deleteContract(contract.id)">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+
+        <div class="d-flex justify-content-between p-2">
+          <ngb-pagination
+            [collectionSize]="collectionSize"
+            [(page)]="page"
+            [pageSize]="pageSize"
+            (pageChange)="refreshContracts()"
+            [boundaryLinks]="false"
+            [maxSize]="0"
+          >
+            <ng-template ngbPaginationPrevious>
+              <span>«</span>
+            </ng-template>
+            <ng-template ngbPaginationNext>
+              <span>»</span>
+            </ng-template>
+          </ngb-pagination>
+
+          <select
+            class="form-select custom-select"
+            style="width: auto"
+            [(ngModel)]="pageSize"
+            (ngModelChange)="refreshContracts()"
+          >
+            <option [ngValue]="2">2 items per page</option>
+            <option [ngValue]="4">4 items per page</option>
+            <option [ngValue]="6">6 items per page</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Section -->
+  <div class="stats-section mt-5">
+    <div class="row">
+      <!-- Card 1: Contracts by Status -->
+      <div class="col-md-4 mb-4">
+        <div class="card stat-card h-100">
+          <div class="card-header d-flex align-items-center stat-card-header">
+            <i class="bi bi-file-earmark-check stat-icon"></i>
+            <h5 class="card-title mb-0 ms-2">Contracts by Status</h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-unstyled stat-list">
+              @for (entry of contractsByStatus | keyvalue; track entry.key) {
+                <li class="d-flex justify-content-between align-items-center">
+                  <span class="stat-label">{{ entry.key }}</span>
+                  <span class="stat-value badge bg-primary">{{ entry.value }}</span>
+                </li>
+              }
+            </ul>
+          </div>
+          <div class="card-footer text-center">
+            <button class="btn btn-outline-primary custom-btn" (click)="loadStats()">Refresh</button>
+          </div>
+        </div>
+      </div>
+
+<!--      &lt;!&ndash; Card 2: Contracts by Client &ndash;&gt;-->
+<!--      <div class="col-md-4 mb-4">-->
+<!--        <div class="card stat-card h-100">-->
+<!--          <div class="card-header d-flex align-items-center stat-card-header">-->
+<!--            <i class="bi bi-people stat-icon"></i>-->
+<!--            <h5 class="card-title mb-0 ms-2">Contracts by Client</h5>-->
+<!--          </div>-->
+<!--          <div class="card-body">-->
+<!--            <ul class="list-unstyled stat-list">-->
+<!--              @for (entry of contractsByClient | keyvalue; track entry.key) {-->
+<!--                <li class="d-flex justify-content-between align-items-center">-->
+<!--                  <span class="stat-label">Client {{ entry.value }}</span>-->
+<!--                  <span class="stat-value badge bg-success">{{ entry.value }}</span>-->
+<!--                </li>-->
+<!--              }-->
+<!--            </ul>-->
+<!--          </div>-->
+<!--          <div class="card-footer text-center">-->
+<!--            <button class="btn btn-outline-success custom-btn" (click)="loadStats()">Refresh</button>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+      <!-- Card 3: Contracts by Echeance -->
+      <div class="col-md-4 mb-4">
+        <div class="card stat-card h-100">
+          <div class="card-header d-flex align-items-center stat-card-header">
+            <i class="bi bi-calendar-date stat-icon"></i>
+            <h5 class="card-title mb-0 ms-2">Contracts by Echeance</h5>
+          </div>
+          <div class="card-body">
+            <div class="mb-3 row">
+              <label for="echeanceStartDate" class="col-sm-4 col-form-label fw-medium">Start Date:</label>
+              <div class="col-sm-8">
+                <input
+                  type="date"
+                  [(ngModel)]="echeanceStartDate"
+                  class="form-control custom-input"
+                  id="echeanceStartDate"
+                />
+              </div>
+            </div>
+            <div class="mb-3 row">
+              <label for="echeanceEndDate" class="col-sm-4 col-form-label fw-medium">End Date:</label>
+              <div class="col-sm-9">
+                <input
+                  type="date"
+                  [(ngModel)]="echeanceEndDate"
+                  class="form-control custom-input"
+                  id="echeanceEndDate"
+                />
+              </div>
+            </div>
+            <ul class="list-unstyled stat-list" *ngIf="contractsByEcheance.length">
+              @for (contract of contractsByEcheance; track contract.id) {
+                <li class="d-flex justify-content-between align-items-center">
+                  <span class="stat-label">{{ contract.contractNumber }}</span>
+                  <span class="stat-value">End: {{ contract.endDate | date }}</span>
+                </li>
+              }
+            </ul>
+          </div>
+          <div class="card-footer text-center">
+            <button class="btn btn-outline-warning custom-btn" (click)="loadContractsByEcheance()">Search</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Performance Analysis Section -->
+    <div class="mt-5">
+      <div class="card custom-card">
+        <div class="card-body">
+          <button class="btn btn-primary custom-btn mb-3" (click)="loadPerformanceAnalysis()">Load Performance</button>
+          <div *ngIf="performanceAnalysis">
+            @for (entry of performanceAnalysis | keyvalue; track entry.key) {
+              <div class="performance-entry mb-3 p-3 rounded">
+                <p class="mb-1">Average Score: <span class="badge bg-info">{{ entry.value.averageScore }}</span></p>
+                <p class="mb-1">Alert: <span class="badge bg-warning">{{ entry.value.alert }}</span></p>
+                <p class="mb-1">Score History:</p>
+                <ul class="list-unstyled stat-list">
+                  @for (score of entry.value.scoreHistory; track score.date) {
+                    <li class="d-flex justify-content-between align-items-center">
+                      <span class="stat-label">Date: {{ score.date | date }}</span>
+                      <span class="stat-value">Score: {{ score.score }}</span>
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modale pour ajouter un contrat -->
+  <ng-template #addContractModal let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title m-0">Add New Contract</h6>
+      <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="contractForm" (ngSubmit)="createContract()">
+        <div class="mb-3 row">
+          <label for="title" class="col-sm-3 col-form-label text-end fw-medium">Title:</label>
+          <div class="col-sm-9">
+            <input
+              type="text"
+              formControlName="title"
+              class="form-control custom-input"
+              id="title"
+              placeholder="Contract Title"
+              [ngClass]="{ 'is-invalid': submitted && form['title'].errors }"
+            />
+            @if (submitted && form['title'].errors) {
+              <div class="invalid-feedback">Title is required</div>
+            }
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="contractNumber" class="col-sm-3 col-form-label text-end fw-medium">Contract Number:</label>
+          <div class="col-sm-9">
+            <input
+              type="text"
+              formControlName="contractNumber"
+              class="form-control custom-input"
+              id="contractNumber"
+              placeholder="e.g., CTR-2025-001"
+              [ngClass]="{ 'is-invalid': submitted && form['contractNumber'].errors }"
+            />
+            @if (submitted && form['contractNumber'].errors) {
+              <div class="invalid-feedback">Contract Number is required</div>
+            }
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="value" class="col-sm-3 col-form-label text-end fw-medium">Value (EUR):</label>
+          <div class="col-sm-9">
+            <input
+              type="number"
+              formControlName="value"
+              class="form-control custom-input"
+              id="value"
+              placeholder="Contract Value"
+              [ngClass]="{ 'is-invalid': submitted && form['value'].errors }"
+            />
+            @if (submitted && form['value'].errors) {
+              <div class="invalid-feedback">Value is required</div>
+            }
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="startDate" class="col-sm-3 col-form-label text-end fw-medium">Start Date:</label>
+          <div class="col-sm-9">
+            <input
+              type="date"
+              formControlName="startDate"
+              class="form-control custom-input"
+              id="startDate"
+              [ngClass]="{ 'is-invalid': submitted && form['startDate'].errors }"
+            />
+            @if (submitted && form['startDate'].errors) {
+              <div class="invalid-feedback">Start Date is required</div>
+            }
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="endDate" class="col-sm-3 col-form-label text-end fw-medium">End Date:</label>
+          <div class="col-sm-9">
+            <input
+              type="date"
+              formControlName="endDate"
+              class="form-control custom-input"
+              id="endDate"
+              [ngClass]="{ 'is-invalid': submitted && form['endDate'].errors }"
+            />
+            @if (submitted && form['endDate'].errors) {
+              <div class="invalid-feedback">End Date is required</div>
+            }
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="status" class="col-sm-3 col-form-label text-end fw-medium">Status:</label>
+          <div class="col-sm-9">
+            <select
+              formControlName="status"
+              class="form-select custom-select"
+              id="status"
+              [ngClass]="{ 'is-invalid': submitted && form['status'].errors }"
+            >
+              <option value="">Select a status</option>
+              @for (status of contractStatuses; track status) {
+                <option [value]="status">{{ status }}</option>
+              }
+            </select>
+            @if (submitted && form['status'].errors) {
+              <div class="invalid-feedback">Status is required</div>
+            }
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="clientId" class="col-sm-3 col-form-label text-end fw-medium">Client:</label>
+          <div class="col-sm-9">
+            <select
+              formControlName="clientId"
+              class="form-select custom-select"
+              id="clientId"
+              [ngClass]="{ 'is-invalid': submitted && form['clientId'].errors }"
+            >
+              <option value="">Select a client</option>
+              @for (user of users; track user.id) {
+                <option [value]="user.id">{{ user.username }}</option>
+              }
+            </select>
+            @if (submitted && form['clientId'].errors) {
+              <div class="invalid-feedback">Client is required</div>
+            }
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary custom-btn btn-sm" (click)="createContract()">Save</button>
+      <button type="button" class="btn btn-outline-danger btn-sm custom-btn" (click)="modal.dismiss()">Close</button>
+    </div>
+  </ng-template>
+
+  <!-- Modale pour modifier un contrat -->
+  <ng-template #editContractModal let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title m-0">Edit Contract</h6>
+      <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="contractForm" (ngSubmit)="updateContract()">
+        <div class="mb-3 row">
+          <label for="title" class="col-sm-3 col-form-label text-end fw-medium">Title:</label>
+          <div class="col-sm-9">
+            <input
+              type="text"
+              formControlName="title"
+              class="form-control custom-input"
+              id="title"
+              placeholder="Contract Title"
+              [ngClass]="{ 'is-invalid': submitted && form['title'].errors }"
+            />
+            @if (submitted && form['title'].errors) {
+              <div class="invalid-feedback">Title is required</div>
+            }
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="contractNumber" class="col-sm-3 col-form-label text-end fw-medium">Contract Number:</label>
+          <div class="col-sm-9">
+            <input
+              type="text"
+              formControlName="contractNumber"
+              class="form-control custom-input"
+              id="contractNumber"
+              placeholder="e.g., CTR-2025-001"
+              [ngClass]="{ 'is-invalid': submitted && form['contractNumber'].errors }"
+            />
+            @if (submitted && form['contractNumber'].errors) {
+              <div class="invalid-feedback">Contract Number is required</div>
+            }
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="value" class="col-sm-3 col-form-label text-end fw-medium">Value (EUR):</label>
+          <div class="col-sm-9">
+            <input
+              type="number"
+              formControlName="value"
+              class="form-control custom-input"
+              id="value"
+              placeholder="Contract Value"
+              [ngClass]="{ 'is-invalid': submitted && form['value'].errors }"
+            />
+            @if (submitted && form['value'].errors) {
+              <div class="invalid-feedback">Value is required</div>
+            }
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="startDate" class="col-sm-3 col-form-label text-end fw-medium">Start Date:</label>
+          <div class="col-sm-9">
+            <input
+              type="date"
+              formControlName="startDate"
+              class="form-control custom-input"
+              id="startDate"
+              [ngClass]="{ 'is-invalid': submitted && form['startDate'].errors }"
+            />
+            @if (submitted && form['startDate'].errors) {
+              <div class="invalid-feedback">Start Date is required</div>
+            }
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="endDate" class="col-sm-3 col-form-label text-end fw-medium">End Date:</label>
+          <div class="col-sm-9">
+            <input
+              type="date"
+              formControlName="endDate"
+              class="form-control custom-input"
+              id="endDate"
+              [ngClass]="{ 'is-invalid': submitted && form['endDate'].errors }"
+            />
+            @if (submitted && form['endDate'].errors) {
+              <div class="invalid-feedback">End Date is required</div>
+            }
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="status" class="col-sm-3 col-form-label text-end fw-medium">Status:</label>
+          <div class="col-sm-9">
+            <select
+              formControlName="status"
+              class="form-select custom-select"
+              id="status"
+              [ngClass]="{ 'is-invalid': submitted && form['status'].errors }"
+            >
+              <option value="">Select a status</option>
+              @for (status of contractStatuses; track status) {
+                <option [value]="status">{{ status }}</option>
+              }
+            </select>
+            @if (submitted && form['status'].errors) {
+              <div class="invalid-feedback">Status is required</div>
+            }
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="clientId" class="col-sm-3 col-form-label text-end fw-medium">Client:</label>
+          <div class="col-sm-9">
+            <select
+              formControlName="clientId"
+              class="form-select custom-select"
+              id="clientId"
+              [ngClass]="{ 'is-invalid': submitted && form['clientId'].errors }"
+            >
+              <option value="">Select a client</option>
+              @for (user of users; track user.id) {
+                <option [value]="user.id">{{ user.username }}</option>
+              }
+            </select>
+            @if (submitted && form['clientId'].errors) {
+              <div class="invalid-feedback">Client is required</div>
+            }
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary btn-sm custom-btn" (click)="updateContract()">Save</button>
+      <button type="button" class="btn btn-outline-danger btn-sm custom-btn" (click)="modal.dismiss()">Close</button>
+    </div>
+  </ng-template>
+
+  <!-- Modale pour afficher les détails du contrat -->
+  <ng-template #detailsModal let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title m-0">Contract Details</h6>
+      <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="selectedContract">
+        <p><strong>Contract ID:</strong> {{ selectedContract.id || 'N/A' }}</p>
+        <p><strong>Contract Number:</strong> {{ selectedContract.contractNumber || 'N/A' }}</p>
+        <p><strong>Title:</strong> {{ selectedContract.title || 'N/A' }}</p>
+        <p><strong>Value:</strong> {{ (selectedContract.value | currency:'EUR') || 'N/A' }}</p>
+        <p><strong>Status:</strong> {{ selectedContract.status || 'N/A' }}</p>
+        <p><strong>Start Date:</strong> {{ (selectedContract.startDate | date) || 'N/A' }}</p>
+        <p><strong>End Date:</strong> {{ (selectedContract.endDate | date) || 'N/A' }}</p>
+        <p><strong>Client Name:</strong> {{ selectedContract.clientUsername || 'N/A' }}</p>
+        <p><strong>Client ID:</strong> {{ selectedContract.clientId || 'N/A' }}</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-danger btn-sm custom-btn" (click)="modal.dismiss()">Close</button>
+    </div>
+  </ng-template>
+</div>

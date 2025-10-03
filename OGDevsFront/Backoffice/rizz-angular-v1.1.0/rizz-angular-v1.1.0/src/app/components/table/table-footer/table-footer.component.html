@@ -1,0 +1,31 @@
+<div
+  class="align-items-center justify-content-between row g-0 text-center text-sm-start pt-3 border-top"
+>
+  <div class="col-sm">
+    <div>
+      Showing
+      <span class="fw-semibold">{{ tableService.startIndex + 1 }}</span>
+      to
+      <span class="fw-semibold">{{ tableService.endIndex }}</span>
+      of
+      <span class="fw-semibold">{{ (total | async)! }}</span>
+      Results
+    </div>
+  </div>
+  <div class="col-sm-auto mt-3 mt-sm-0">
+    <ul class="datatable-pagination-list">
+      <ngb-pagination
+        [collectionSize]="(total | async)!"
+        [(page)]="tableService.page"
+        [pageSize]="tableService.pageSize"
+      >
+        <ng-template ngbPaginationPrevious
+          ><i class="las la-angle-left"></i
+        ></ng-template>
+        <ng-template ngbPaginationNext
+          ><i class="las la-angle-right"></i
+        ></ng-template>
+      </ngb-pagination>
+    </ul>
+  </div>
+</div>

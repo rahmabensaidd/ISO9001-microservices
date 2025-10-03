@@ -1,0 +1,23 @@
+<div class="card">
+  <card-title title="Customers Growth" selected="This Year" />
+
+  <div class="card-body pt-0">
+    <div id="customers-line" class="apex-charts">
+      <apx-chart
+        [series]="growthChart.series!"
+        [tooltip]="growthChart.tooltip!"
+        [markers]="growthChart.markers!"
+        [chart]="growthChart.chart!"
+        [plotOptions]="growthChart.plotOptions!"
+        [stroke]="growthChart.stroke!"
+        [grid]="growthChart.grid!"
+        [dataLabels]="growthChart.dataLabels!"
+        [xaxis]="growthChart.xaxis!"
+        [colors]="growthChart.colors!"
+        [legend]="growthChart.legend!"
+      ></apx-chart>
+    </div>
+  </div>
+  <!--end card-body-->
+</div>
+<!--end card-->

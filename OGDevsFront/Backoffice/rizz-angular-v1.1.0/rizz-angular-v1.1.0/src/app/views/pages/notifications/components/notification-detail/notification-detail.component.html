@@ -1,0 +1,62 @@
+@for (item of notificationDetailData; track $index) {
+  <div class="card-body mb-3">
+    <h5
+      class="me-0.5 mb-0 d-inline-block"
+      [ngClass]="item.date === 'Today' ? 'text-body' : 'text-muted'"
+    >
+      {{ item.date }}
+    </h5>
+    <span
+      class="text-pink bg-pink-subtle py-0 px-1 rounded fw-medium d-inline-block ms-1"
+      >{{ item.count }}</span
+    >
+  </div>
+  @for (event of item.events; track $index) {
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-10">
+            <a href="javascript:void(0);" class="">
+              <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                  <img
+                    [src]="event.avatar"
+                    alt=""
+                    class="thumb-lg rounded-circle"
+                  />
+                </div>
+                <div class="flex-grow-1 ms-2 text-truncate">
+                  <h6 class="my-1 fw-medium text-dark fs-14">
+                    {{ event.title
+                    }}<small class="text-muted ps-2">{{ event.time }}</small>
+                  </h6>
+                  <p class="text-muted mb-0 text-wrap">
+                    {{ event.description }}
+                  </p>
+                </div>
+                <!--end media-body-->
+              </div>
+              <!--end media-->
+            </a>
+          </div>
+          <!--end col-->
+          <div class="col-md-2 text-end align-self-center mt-sm-2 mt-lg-0">
+            <button type="button" class="btn btn-primary btn-sm px-2 me-0.5">
+              View
+            </button>
+            <button
+              type="button"
+              class="btn btn bg-secondary-subtle text-secondary btn-sm"
+            >
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  }
+}

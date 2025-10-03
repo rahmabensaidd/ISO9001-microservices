@@ -1,0 +1,9 @@
+<div class="row">
+  @for (data of teamList; track $index) {
+    <div class="col-md-6 col-lg-4">
+      <team-card [team]="data" />
+    </div>
+    <!--end col-->
+  }
+</div>
+<!--end row-->

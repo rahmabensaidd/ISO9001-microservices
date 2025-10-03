@@ -1,0 +1,91 @@
+<div class="table-responsive">
+  <app-table-header />
+  <table class="table mb-0 checkbox-all text-nowrap" id="datatable_1">
+    <thead class="table-light">
+      <tr>
+        <th style="width: 16px">
+          <div class="form-check mb-0 ms-n1">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              name="select-all"
+              id="select-all"
+            />
+          </div>
+        </th>
+        <th class="ps-0" sortable="name" (sort)="onSort($event)">
+          Product Name
+        </th>
+        <th sortable="category" (sort)="onSort($event)">Category</th>
+        <th sortable="pics" (sort)="onSort($event)">Pics</th>
+        <th sortable="price" (sort)="onSort($event)">Price</th>
+        <th sortable="status" (sort)="onSort($event)">Status</th>
+        <th sortable="created_at" (sort)="onSort($event)">Created At</th>
+        <th class="text-end">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (data of product$ | async; track $index) {
+        <tr>
+          <td style="width: 16px">
+            <div class="form-check">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                name="check"
+                id="customCheck1"
+              />
+            </div>
+          </td>
+          <td class="ps-0">
+            <img [src]="data.image" alt="" height="40" />
+            <p class="d-inline-block align-middle mb-0">
+              <a
+                routerLink="/apps/ecommerce/orders/3001"
+                class="d-inline-block align-middle mb-0 product-name"
+                >{{ data.name }}</a
+              >
+              <br />
+              <span class="text-muted font-13">{{ data.description }}</span>
+            </p>
+          </td>
+          <td>{{ data.category }}</td>
+          <td>{{ data.pics }}</td>
+          <td>{{ currency }}{{ data.price }}</td>
+          <td>
+            <span
+              class="badge"
+              [ngClass]="{
+                'bg-secondary-subtle text-secondary': data.status == 'Draft',
+                'bg-success-subtle text-success': data.status == 'Published',
+                'bg-danger-subtle text-danger': data.status == 'Inactive',
+              }"
+            >
+              <i
+                class="fas me-1"
+                [ngClass]="{
+                  'fa-box-archive': data.status == 'Draft',
+                  'fa-check': data.status == 'Published',
+                  'fa-xmark': data.status == 'Inactive',
+                }"
+              ></i>
+              {{ data.status }}</span
+            >
+          </td>
+          <td>
+            <span>{{ data.created_at }}</span>
+          </td>
+          <td class="text-end">
+            <a href="javascript:void(0);"
+              ><i class="las la-pen text-secondary fs-18 me-0.5"></i
+            ></a>
+            <a href="javascript:void(0);"
+              ><i class="las la-trash-alt text-secondary fs-18"></i
+            ></a>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+<app-table-footer [total]="total$" />

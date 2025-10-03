@@ -1,0 +1,39 @@
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  padding: 15px;
+}
+
+.card-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.card-body h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.alert-danger {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 5px;
+}

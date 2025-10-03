@@ -1,0 +1,75 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body bg-black">
+        <div class="row">
+          <div class="col-4 align-self-center">
+            <img src="assets/images/logo-sm.png" alt="logo-small" class="logo-sm me-1" height="70" />
+          </div>
+          <div class="col-8 text-end align-self-center">
+            <h5 class="mb-1 fw-semibold text-white">
+              <span class="text-muted">Invoice:</span> #BBN2351D458
+            </h5>
+            <h5 class="mb-0 fw-semibold text-white">
+              <span class="text-muted">Issue Date:</span> 20/07/{{ currentYear }}
+            </h5>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <invoice-address />
+        <invoice-product />
+        <invoice-terms />
+
+        <hr />
+        <div class="row d-flex justify-content-center">
+          <div class="col-lg-12 col-xl-4 ms-auto align-self-center text-center">
+            <small class="fs-12">Thank you very much for doing business with us.</small>
+          </div>
+          <div class="col-lg-12 col-xl-4">
+            <div class="float-end d-print-none mt-2 mt-md-0">
+              <button onclick="printInvoice()" class="btn btn-info me-0.5">Print</button>
+              <button onclick="submitInvoice()" class="btn btn-primary me-0.5">Submit</button>
+              <button onclick="cancelInvoice()" class="btn btn-danger me-0.5">Cancel</button>
+              <button onclick="uploadFile()" class="btn btn-success me-0.5">Upload</button>
+              <button onclick="deleteInvoice()" class="btn btn-warning">Delete</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="messageBox" class="mt-3 text-center"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showMessage(message, type) {
+    const messageBox = document.getElementById('messageBox');
+    messageBox.innerHTML = `<div class="alert alert-${type}" role="alert">${message}</div>`;
+    setTimeout(() => {
+      messageBox.innerHTML = "";
+    }, 3000);
+  }
+
+  function printInvoice() {
+    window.print();
+    showMessage('Invoice printed successfully!', 'info');
+  }
+
+  function submitInvoice() {
+    showMessage('Invoice submitted successfully!', 'primary');
+  }
+
+  function cancelInvoice() {
+    showMessage('Invoice cancelled successfully!', 'danger');
+  }
+
+  function uploadFile() {
+    showMessage('File uploaded successfully!', 'success');
+  }
+
+  function deleteInvoice() {
+    showMessage('Invoice deleted successfully!', 'warning');
+  }
+</script>

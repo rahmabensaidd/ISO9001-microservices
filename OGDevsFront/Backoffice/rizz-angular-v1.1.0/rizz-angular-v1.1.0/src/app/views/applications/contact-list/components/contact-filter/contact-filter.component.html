@@ -1,0 +1,68 @@
+<form class="row g-2">
+  <div ngbDropdown class="col-auto">
+    <a
+      ngbDropdownToggle
+      class="btn bg-primary-subtle text-primary dropdown-toggle d-flex align-items-center arrow-none"
+      data-bs-toggle="dropdown"
+      role="button"
+      aria-haspopup="false"
+      aria-expanded="false"
+      data-bs-auto-close="outside"
+    >
+      <i class="iconoir-filter-alt me-1"></i> Filter
+    </a>
+    <div ngbDropdownMenu class="dropdown-menu dropdown-menu-start">
+      <div class="p-2">
+        <div class="form-check mb-2">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            checked
+            id="filter-all"
+          />
+          <label class="form-check-label" for="filter-all"> All </label>
+        </div>
+        <div class="form-check mb-2">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            checked
+            id="filter-one"
+          />
+          <label class="form-check-label" for="filter-one"> New </label>
+        </div>
+        <div class="form-check mb-2">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            checked
+            id="filter-two"
+          />
+          <label class="form-check-label" for="filter-two"> Active </label>
+        </div>
+        <div class="form-check">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            checked
+            id="filter-three"
+          />
+          <label class="form-check-label" for="filter-three"> Inactive </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--end col-->
+
+  <div class="col-auto">
+    <button
+      type="button"
+      class="btn btn-primary"
+      data-bs-toggle="modal"
+      data-bs-target="#addBoard"
+    >
+      <i class="fa-solid fa-plus me-1"></i> Add Contact
+    </button>
+  </div>
+  <!--end col-->
+</form>

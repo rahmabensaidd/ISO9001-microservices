@@ -1,0 +1,8 @@
+<div class="row">
+  @for (item of clientList; track $index) {
+    <div class="col-md-6 col-lg-4">
+      <client-card [client]="item" />
+    </div>
+    <!--end row-->
+  }
+</div>

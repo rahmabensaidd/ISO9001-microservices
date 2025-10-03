@@ -1,0 +1,791 @@
+<div class="container my-5">
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-4">
+      <!-- Loading and Error States -->
+      <div *ngIf="loading" class="text-center text-muted mb-4">
+        <i class="las la-spinner la-spin me-2"></i>Chargement du projet...
+      </div>
+      <div *ngIf="error" class="alert alert-danger" role="alert">
+        {{ error }}
+      </div>
+
+      <!-- Sections -->
+      <div *ngIf="project">
+        <!-- Infos Section (Always Open) -->
+        <div class="section-item border-0 mb-4 shadow-sm p-4 rounded bg-white">
+          <h2 class="section-header d-flex align-items-center mb-4 border-bottom pb-2">
+            <i class="las la-info-circle me-2 fs-5 text-primary"></i>
+            <span class=" fs-5  text-dark">Project Information</span>
+          </h2>
+
+          <div class="section-content">
+            <h3 class="fw-bold text-secondary mb-4">{{ project.name }}</h3>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <p class="mb-2">
+                  <i class="las la-align-left me-2 fs-5 text-secondary"></i>
+                  <span class="text-muted fw-semibold">Description:</span> {{ project.description }}
+                </p>
+                <p class="mb-2">
+                  <i class="las la-calendar-plus me-2 fs-5 text-success"></i>
+                  <span class="text-muted fw-semibold">Start Date:</span> {{ project.start_Date | date:'mediumDate' }}
+
+                </p>
+                <p class="mb-2">
+                  <i class="las la-calendar-check me-2 fs-5 text-danger"></i>
+                  <span class="text-muted fw-semibold">End Date:</span> {{ project.expected_endDate | date:'mediumDate' }}
+              </div>
+              <div class="col-md-6 mb-3">
+                <p class="mb-2">
+                  <i class="las la-user me-2 fs-5 text-info"></i>
+                  <span class="text-muted fw-semibold">Responsible:</span> {{ project.responsable?.username }}
+                </p>
+                <p class="mb-2">
+                  <i class="las la-envelope me-2 fs-5 text-warning"></i>
+                  <span class="text-muted fw-semibold email">Email:</span> {{ project.responsable?.email }}
+                </p>
+                <p class="mb-2">
+                  <i class="las la-user me-2 fs-5 text-info"></i>
+                  <span class="text-muted fw-semibold">Client:</span> {{ project.client?.username }}
+                </p>
+                <p class="mb-2 ">
+                  <i class="las la-envelope me-2 fs-5 text-warning"></i>
+                  <span class="text-muted fw-semibold email">Email:</span> {{ project.client?.email }}
+                </p>
+              </div>
+
+
+
+
+            </div>
+          </div>
+        </div>
+
+        <div class="section-item border-0 mb-3 shadow-sm">
+          <h2 class="section-header">
+            <button class="section-button" (click)="toggleSection('req')" [ngClass]="{'active': activeSection === 'req'}">
+              <i class="iconoir-code-brackets"></i>  Project Requirements
+            </button>
+          </h2>
+          <div class="section-content" *ngIf="activeSection === 'req'">
+            <div class="section-body">
+
+              <div class="requirements-container">
+                <p class="requirements-title">Project Requirements:</p>
+                <button class="btn btn-primary btn-sm" (click)="openManualModalreq()">Add manually</button>
+                <div class="requirements-list">
+            <span class="requirement-item" *ngFor="let requirement of project.requirements">
+              <span class="requirement-icon"><i class="las la-check-circle"></i></span>
+              <span class="requirement-text">{{ requirement }}</span>
+              <!-- Boule de suppression, invisible par défaut -->
+           <span class="delete-icon"  (click)="deleteRequirement(requirement)" >
+           <i class="las la-times-circle" ></i>
+           </span>
+            </span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="section-item border-0 mb-3 shadow-sm">
+          <h2 class="section-header">
+            <button class="section-button" (click)="toggleSection('tech')" [ngClass]="{'active': activeSection === 'tech'}">
+              <i class="iconoir-code-brackets"></i>  Project technologies
+            </button>
+          </h2>
+          <div class="section-content" *ngIf="activeSection === 'tech'">
+            <div class="section-body">
+
+              <div class="requirements-container">
+                <p class="requirements-title">Project Technologies:</p>
+                <button class="btn btn-primary btn-sm" (click)="openManualModal()">Add manually</button>
+                <div class="requirements-list">
+  <span class="requirement-item" *ngFor="let tech of project.technologies">
+    <span class="requirement-icon"><i class="las la-check-circle"></i></span>
+    <span class="requirement-text">{{ tech }}</span>
+
+    <!-- Boule de suppression, invisible par défaut -->
+    <span class="delete-icon" (click)="deletetech(tech)">
+      <i class="las la-times-circle"></i>
+    </span>
+  </span>
+                </div>
+
+              </div>
+              <div class="button-container">
+                <button class="btn btn-primary" (click)="suggestTechnologies(project)" [disabled]="loadingg[project.idProjet]">
+                  <ng-container *ngIf="!loadingg[project.idProjet]; else loading">
+                    <i class="las la-robot"></i> Suggest Technologies
+                  </ng-container>
+                  <ng-template #loading>
+                    <i class="la la-spinner la-spin"></i> Loading...
+                  </ng-template>
+                </button>
+                <button
+                  *ngIf="suggestedTechnologies[project.idProjet]?.length"
+                  class="btn apply-btn"
+                  (click)="applyForProject(project.idProjet)"
+                  [disabled]="loadingg[project.idProjet]"
+                >
+                  <span *ngIf="!loadingg[project.idProjet]">Apply Technologies</span>
+                  <span *ngIf="loadingg[project.idProjet]">
+                <i class="la la-spinner la-spin"></i> Applying...
+              </span>
+                </button>
+              </div>
+
+
+              <!-- Suggested Technologies Section -->
+              <div *ngIf="suggestedTechnologies[project.idProjet]?.length" class="tech-list-container">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h5 class="tech-section-title">Suggested Technology Stacks</h5>
+                  <button class="btn btn-sm" (click)="hideSuggestions(project.idProjet)">❌</button>
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                      <th *ngFor="let type of getAllTypes(suggestedTechnologies[project.idProjet])">
+                        {{ type | titlecase }}
+                      </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let stack of suggestedTechnologies[project.idProjet]; let i = index">
+                      <td *ngFor="let type of getAllTypes(suggestedTechnologies[project.idProjet])" [ngClass]="{'selected-cell': isSelectedd(project.idProjet,type,stack[type])}">
+                        <div class="d-flex align-items-center">
+                          <div class="form-check me-2">
+                            <input
+                              class="form-check-input"
+                              type="radio"
+                              [name]="'type-' + type"
+                              [id]="'type-' + type + '-row-' + i"
+                              [value]="stack[type]"
+                              [checked]="isSelectedd(project.idProjet, type, stack[type])"
+                              (change)="selectTechnology(project.idProjet, type, stack[type])"
+                            >
+                          </div>
+                          <span>{{ stack[type] }}</span>
+                        </div>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+        <!-- Phases Section -->
+        <div class="section-item border-0 mb-3 shadow-sm">
+          <h2 class="section-header">
+            <button class="section-button" (click)="toggleSection('phases')" [ngClass]="{'active': activeSection === 'phases'}">
+              <i class="las la-tasks me-2"></i>Project Phases
+            </button>
+          </h2>
+          <div class="section-content" *ngIf="activeSection === 'phases'">
+            <div class="section-body">
+              <!-- Container with d-flex to align buttons in the same line -->
+              <div class="d-flex align-items-center">
+                <!-- Add Phase Button -->
+                <button class="btn btn-primary mb-4 me-2" (click)="openPhaseModal(addPhaseModal)">
+                  <i class="las la-plus-circle me-2"></i>Add Phase
+                </button>
+
+                <!-- Bouton pour suggérer les phases -->
+                <button class="btn btn-success mb-4 me-2" (click)="suggestPhasesForProject()" [disabled]="isLoading">
+                  <i class="las la-magic me-2"></i>
+                  <span *ngIf="!isLoading">Suggest Phases</span>
+                  <span *ngIf="isLoading"> <i class="las la-spinner la-spin"></i> Loading...</span>
+                </button>
+
+                <!-- Bouton de suppression à droite -->
+                <button class="btn btn-outline-danger mb-4 px-4 py-2 fw-semibold d-flex align-items-center gap-2 ms-auto"
+                        (click)="deleteallphases(projectId)"
+                        ngbTooltip="Delete all project phases" placement="top">
+                  <i class="las la-trash-alt fs-5"></i>
+                  <span>Delete All Phases</span>
+                </button>
+              </div>
+
+
+
+
+              <!-- Phases List -->
+              <div *ngIf="phases && phases.length > 0">
+                <h4 class="fw-bold mb-4">Phases</h4>
+
+                <div *ngFor="let phase of phases" class="card mb-3 shadow-sm">
+                  <div class="card-header text-white d-flex justify-content-between align-items-center phase-header">
+                    <h5 class="mb-0">{{ phase.phase_name }}</h5>
+                    <div class="d-flex gap-2">
+                      <!-- Bouton Update Phase -->
+                      <button (click)="openUpdateModal(phase)" class="btn btn-sm phase-delete-btn" ngbTooltip="Update Phase" placement="left">
+                        <i class="las la-edit text-secondary fs-18"></i>
+                      </button>
+
+                      <!-- Bouton Delete Phase -->
+                      <button (click)="deletePhase(phase.idPhase)" class="btn btn-sm phase-delete-btn" ngbTooltip="Delete Phase" placement="bottom-right">
+                        <i class="las la-trash-alt text-secondary fs-18"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="card-body">
+                    <p class="text-muted mb-3 p-3 bg-light rounded">{{ phase.description }}</p>
+
+                    <!-- OPERATIONS SECURE WRAPPER -->
+                    <ng-container *ngIf="projectOperationsByPhase[phase.idPhase] as ops">
+                      <div class="operations-table">
+                        <div class="table-responsive-sm mt-3">
+                          <table class="table mb-0">
+                            <caption>List of Operations</caption>
+                            <thead class="table-light">
+                            <tr>
+                              <th>Operation Name</th>
+                              <th>Description</th>
+                              <th>Operation Owner</th>
+                              <th>Priority</th>
+                              <th>Deadline</th>
+                              <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let operation of getPaginatedOperations(phase.idPhase)">
+                              <td>{{ operation.name }}</td>
+                              <td>{{ operation.description }}</td>
+                              <td>
+                                <button *ngIf="!operation.user" class="btn btn-light" (click)="showadduserModal(operation, adduserModal)">
+                                  <i class="las la-user text-secondary fs-18 me-0.5"></i>
+                                </button>
+                                <span *ngIf="operation.user">
+                      {{ operation.user.username }} ({{ operation.user.email }})
+                    </span>
+                              </td>
+                              <td>{{ operation.priority }}</td>
+                              <td>{{ operation.deadline }}</td>
+                              <td>
+                                <a href="javascript:void(0);" ngbTooltip="Edit" placement="bottom">
+                                  <i class="las la-pen text-secondary fs-18 me-0.5" (click)="showadduserModal(operation, adduserModal)"></i>
+                                </a>
+                                <a href="javascript:void(0);" (click)="deleteProjectOperation(operation.idProjectOperation)" ngbTooltip="Delete" placement="bottom">
+                                  <i class="las la-trash-alt text-secondary fs-18"></i>
+                                </a>
+                              </td>
+                            </tr>
+
+                            <tr *ngIf="ops.length === 0">
+                              <td colspan="6" class="text-center text-muted">No operations available</td>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </div>
+
+                        <!-- PAGINATION -->
+                        <nav *ngIf="ops.length > itemsPerPage">
+                          <ul class="pagination justify-content-center mt-3">
+                            <li class="page-item"
+                                *ngFor="let page of [].constructor(Math.ceil(ops.length / itemsPerPage)); let i = index"
+                                [class.active]="(currentPageByPhase[phase.idPhase] || 1) === (i + 1)">
+                              <a class="page-link" href="javascript:void(0)" (click)="changePage(phase.idPhase, i + 1)">
+                                {{ i + 1 }}
+                              </a>
+                            </li>
+                          </ul>
+                        </nav>
+
+                      </div>
+                    </ng-container>
+
+                    <!-- ADD OPERATION BUTTON -->
+                    <button class="btn btn-outline-secondary mt-3 add-operation-btn" (click)="openOperationModal(phase.idPhase, addOperationModal)">
+                      <i class="las la-plus me-2"></i>Add Operation
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Resources Section -->
+        <!-- Resources Section -->
+        <div class="section-item border-0 mb-3 shadow-sm">
+          <h2 class="section-header">
+            <button class="section-button" (click)="toggleSection('resources')" [ngClass]="{'active': activeSection === 'resources'}">
+              <i class="iconoir-server"></i> Project Resources
+            </button>
+          </h2>
+
+          <div class="section-content" *ngIf="activeSection === 'resources'">
+            <div class="section-body">
+
+              <!-- Assigned Resources -->
+              <h5 class="fw-semibold mb-3">Assigned Project Resources</h5>
+
+              <div class="d-flex align-items-center mb-2">
+                <label class="me-2">Afficher :</label>
+                <select class="form-select w-auto"
+                        [(ngModel)]="assignedResourcesPageSize"
+                        (change)="onAssignedPageSizeChange(assignedResourcesPageSize)">
+                  <option [value]="3">3</option>
+                  <option [value]="5">5</option>
+                  <option [value]="10">10</option>
+                </select>
+              </div>
+
+              <div class="table-responsive">
+                <table class="table datatable">
+                  <thead class="table-light">
+                  <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Type</th>
+                    <th>Assigned To</th>
+                    <th>Actions</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let resource of getPaginatedAssignedResources()">
+                    <td>{{ resource.resourceName }}</td>
+                    <td>{{ resource.price | currency:'USD' }}</td>
+                    <td>
+                <span class="badge badge-lg" [ngClass]="getStatusClass(resource.status)">
+                  {{ resource.status }}
+                </span>
+                    </td>
+                    <td>{{ resource.type }}</td>
+                    <td>
+                      <ng-container *ngIf="resource.type === 'Infrastructure'; else notInfrastructure">
+                        <span>Current Project</span>
+                      </ng-container>
+                      <ng-template #notInfrastructure>
+                        <span>{{ resource.user?.email }}</span>
+                      </ng-template>
+                    </td>
+                    <td>
+                      <button *ngIf="resource.type === 'Infrastructure'"
+                              class="btn btn-danger btn-sm"
+                              (click)="unassignResource(resource.resourceId)">
+                        Unassign
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr *ngIf="assignedResources.length === 0">
+                    <td colspan="6" class="text-danger text-center">No resources assigned to this project.</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination Assigned Resources -->
+              <nav *ngIf="assignedResources.length > assignedResourcesPageSize">
+                <ul class="pagination justify-content-center mt-3">
+                  <li class="page-item"
+                      *ngFor="let page of [].constructor(Math.ceil(assignedResources.length / assignedResourcesPageSize)); let i = index"
+                      [class.active]="assignedResourcesPage === (i + 1)">
+                    <a class="page-link" href="javascript:void(0);" (click)="onAssignedPageChange(i + 1)">
+                      {{ i + 1 }}
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+
+              <!-- Select Resources -->
+              <h5 class="fw-semibold mt-4 mb-3">Select Resources to Add:</h5>
+
+              <div class="d-flex align-items-center mb-2">
+                <label class="me-2">Afficher :</label>
+                <select class="form-select w-auto"
+                        [(ngModel)]="resourcesPageSize"
+                        (change)="onResourcesPageSizeChange(resourcesPageSize)">
+                  <option [value]="3">3</option>
+                  <option [value]="5">5</option>
+                  <option [value]="10">10</option>
+                </select>
+              </div>
+
+              <div class="table-responsive">
+                <table class="table datatable">
+                  <thead class="table-light">
+                  <tr>
+                    <th>Select</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Type</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let resource of getPaginatedResources()">
+                    <td>
+                      <input type="checkbox"
+                             [value]="resource.resourceId"
+                             (change)="toggleResourceSelection(resource)"
+                             [checked]="isSelected(resource)">
+                    </td>
+                    <td>{{ resource.resourceName }}</td>
+                    <td>{{ resource.price | currency:'USD' }}</td>
+                    <td>
+                <span class="badge badge-lg" [ngClass]="getStatusClass(resource.status)">
+                  {{ resource.status }}
+                </span>
+                    </td>
+                    <td>{{ resource.type }}</td>
+                  </tr>
+
+                  <tr *ngIf="resources.length === 0">
+                    <td colspan="5" class="text-danger text-center">No resources found.</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination Select Resources -->
+              <nav *ngIf="resources.length > resourcesPageSize">
+                <ul class="pagination justify-content-center mt-3">
+                  <li class="page-item"
+                      *ngFor="let page of [].constructor(Math.ceil(resources.length / resourcesPageSize)); let i = index"
+                      [class.active]="resourcesPage === (i + 1)">
+                    <a class="page-link" href="javascript:void(0);" (click)="onResourcesPageChange(i + 1)">
+                      {{ i + 1 }}
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+
+              <button class="btn btn-success mt-2" (click)="assignSelectedResources()">Add Selected Resources</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dates  Section -->
+
+
+        <div class="section-item border-0 mb-3 shadow-sm" [ngClass]="{'expanded-item': activeSection === 'dates'}">
+          <h2 class="section-header">
+            <button class="section-button" (click)="toggleSection('dates')" [ngClass]="{'active': activeSection === 'dates'}">
+              <i class="iconoir-calendar me-2"></i> Dates
+            </button>
+          </h2>
+
+          <div class="section-content" *ngIf="activeSection === 'dates'" [ngClass]="{'expanded-section': activeSection === 'dates'}">
+            <div class="section-body">
+              <label class="form-label small mb-1">Date Range</label>
+              <div class="input-group input-group-sm" id="DateRange">
+                <input
+                  type="text"
+                  class="form-control"
+                  appDatepicker
+                  #startDateInput
+                  [(ngModel)]="project.start_Date"
+                  [options]="startOptions"
+                  placeholder="Start"
+                  aria-label="StartDate"
+                />
+                <input
+                  type="text"
+                  class="form-control"
+                  appDatepicker
+                  #endDateInput
+                  [(ngModel)]="project.expected_endDate"
+                  [options]="endOptions"
+                  placeholder="End"
+                  aria-label="EndDate"
+                />
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="d-flex flex-wrap gap-3 mt-3 justify-content-end">
+                <!-- Save Dates Button -->
+                <button
+                  class="btn btn-outline-primary btn-sm rounded shadow-sm fw-medium"
+                  (click)="savedates(project.idProjet, startDateInput.value, endDateInput.value)"
+                >
+                  <i class="bi bi-save me-1"></i> Save Dates
+                </button>
+              </div>
+
+              <!-- Predict and Apply Duration Buttons -->
+              <div class="d-flex gap-2 mt-3">
+                <!-- Predict Duration Button with Loading -->
+
+                <button
+                  class="btn btn-outline-warning btn-sm rounded shadow-sm fw-medium d-flex align-items-center"
+                  (click)="showPredictionWarning(project.idProjet)"
+                  [disabled]="loadingPrediction[project.idProjet]"
+                >
+  <span *ngIf="!loadingPrediction[project.idProjet]">
+    <i class="iconoir-brain me-2"></i> Predict Duration
+  </span>
+                  <span *ngIf="loadingPrediction[project.idProjet]" class="d-flex align-items-center">
+    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+    Predicting...
+  </span>
+                </button>
+
+
+
+                <!-- Apply Duration Button (Visible only after prediction) -->
+                <button
+                  *ngIf="predictedDuration"
+                  class="btn btn-outline-success btn-sm rounded shadow-sm fw-medium"
+                  (click)="applyDurationn(project.idProjet, startDateInput.value)"
+                >
+                  <i class="bi bi-check2-circle me-1"></i> Apply Duration
+                </button>
+              </div>
+
+              <!-- Predicted Duration Text -->
+              <div *ngIf="predictedDuration" class="predicted-duration-text">
+                Predicted project duration:
+                <span class="predicted-duration-days">{{ upperMargin }} days</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bugs Section (Direct Navigation) -->
+        <div class="section-item border-0 mb-3 shadow-sm">
+          <h2 class="section-header">
+            <button class="section-button" (click)="viewProjectBugs(project.idProjet)">
+              <i class="las la-bug me-2"></i>Project Bugs
+            </button>
+          </h2>
+          <!-- No section-content; clicking header navigates directly -->
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Add Phase Modal -->
+  <ng-template #addPhaseModal let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title m-0">Add a New Phase</h6>
+      <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="phaseForm" (ngSubmit)="addPhase(modal)">
+        <div class="mb-3">
+          <label class="form-label fw-medium">Phase Name</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="phase_name"
+            placeholder="Enter phase name"
+            required
+          />
+          <div *ngIf="phaseForm.get('phase_name')?.invalid && phaseForm.get('phase_name')?.touched" class="text-danger mt-1">
+            Phase name is required.
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-medium">Phase Description</label>
+          <textarea
+            class="form-control"
+            formControlName="description"
+            rows="4"
+            placeholder="Enter description"
+            required
+          ></textarea>
+          <div *ngIf="phaseForm.get('description')?.invalid && phaseForm.get('description')?.touched" class="text-danger mt-1">
+            Description is required.
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="phaseForm.invalid">
+          <i class="las la-save me-2"></i>Add Phase
+        </button>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-danger btn-sm" (click)="modal.dismiss()">Close</button>
+    </div>
+  </ng-template>
+
+  <!-- Add Operation Modal -->
+  <ng-template #addOperationModal let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title m-0">Add a New Operation</h6>
+      <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <form *ngIf="currentOperationForm" [formGroup]="currentOperationForm" (ngSubmit)="addOperationWithModal(currentPhaseId, modal)">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label fw-medium">Priority</label>
+            <select class="form-control" formControlName="priority" required>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-medium">Deadline</label>
+            <input type="date" class="form-control" formControlName="deadline" required />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-medium">Select Process Operation</label>
+            <select class="form-control" formControlName="processOperation" required>
+              <option *ngFor="let operation of processOperations" [value]="operation.id">
+                {{ operation.operationName }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3" [disabled]="!currentOperationForm.valid">
+          <i class="las la-save me-2"></i>Add Operation
+        </button>
+      </form>
+      <div *ngIf="!currentOperationForm" class="text-danger">
+        Error: Operation form not initialized.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-danger btn-sm" (click)="modal.dismiss()">Close</button>
+    </div>
+  </ng-template>
+
+  <!-- User Assignment Modal -->
+  <ng-template #adduserModal let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title m-0">Assign a User</h6>
+      <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <!-- Utiliser formGroup pour lier le formulaire -->
+      <form [formGroup]="userForm">
+        <div class="mb-3 row">
+          <label for="modifyUserId" class="col-sm-3 col-form-label text-end fw-medium">Utilisateur :</label>
+          <div class="col-sm-9">
+            <select formControlName="userId" class="form-select" id="modifyUserId">
+              <option *ngFor="let user of users" [value]="user.email">{{ user.username }} - {{ user.email }}</option>
+              <option value="">Aucun utilisateur</option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary btn-sm" (click)="saveUserAssignment()">Save</button>
+      <button type="button" class="btn btn-outline-danger btn-sm" (click)="modal.dismiss()">Close</button>
+    </div>
+  </ng-template>
+</div>
+
+<!-- Modal -->
+<ng-template [ngIf]="isManualModalOpen">
+  <div class="modal-backdrop">
+    <div class="modal-content">
+      <h5>Add Technologies Manually</h5>
+      <input
+        type="text"
+        [(ngModel)]="manualTechnologiesInput"
+        placeholder="Enter technologies separated by commas"
+        class="form-control"
+      />
+      <div style="margin-top: 10px;">
+        <button class="btn btn-success btn-sm custom-save-btn" (click)="saveManualTechnologies()">Save</button>
+        <button class="btn btn-secondary btn-sm custom-save-btn" (click)="closeManualModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<!-- Modal -->
+<ng-template [ngIf]="isManualModalreqOpen">
+  <div class="modal-backdrop">
+    <div class="modal-content">
+      <h5>Add requiremenrs Manually</h5>
+      <input
+        type="text"
+        [(ngModel)]="manualreqInput"
+        placeholder="Enter technologies separated by commas"
+        class="form-control"
+      />
+      <div style="margin-top: 10px;">
+        <button class="btn btn-success btn-sm custom-save-btn" (click)="saveManualreq()">Save</button>
+        <button class="btn btn-secondary btn-sm custom-save-btn" (click)="closeManualModalreq()">Cancel</button>
+
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Suggested Phases Modal -->
+<ng-template #suggestedPhasesModal let-modal>
+  <div class="modal-header">
+    <h6 class="modal-title m-0">Suggested Phases</h6>
+    <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+  </div>
+  <div class="modal-body">
+    <!-- Affichage des phases suggérées en deux colonnes -->
+    <div *ngIf="leftPhases.length > 0 || rightPhases.length > 0" class="row">
+      <div class="col-md-6">
+        <div *ngFor="let phase of leftPhases" class="card mb-3 shadow-sm border-0 rounded-3">
+          <div class="card-body cd">
+            <h5 class="card-title t">{{ phase.name }}</h5>
+            <p class="card-text tx">{{ phase.description }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div *ngFor="let phase of rightPhases" class="card mb-3 shadow-sm border-0 rounded-3">
+          <div class="card-body cd">
+            <h5 class="card-title t">{{ phase.name }}</h5>
+            <p class="card-text tx">{{ phase.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!leftPhases.length && !rightPhases.length">
+      <p class="text-center text-muted">No suggested phases available.</p>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <!-- Bouton Ajouter les phases au projet -->
+    <button type="button" class="btn btn-success btn-sm" (click)="addPhasesToProject()">
+      <i class="las la-check-circle me-2"></i>Add Phases to Project
+    </button>
+    <button type="button" class="btn btn-outline-danger btn-sm" (click)="modal.dismiss()">Close</button>
+  </div>
+</ng-template>
+
+
+<!-- Modal Template pour Update Phase -->
+<ng-template #updatePhaseModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Update Phase</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+
+  <div class="modal-body">
+    <form #updatePhaseForm="ngForm">
+      <div class="mb-3">
+        <label class="form-label">Phase Name</label>
+        <input type="text" class="form-control" [(ngModel)]="selectedPhase.phase_name" name="phaseName" required />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea class="form-control" [(ngModel)]="selectedPhase.description" name="description" rows="3"></textarea>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>
+    <button type="button" class="btn btn-success" (click)="updatePhase(modal)">Update</button>
+  </div>
+</ng-template>

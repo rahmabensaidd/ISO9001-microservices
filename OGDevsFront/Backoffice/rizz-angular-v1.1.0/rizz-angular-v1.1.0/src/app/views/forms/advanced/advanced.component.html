@@ -1,0 +1,283 @@
+<div class="row justify-content-center">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Selectr Components</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div class="row g-2">
+          <div class="col-md-4">
+            <label class="mb-2">Default Select</label>
+            <select id="default" #selectr>
+              <option value="value-1">Value 1</option>
+              <option value="value-2">Value 2</option>
+              <option value="value-3">Value 3</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="mb-2">Multi Select</label>
+            <select id="multiSelect" #selectr2>
+              <option value="value-1">Value 1</option>
+              <option value="value-2">Value 2</option>
+              <option value="value-3">Value 3</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="mb-2">Taggable Select</label>
+            <select id="taggableSelect" #selectr3>
+              <option value="value-1">Value 1</option>
+              <option value="value-2">Value 2</option>
+              <option value="value-3">Value 3</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Huebee Color</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div class="row g-2">
+          <div class="col-md-4">
+            <input
+              class="form-control color-input"
+              value="#22c55e"
+              appHuebee
+              [appHuebee]="{ setBGColor: true, saturations: 3 }"
+            />
+          </div>
+          <div class="col-md-4">
+            <input
+              class="form-control"
+              value="#fac146"
+              data-huebee
+              appHuebee
+              [appHuebee]="{ setBGColor: true, saturations: 3 }"
+            />
+          </div>
+          <div class="col-md-4">
+            <input
+              class="form-control"
+              value="#f7f8f9"
+              appHuebee
+              [appHuebee]="{ setBGColor: true, saturations: 2 }"
+            />
+          </div>
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Custom Touch Spin</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div class="input-group qty-icons w-50">
+          <button class="btn btn-primary" (click)="decrementCounter()">
+            -
+          </button>
+          <input
+            type="number"
+            class="form-control"
+            min="0"
+            name="quantity"
+            [value]="count"
+            style="pointer-events: none"
+          />
+          <button class="btn btn-primary" (click)="incrementCounter()">
+            +
+          </button>
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Vanilla JS Datepicker</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div class="row">
+          <div class="col-md-12">
+            <label class="mb-2">Default Datepicker</label>
+            <input
+              class="form-control mb-3"
+              type="text"
+              name="foo"
+              appDatepicker
+            />
+            <label class="mb-2">Date Range Picker</label>
+            <div class="input-group" id="DateRange">
+              <input
+                type="text"
+                class="form-control"
+                appDatepicker
+                #startDateInput
+                [options]="startOptions"
+                placeholder="Start"
+                aria-label="StartDate"
+              />
+              <span class="input-group-text">to</span>
+              <input
+                type="text"
+                class="form-control rounded-end"
+                appDatepicker
+                #endDateInput
+                [options]="endOptions"
+                placeholder="End"
+                aria-label="EndDate"
+              />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="my-2">Inline Datepicker</label>
+            <div id="inline_calendar" appDatepicker></div>
+          </div>
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Mask</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div class="mb-2">
+          <label class="mb-2"
+            >RegExp (Russian postal code)
+            <span class="desc ms-2 font-11 text-muted"
+              >/^[1-6]\d&#123;0,5&#125;$/</span
+            ></label
+          >
+          <input
+            id="regexp-mask"
+            type="text"
+            value=""
+            class="form-control"
+            [imask]="regExpMaskOptions"
+          />
+        </div>
+        <div class="mb-2">
+          <label class="mb-2">
+            Type here against mask
+            <span class="desc ms-2 font-11 text-muted"
+              >+&#123;7&#125; (000)000-00-00</span
+            >
+          </label>
+          <input
+            id="start-phone-mask"
+            type="text"
+            value=""
+            class="form-control"
+          />
+          <div class="desc font-11 text-muted">
+            unmasked: <span id="start-phone-unmasked"></span>
+            <span
+              id="start-phone-complete"
+              class="example__complete"
+              style="display: none"
+            ></span>
+          </div>
+        </div>
+        <div class="mb-2">
+          <label class="mb-2">Mask in overwrite and autofix modes</label>
+          <input
+            id="date-overwrite-mask"
+            type="text"
+            value=""
+            [imask]="dateMaskOptions"
+            class="form-control"
+          />
+        </div>
+        <div class="mb-2">
+          <label class="mb-2">Type to uppercase</label>
+          <input
+            id="uppercase-mask"
+            type="text"
+            [imask]="maskOptions"
+            value=""
+            class="form-control"
+          />
+        </div>
+
+        <div>
+          <label class="mb-2">Date and time</label>
+          <input
+            id="moment-mask"
+            type="text"
+            [imask]="dateOption"
+            value=""
+            class="form-control"
+          />
+          <div class="desc font-11 text-muted">
+            date: <span id="moment-value">{{ momentValue }}</span>
+          </div>
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->

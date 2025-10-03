@@ -1,0 +1,295 @@
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Basic</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <ngb-progressbar class="mb-3" type="primary" [value]="10" />
+        <ngb-progressbar class="mb-3" type="primary" [value]="20" />
+        <ngb-progressbar class="mb-3" type="primary" [value]="30" />
+        <ngb-progressbar class="mb-3" type="primary" [value]="40" />
+        <ngb-progressbar class="mb-3" type="primary" [value]="50" />
+        <ngb-progressbar type="primary" [value]="60" />
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Striped And Animated</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <ngb-progressbar
+          class="mb-3"
+          type="warning"
+          [value]="15"
+          [animated]="true"
+          [striped]="true"
+        />
+        <ngb-progressbar
+          class="mb-3"
+          type="success"
+          [value]="30"
+          [animated]="true"
+          [striped]="true"
+        />
+        <ngb-progressbar
+          class="mb-3"
+          type="primary"
+          [value]="45"
+          [animated]="true"
+          [striped]="true"
+        />
+        <ngb-progressbar
+          class="mb-3"
+          type="info"
+          [value]="60"
+          [animated]="true"
+          [striped]="true"
+        />
+        <ngb-progressbar
+          class="mb-3"
+          type="danger"
+          [value]="75"
+          [animated]="true"
+          [striped]="true"
+        />
+        <ngb-progressbar
+          type="gray"
+          [value]="90"
+          [animated]="true"
+          [striped]="true"
+        />
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Labels And Multiple Bars</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <ngb-progressbar type="secondary" class="mb-3" [value]="20"
+          >20%</ngb-progressbar
+        >
+
+        <ngb-progressbar
+          type="secondary"
+          class="mb-3"
+          [value]="40"
+          [animated]="true"
+          [striped]="true"
+          >40%</ngb-progressbar
+        >
+
+        <ngb-progressbar-stacked class="progress mb-3">
+          <ngb-progressbar type="primary" [value]="20">20%</ngb-progressbar>
+          <ngb-progressbar type="secondary" [striped]="true" [value]="20"
+            >20%</ngb-progressbar
+          >
+          <ngb-progressbar
+            type="info"
+            [animated]="true"
+            [striped]="true"
+            [value]="20"
+            >20%</ngb-progressbar
+          >
+        </ngb-progressbar-stacked>
+
+        <ngb-progressbar-stacked class="progress">
+          <ngb-progressbar type="primary" [value]="20"></ngb-progressbar>
+          <ngb-progressbar type="secondary" [value]="40"></ngb-progressbar>
+          <ngb-progressbar type="info" [value]="20"></ngb-progressbar>
+        </ngb-progressbar-stacked>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Height</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <ngb-progressbar
+          class="mb-3"
+          [value]="15"
+          style="height: 3px"
+        ></ngb-progressbar>
+
+        <ngb-progressbar
+          class="mb-3"
+          [value]="45"
+          [striped]="true"
+        ></ngb-progressbar>
+
+        <ngb-progressbar
+          [value]="60"
+          [animated]="true"
+          [striped]="true"
+          style="height: 14px"
+        ></ngb-progressbar>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row justify-content-center">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Vertical</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div class="row">
+          <div class="col-md-4 d-flex justify-content-center">
+            <div class="progress progress-vertical my-3" style="height: 8px">
+              <ngb-progressbar
+                class="progress-bar progress-bar-striped progress-bar-animated bg-warning"
+                [value]="25"
+                style="height: 25%"
+              ></ngb-progressbar>
+            </div>
+            <div class="progress progress-vertical my-3" style="height: 8px">
+              <ngb-progressbar
+                class="progress-bar progress-bar-striped progress-bar-animated bg-secondary"
+                [value]="50"
+                style="height: 50%"
+              ></ngb-progressbar>
+            </div>
+            <div class="progress progress-vertical my-3" style="height: 8px">
+              <ngb-progressbar
+                class="progress-bar progress-bar-striped progress-bar-animated bg-primary"
+                [value]="75"
+                style="height: 75%"
+              ></ngb-progressbar>
+            </div>
+          </div>
+          <!--end col-->
+
+          <div class="col-md-4 d-flex justify-content-center">
+            <div
+              class="progress progress-vertical-bottom my-3"
+              style="height: 8px"
+            >
+              <ngb-progressbar
+                class="progress-bar progress-bar-striped progress-bar-animated bg-primary"
+                [value]="10"
+                style="height: 10%"
+              ></ngb-progressbar>
+            </div>
+            <div
+              class="progress progress-vertical-bottom my-3"
+              style="height: 8px"
+            >
+              <ngb-progressbar
+                class="progress-bar progress-bar-striped progress-bar-animated bg-warning"
+                [value]="25"
+                style="height: 25%"
+              ></ngb-progressbar>
+            </div>
+            <div
+              class="progress progress-vertical-bottom my-3"
+              style="height: 8px"
+            >
+              <ngb-progressbar
+                class="progress-bar progress-bar-striped progress-bar-animated bg-secondary"
+                [value]="50"
+                style="height: 50%"
+              ></ngb-progressbar>
+            </div>
+          </div>
+          <!--end col-->
+
+          <div class="col-md-4 d-flex justify-content-center">
+            <div
+              class="progress progress-vertical-bottom my-3"
+              style="width: 30px"
+            >
+              <ngb-progressbar
+                type="primary"
+                class="progress-bar progress-bar-striped progress-bar-animated bg-primary"
+                [value]="75"
+                style="height: 75%"
+              ></ngb-progressbar>
+            </div>
+
+            <div
+              class="progress progress-vertical-bottom my-3"
+              style="width: 30px"
+            >
+              <div
+                class="progress-bar progress-bar-striped progress-bar-animated bg-secondary"
+                role="progressbar"
+                style="height: 100%"
+                aria-valuenow="100"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              >
+                100%
+              </div>
+            </div>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->

@@ -1,0 +1,30 @@
+
+.profile-photo {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border: 3px solid #28a745; /* Changed to green border */
+}
+.profile-section {
+  min-width: 300px;
+}
+.camera-icon {
+  bottom: 15px; /* Moved inward (up) */
+  right: 15px; /* Moved inward (left) */
+  width: 30px;
+  height: 30px;
+  font-size: 16px;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+.camera-icon:hover {
+  opacity: 1;
+}
+.right-column {
+  max-width: 600px;
+}
+.comment,
+.reply {
+  border-left: 2px solid #007bff;
+  padding-left: 10px;
+}

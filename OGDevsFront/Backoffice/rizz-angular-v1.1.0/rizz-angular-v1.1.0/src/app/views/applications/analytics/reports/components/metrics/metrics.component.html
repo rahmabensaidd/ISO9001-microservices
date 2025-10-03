@@ -1,0 +1,20 @@
+<div class="card">
+  <card-title title="Metrics" selected="This Year" />
+  <div class="card-body pt-0">
+    <div id="reports-bar" class="apex-charts pill-bar">
+      <apx-chart
+        [chart]="metricsChart.chart!"
+        [series]="metricsChart.series!"
+        [colors]="metricsChart.colors!"
+        [plotOptions]="metricsChart.plotOptions!"
+        [dataLabels]="metricsChart.dataLabels!"
+        [legend]="metricsChart.legend!"
+        [grid]="metricsChart.grid!"
+        [yaxis]="metricsChart.yaxis!"
+        [xaxis]="metricsChart.xaxis!"
+      ></apx-chart>
+    </div>
+  </div>
+  <!--end card-body-->
+</div>
+<!--end card-->

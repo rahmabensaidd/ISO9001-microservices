@@ -1,0 +1,114 @@
+.btn-group .btn {
+  font-size: 12px;  /* Réduit la taille du texte */
+  padding: 3px 6px; /* Réduit l'espace intérieur */
+  margin: 0 3px;    /* Réduit l'espacement entre les boutons */
+  border-radius: 8px; /* Arrondi plus petit */
+}
+li.d-flex {
+  gap: 10px; /* Réduit l'espace entre la description et les boutons */
+  align-items: center;
+}
+ul li {
+  margin-bottom: 8px; /* Ajuste cet espace selon ton besoin */
+}
+
+.collapse {
+  display: none;
+}
+
+.collapse.show {
+  display: block;
+}
+.operation-details {
+  display: flex; /* Utilise Flexbox pour aligner horizontalement */
+  align-items: center; /* Centre verticalement les éléments */
+  gap: 40px; /* Espace réduit entre les sections (ajustable) */
+  flex-wrap: wrap; /* Permet un retour à la ligne si l'espace est insuffisant */
+  margin-left: 40px;
+}
+
+.progress-section {
+  flex: 1; /* Prend plus d'espace pour la barre de progression */
+  max-width: 300px; /* Largeur minimale pour éviter un écrasement */
+}
+
+.bugs-section,
+.assigned-section {
+  margin-left: 80px;
+  flex: 0 0 auto; /* Taille fixe basée sur le contenu */
+  max-width: 200px; /* Largeur minimale pour cohérence */
+}
+
+.progress-section h6,
+.bugs-section h6,
+.assigned-section h6 {
+  font-size: 13px; /* Taille de police réduite pour compacité */
+  margin-bottom: 4px; /* Espace réduit sous le titre */
+}
+
+.progress-section p,
+.bugs-section p,
+.assigned-section p {
+  font-size: 12px; /* Texte plus petit pour les valeurs */
+  margin: 0; /* Supprime les marges par défaut */
+}
+
+.progress-section .progress {
+  height: 6px; /* Hauteur légèrement augmentée pour visibilité */
+  border-radius: 3px; /* Coins arrondis pour la barre */
+}
+
+.progress-section .progress-bar {
+  background-color: #28a745; /* Vert pour la progression (optionnel) */
+}
+.task-accordion {
+  transition: all 0.3s ease; /* Animation fluide pour l'ouverture/fermeture */
+}
+
+.task-accordion .cursor-pointer {
+  padding: 10px; /* Ajuste le padding pour un look plus compact */
+}
+.accordion-body {
+  display: block !important;
+}
+
+.operation-details {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.progress-section {
+  flex: 1;
+  min-width: 150px;
+}
+
+.bugs-section,
+.assigned-section {
+  flex: 0 0 auto;
+  min-width: 100px;
+}
+
+.progress-section h6,
+.bugs-section h6,
+.assigned-section h6 {
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.progress-section p,
+.bugs-section p,
+.assigned-section p {
+  font-size: 12px;
+  margin: 0;
+}
+
+.progress-section .progress {
+  height: 6px;
+  border-radius: 3px;
+}
+
+.progress-section .progress-bar {
+  background-color: #28a745; /* Vert pour la barre de progression */
+}

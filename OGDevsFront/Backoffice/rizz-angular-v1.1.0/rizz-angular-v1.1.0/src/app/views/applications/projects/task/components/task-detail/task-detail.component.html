@@ -1,0 +1,180 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row align-items-center">
+      <div class="col">
+        <h4 class="card-title">Tasks & Details</h4>
+      </div>
+      <!--end col-->
+    </div>
+    <!--end row-->
+  </div>
+  <!--end card-header-->
+  <div class="card-body pt-0">
+    <div
+      ngbAccordion
+      [closeOthers]="true"
+      class="accordion card-bg"
+      id="task-1"
+    >
+      @for (task of taskList; track $index; let last = $last) {
+        <div
+          ngbAccordionItem
+          [collapsed]="$index == 0 ? false : true"
+          class="task-accordion rounded border-dashed border-theme-color p-2"
+          [ngClass]="{ 'mb-3': !last }"
+        >
+          <div
+            ngbAccordionHeader
+            class="cursor-pointer"
+            data-bs-toggle="collapse"
+            data-bs-target="#task-one"
+            aria-expanded="true"
+            aria-controls="task-one"
+          >
+            <div ngbAccordionToggle class="table-responsive">
+              <table class="table text-nowrap mb-0">
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <i class="iconoir-calendar fs-2 me-2"></i>
+                        <div class="flex-grow-1 text-truncate">
+                          <h6 class="m-0 mb-1 fw-semibold">
+                            Start from to end
+                          </h6>
+                          <div class="fw-semibold">
+                            <span>{{ task.start_date }}</span> -
+                            <span class="text-danger">
+                              {{ task.end_date }}</span
+                            >
+                          </div>
+                        </div>
+                        <!--end media body-->
+                      </div>
+                    </td>
+                    <td class="text-start">
+                      <h6 class="m-0 mb-1 fw-semibold">Task</h6>
+                      <span class="fs-13 fw-semibold">{{ task.task }}</span>
+                    </td>
+                    <td class="text-start">
+                      <h6 class="m-0 mb-1 fw-semibold">Priority</h6>
+                      <span
+                        [class]="{
+                          'text-danger': task.priority == 'High',
+                          'text-warning': task.priority == 'Low',
+                          'text-info': task.priority == 'Medium',
+                        }"
+                        ><i class="fa-solid fa-stop fs-10"></i>
+                        {{ task.priority }}</span
+                      >
+                    </td>
+
+                    <td class="text-start">
+                      <h6 class="m-0 mb-1 fw-semibold">Team</h6>
+                      <span class="text-secondary">{{ task.team }}</span>
+                    </td>
+
+                    <td class="text-end">
+                      <h6 class="m-0 mb-1 fw-semibold">Status</h6>
+                      <span
+                        class="badge rounded bg-transparent border p-1"
+                        [ngClass]="{
+                          'text-blue border-blue': task.status == 'In progress',
+                          'text-success border-success': task.status == 'Done',
+                          'text-secondary border-secondary':
+                            task.status == 'Pending',
+                        }"
+                        >{{ task.status }}</span
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div
+            ngbAccordionCollapse
+            id="task-one"
+            class="accordion-collapse collapse show"
+            data-bs-parent="#task-1"
+          >
+            <div
+              ngbAccordionBody
+              class="accordion-body bg-body border-dashed-top p-3 p-3"
+            >
+              <h6 class="fw-semibold">Task Info</h6>
+              <p class="mt-2 mb-3">
+                {{ task.description }}
+              </p>
+              <div class="row row-cols-auto g-3">
+                <div class="col col-md-3">
+                  <div class="d-flex align-items-center">
+                    <img
+                      [src]="task.client.avatar"
+                      class="thumb-md align-self-center rounded-circle"
+                      alt="..."
+                    />
+                    <div class="flex-grow-1 ms-2">
+                      <h6 class="m-0 mb-1 fw-semibold">
+                        {{ task.client.name }}
+                      </h6>
+                      <p class="text-muted mb-0">{{ task.client.role }}</p>
+                    </div>
+                  </div>
+                </div>
+                <!--end col-->
+                <div class="col col-md-3">
+                  <h6 class="m-0 mb-1 fw-semibold">Project type</h6>
+                  <p class="text-muted mb-0">{{ task.project_type }}</p>
+                </div>
+                <!--end col-->
+                <div class="col col-md-2 text-end align-self-center">
+                  <div class="d-flex justify-content-between">
+                    <h6 class="m-0 mb-1 fw-semibold">Progress</h6>
+                    <small class="text-end">{{ task.progress }}%</small>
+                  </div>
+                  <ngb-progressbar-stacked
+                    class="progress bg-secondary-subtle"
+                    style="height: 5px"
+                  >
+                    <ngb-progressbar
+                      class="progress-bar bg-secondary rounded-pill"
+                      [value]="service.dividePercentage(task.progress)"
+                      style="margin-right: 2px; height: 5px"
+                    ></ngb-progressbar>
+                    <ngb-progressbar
+                      class="progress-bar bg-secondary rounded-pill"
+                      [value]="service.dividePercentage(task.progress)"
+                      style="margin-right: 2px; height: 5px"
+                    ></ngb-progressbar>
+                    <ngb-progressbar
+                      class="progress-bar bg-secondary rounded-pill"
+                      [value]="service.dividePercentage(task.progress)"
+                      style="margin-right: 2px; height: 5px"
+                    ></ngb-progressbar>
+                  </ngb-progressbar-stacked>
+                </div>
+                <!--end col-->
+                <div class="col col-md-2">
+                  <h6 class="m-0 mb-1 fw-semibold">Total Report</h6>
+                  <p class="text-muted mb-0">{{ task.total_report }}</p>
+                </div>
+                <!--end col-->
+                <div class="col col-md-2 ms-auto">
+                  <h6 class="m-0 mb-1 fw-semibold">Assigned To</h6>
+                  <p class="text-muted mb-0">{{ task.assigned_to }}</p>
+                </div>
+                <!--end col-->
+              </div>
+              <!--end row-->
+            </div>
+            <!--end accordion-body-->
+          </div>
+          <!--end task-->
+        </div>
+        <!--end -->
+      }
+    </div>
+    <!--end accordion-->
+  </div>
+</div>

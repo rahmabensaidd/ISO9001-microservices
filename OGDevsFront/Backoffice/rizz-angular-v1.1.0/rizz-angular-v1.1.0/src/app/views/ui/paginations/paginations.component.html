@@ -1,0 +1,188 @@
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Default Example</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <ngb-pagination [collectionSize]="3" [page]="1" [pageSize]="1">
+              <ng-template ngbPaginationPrevious>Previous</ng-template>
+              <ng-template ngbPaginationNext>Next</ng-template>
+            </ngb-pagination>
+          </ul>
+          <!--end pagination-->
+        </nav>
+        <!--end nav-->
+
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <ngb-pagination [collectionSize]="3" [page]="1" [pageSize]="1">
+            </ngb-pagination>
+          </ul>
+          <!--end pagination-->
+        </nav>
+        <!--end nav-->
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Disabled And Active States</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <nav aria-label="...">
+          <ul class="pagination">
+            <ngb-pagination [collectionSize]="3" [page]="2" [pageSize]="1">
+              <ng-template ngbPaginationPrevious>Previous</ng-template>
+              <ng-template ngbPaginationNext>Next</ng-template>
+            </ngb-pagination>
+          </ul>
+          <!--end pagination-->
+        </nav>
+        <!--end nav-->
+
+        <nav aria-label="...">
+          <ul class="pagination">
+            <ngb-pagination [collectionSize]="3" [page]="2" [pageSize]="1">
+              <ng-template ngbPaginationPrevious>Previous</ng-template>
+              <ng-template ngbPaginationNext>Next</ng-template>
+            </ngb-pagination>
+          </ul>
+          <!--end pagination-->
+        </nav>
+        <!--end nav-->
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row justify-content-center">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Sizing Example</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <nav aria-label="...">
+          <ul class="pagination pagination-lg">
+            <ngb-pagination
+              [collectionSize]="5"
+              [page]="1"
+              [directionLinks]="false"
+              size="lg"
+              [pageSize]="1"
+            >
+            </ngb-pagination>
+          </ul>
+          <!--end pagination-->
+        </nav>
+        <!--end nav-->
+
+        <nav aria-label="...">
+          <ul class="pagination pagination-sm">
+            <ngb-pagination
+              [collectionSize]="5"
+              [page]="1"
+              [directionLinks]="false"
+              size="sm"
+              [pageSize]="1"
+            >
+            </ngb-pagination>
+          </ul>
+          <!--end pagination-->
+        </nav>
+        <!--end nav-->
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row justify-content-center">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Alignment Example</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <ngb-pagination [collectionSize]="3" [pageSize]="1">
+              <ng-template ngbPaginationPrevious>Previous</ng-template>
+              <ng-template ngbPaginationNext>Next</ng-template>
+            </ngb-pagination>
+          </ul>
+          <!--end pagination-->
+        </nav>
+        <!--end nav-->
+
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+            <ngb-pagination [collectionSize]="3" [pageSize]="1">
+              <ng-template ngbPaginationPrevious>Previous</ng-template>
+              <ng-template ngbPaginationNext>Next</ng-template>
+            </ngb-pagination>
+          </ul>
+          <!--end pagination-->
+        </nav>
+        <!--end nav-->
+
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-end">
+            <ngb-pagination [collectionSize]="30">
+              <ng-template ngbPaginationPrevious>Previous</ng-template>
+              <ng-template ngbPaginationNext>Next</ng-template>
+            </ngb-pagination>
+          </ul>
+          <!--end pagination-->
+        </nav>
+        <!--end nav-->
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->

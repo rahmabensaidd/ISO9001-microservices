@@ -1,0 +1,34 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row align-items-center">
+      <div class="col">
+        <h4 class="card-title">Visits Details</h4>
+      </div>
+      <!--end col-->
+    </div>
+    <!--end row-->
+  </div>
+  <!--end card-header-->
+  <div class="card-body pt-0">
+    <div class="table-responsive">
+      <table class="table mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>URL</th>
+            <th class="text-end">Views</th>
+            <th class="text-end">Uniques</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of socialData; track $index) {
+            <tr>
+              <td>{{ item.url }}</td>
+              <td class="text-end">{{ item.views }}k</td>
+              <td class="text-end">{{ item.uniques }}k</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

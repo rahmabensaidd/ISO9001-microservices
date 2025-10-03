@@ -1,0 +1,24 @@
+<div class="mb-3">
+  <div class="card-body pt-0 text-center">
+    <div id="task" class="apex-charts">
+      <apx-chart
+        [chart]="summaryChart.chart!"
+        [series]="summaryChart.series!"
+        [plotOptions]="summaryChart.plotOptions!"
+        [dataLabels]="summaryChart.dataLabels!"
+        [stroke]="summaryChart.stroke!"
+        [legend]="summaryChart.legend!"
+        [labels]="summaryChart.labels!"
+        [colors]="summaryChart.colors!"
+        [responsive]="summaryChart.responsive!"
+        [tooltip]="summaryChart.tooltip!"
+      ></apx-chart>
+    </div>
+    <h4 class="card-title my-2">Tasks Summary</h4>
+    <button type="button" class="btn btn-outline-primary px-3 mt-2">
+      View Tasks
+    </button>
+  </div>
+  <!--end card-body-->
+</div>
+<!--end card-->

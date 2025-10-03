@@ -1,0 +1,81 @@
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Timeline</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body px-0 pt-0">
+        <ngx-simplebar class="activity p-3 pt-0" style="height: 500px">
+          @for (item of activitiesData; track $index) {
+            <div class="activity-info">
+              <div class="icon-info-activity">
+                <i class="{{ item.icon }}"></i>
+              </div>
+              <div class="activity-info-text">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h6 class="m-0 w-75">{{ item.title }}</h6>
+                  <span class="text-muted d-block">{{ item.time }}</span>
+                </div>
+                <p class="text-muted mt-3">
+                  {{ item.description }}
+                  <a href="javascript:void(0);" class="text-primary"
+                    >[more info]</a
+                  >
+                </p>
+                @for (data of item.badges; track $index) {
+                  <span class="badge badge-soft-secondary me-0.5">{{
+                    data
+                  }}</span>
+                }
+              </div>
+            </div>
+          }</ngx-simplebar
+        ><!--end activity-->
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Timeline</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div class="tracking-list">
+          @for (item of activities2Data; track $index) {
+            <div class="tracking-item">
+              <div class="tracking-icon icon-inner">
+                <i class="fas fa-circle"></i>
+              </div>
+              <div class="tracking-date">
+                {{ item.date
+                }}<span class="d-block fs-12 text-muted">{{ item.time }}</span>
+              </div>
+              <p class="mb-0 text-muted">{{ item.description }}</p>
+            </div>
+          }
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->

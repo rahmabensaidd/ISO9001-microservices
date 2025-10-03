@@ -1,0 +1,200 @@
+<div class="container mt-4">
+  <h2 class="text-center">Bugs Queue for Task</h2>
+
+  <div *ngIf="task; else noTask">
+
+    <p><strong>Description:</strong> {{ task?.taskDescription }}</p>
+    <p><strong>Status:</strong> {{ task?.status }}</p>
+  </div>
+
+  <ng-template #noTask>
+    <p class="text-danger">No task found.</p>
+  </ng-template>
+
+  <div *ngIf="bugs && bugs.length > 0">
+    <h3 class="mt-4">List of Bugs for this Task</h3>
+    <div class="d-flex justify-content-between p-2 align-items-center">
+      <ngb-pagination
+        [collectionSize]="bugs.length"
+        [(page)]="currentPage"
+        [pageSize]="pageSize"
+        (pageChange)="refreshBugs()"
+      ></ngb-pagination>
+      <select class="form-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="refreshBugs()">
+        <option [ngValue]="2">2 items per page</option>
+        <option [ngValue]="4">4 items per page</option>
+        <option [ngValue]="6">6 items per page</option>
+      </select>
+    </div>
+    <div class="table-responsive">
+      <table class="table datatable" *ngIf="bugs && bugs.length > 0; else noBugs">
+        <thead class="table-light">
+        <tr>
+
+          <th>Bug Description</th>
+          <th>Status</th>
+          <th>Source Issue</th>
+          <th>Priority</th>
+          <th>Date</th>
+          <th>Developer</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let bug of getBugsForCurrentPage()" [ngClass]="{'expanded-row': isExpanded(bug.idBug)}">
+
+          <td class="bug-description" (click)="toggleDescription(bug.idBug)">
+            <span class="description-text">{{ bug.description }}</span>
+          </td>
+          <td >
+           <div class="button-container">
+            <span class="badge badge-lg" [ngClass]="getStatusClass(bug.status)">{{ bug.status }}</span>
+            <button
+              class="fix-btn me-2"
+              placement="bottom"
+              *ngIf="bug.status && bug.status.trim().toLowerCase() === 'open'"
+              ngbTooltip="Mark as fix"
+              (click)="fixBug(bug.idBug)">
+              <i class="icofont-check-circled"></i>
+            </button>
+
+
+           </div>
+          </td>
+
+
+          <td><span class="badge badge-lg" [ngClass]="getSourceIssueClass(bug.source_issue)">{{ bug.source_issue }}</span></td>
+          <td><span class="badge badge-lg" [ngClass]="getPriorityClass(bug.priority)">{{ bug.priority }}</span></td>
+          <td>{{ bug.repportDate | date:'dd MMM yyyy' }}</td>
+          <td>{{ bug.developer?.username || 'Not assigned' }}</td>
+          <td>
+            <div class="d-flex align-items-center gap-2">
+              <!-- Icône modifier -->
+              <a href="javascript:void(0);"
+                 ngbTooltip="Edit"
+                 placement="bottom"
+                 (click)="editBug(bug, editBugModal)">
+                <i class="las la-pen text-secondary fs-18"></i>
+              </a>
+
+
+              <!-- Icône supprimer -->
+              <a href="javascript:void(0);"
+                 ngbTooltip="Delete"
+                 placement="bottom"
+                 (click)="deleteBug(bug.idBug)">
+                <i class="las la-trash-alt text-secondary fs-18"></i>
+              </a>
+
+              <!-- Bouton suggestion -->
+              <button
+                *ngIf="bug.status === 'Open'"
+                class="btn btn-warning btn-sm d-flex align-items-center"
+                ngbTooltip="AI suggest correction"
+                placement="bottom"
+                (click)="openSuggestionModal(suggestionTemplate, bug.idBug)">
+                <i class="fas fa-lightbulb me-1"></i>Correction
+              </button>
+            </div>
+          </td>
+
+
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noBugs>
+      <p class="text-danger">No bugs found for this task.</p>
+    </ng-template>
+  </div>
+</div>
+
+<ng-template #suggestionTemplate let-modal>
+  <div class="modal-header bg-warning text-white">
+    <h5 class="modal-title">Correction Suggestion for Bug #{{ selectedBug?.idBug }}</h5>
+    <button type="button" class="btn-close btn-close-white" (click)="modal.dismiss()" aria-label="Close"></button>
+  </div>
+  <div class="modal-body">
+    <p><strong>Description:</strong> {{ selectedBug?.description }}</p>
+    <p><strong>Developer:</strong> {{ selectedBug?.developer?.username || 'Not assigned' }}</p>
+    <p><strong>Status:</strong> {{ selectedBug?.status }}</p>
+    <p><strong>Priority:</strong> {{ selectedBug?.priority }}</p>
+    <p><strong>Reported Date:</strong> {{ selectedBug?.repportDate  }}</p>
+    <p><strong>Source:</strong> {{ selectedBug?.source_issue }}</p>
+
+
+    <hr>
+    <h4>Root Cause Analysis:</h4>
+    <p>{{ rootCauseAnalysis || 'No analysis available' }}</p>
+    <hr>
+    <h4>Code Correction Suggestion:</h4>
+    <p>{{ codeCorrectionSuggestion || 'No code correction available' }}</p>
+    <hr>
+    <h4>Performance Improvement Tips:</h4>
+    <p>{{ performanceImprovementTips || 'No tips available' }}</p>
+  </div>
+</ng-template>
+<ng-template #editBugModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modifier le Bug</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+
+  <div class="modal-body">
+    <form #editForm="ngForm" #bugForm="ngForm">
+
+      <!-- Description -->
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <input id="description" *ngIf="selectedBugg" type="text" [(ngModel)]="selectedBugg.description" name="description" class="form-control">
+      </div>
+
+      <!-- Status (Updated to select dropdown) -->
+      <div class="mb-3">
+        <label for="status" class="form-label">Status</label>
+        <select id="status" *ngIf="selectedBugg" [(ngModel)]="selectedBugg.status" name="status" class="form-control">
+          <option value="">Select status</option>
+          <option value="FIXED">FIXED</option>
+          <option value="OPEN">Open</option>
+        </select>
+      </div>
+
+      <!-- Source Issue with validation -->
+      <div class="mb-3">
+        <label for="sourceIssue" class="form-label">Source Issue</label>
+        <select
+          id="sourceIssue"
+          *ngIf="selectedBugg"
+          [(ngModel)]="selectedBugg.source_issue"
+          name="source_issue"
+          class="form-control"
+          [ngClass]="{'is-invalid': bugForm.submitted && bugForm.controls['source_issue']?.invalid}">
+          <option value="">Select source issue</option>
+          <option value="In-House">In-House</option>
+          <option value="Alpha">Alpha</option>
+          <option value="Support">Support</option>
+        </select>
+        <div class="invalid-feedback">Source Issue is required.</div>
+      </div>
+
+      <!-- Priority -->
+      <div class="mb-3">
+        <label for="priority" class="form-label">Priority</label>
+        <select id="priority" *ngIf="selectedBugg" [(ngModel)]="selectedBugg.priority" name="priority" class="form-control">
+          <option value="">Select priority</option>
+          <option value="Critical">Critical</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+        </select>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Annuler</button>
+    <button type="button" class="btn btn-primary" (click)="saveBug(modal)">Enregistrer</button>
+  </div>
+</ng-template>
+
+

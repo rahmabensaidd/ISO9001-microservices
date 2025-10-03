@@ -1,0 +1,162 @@
+/* Container styling */
+.container.mt-4 {
+  max-width: 1280px; /* Légère augmentation pour un look plus spacieux */
+  margin: 0 auto;
+  padding: 2.5rem;
+  background: linear-gradient(135deg, #f8fafc, #ffffff); /* Dégradé subtil */
+  border-radius: 16px; /* Coins plus doux */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Ombre plus douce et moderne */
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Headings */
+h2.text-center {
+  font-family: 'Inter', 'Segoe UI', sans-serif; /* Police plus moderne */
+  font-weight: 700;
+  color: #1a202c; /* Ton plus sombre et élégant */
+  letter-spacing: -0.025em; /* Légère compression pour un look pro */
+  margin-bottom: 2rem;
+  font-size: 2rem; /* Plus grand pour attirer l’attention */
+}
+
+h3.mt-4 {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-weight: 600;
+  color: #28a745;
+  position: relative;
+  padding-bottom: 0.75rem;
+  margin-top: 2.5rem;
+}
+
+h3.mt-4:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px; /* Ligne plus épaisse pour plus d’impact */
+  background: linear-gradient(to right, #20c997, #28a745); /* Dégradé assorti */
+  border-radius: 2px;
+}
+
+
+
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Badge styling */
+.badge {
+  padding: 0.4em 1em;           /* Padding modéré */
+  font-size: 0.55rem;           /* Taille de police légèrement augmentée */
+  font-weight: 600;
+  border-radius: 0.9rem;
+  transition: all 0.3s ease;
+  min-width: auto;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.badge:hover {
+  transform: scale(1.05);
+}
+
+.badge-lg {
+  font-size: 0.75rem;
+  padding: 0.6em 1.1em;
+}
+
+
+/* Status Badge Colors */
+.status-open {
+  background-color: #f1c40f; /* Yellow (as in the image) */
+}
+
+.status-fixed {
+  background-color: #3498db; /* Blue (new color for FIXED) */
+}
+
+/* Source Issue Badge Colors */
+.source-alpha {
+  background-color: #7f8c8d; /* Gray (as in the image) */
+}
+
+.source-support {
+  background-color: #95a5a6; /* Slightly lighter gray (as in the image) */
+}
+
+.source-in-house {
+  background-color: #bdc3c7; /* Even lighter gray (as in the image) */
+}
+
+/* Priority Badge Colors */
+.priority-medium {
+  background-color: #f39c12; /* Orange (as in the image) */
+}
+
+.priority-critical {
+  background-color: #e74c3c; /* Red (slightly darker for contrast) */
+}
+
+.priority-high {
+  background-color: #c0392b; /* Darker red (as in the image) */
+}
+
+/* Couleurs badges */
+.bg-warning { background-color: #f6c107 !important; color: #1a202c !important; }
+.bg-success { background-color: #34c759 !important; }
+.bg-primary { background-color: #007bff !important; }
+.bg-info { background-color: #17a2b8 !important; }
+.bg-secondary { background-color: #6b7280 !important; }
+.bg-danger { background-color: #e3342f !important; }
+
+/* Description styling */
+.bug-description {
+  width: 320px;
+  max-width: 320px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.expanded-row .bug-description {
+  height: auto;
+  max-height: 250px; /* Plus d’espace pour la lisibilité */
+  overflow-y: auto;
+  white-space: normal;
+  padding: 0.5rem;
+  background: #f8fafc; /* Fond léger pour contraste */
+  border-radius: 8px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container.mt-4 {
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+
+
+  .bug-description {
+    width: 240px;
+    max-width: 240px;
+  }
+
+  .expanded-row .bug-description {
+    max-height: 180px;
+  }
+
+
+  .bug-description {
+    width: 180px;
+    max-width: 180px;
+  }
+}
+.table thead.table-light th {
+  background-color: rgba(208, 208, 208, 0.58); /* Dark blue */
+
+}

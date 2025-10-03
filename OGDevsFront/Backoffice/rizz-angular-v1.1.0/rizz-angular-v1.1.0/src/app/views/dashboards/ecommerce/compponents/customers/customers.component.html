@@ -1,0 +1,94 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row align-items-center">
+      <div class="col">
+        <h4 class="card-title">Customers</h4>
+      </div>
+      <!--end col-->
+      <div class="col-auto">
+        <div class="img-group d-flex">
+          <a
+            class="user-avatar position-relative d-inline-block"
+            href="javascript:void(0);"
+          >
+            <img
+              src="assets/images/users/avatar-1.jpg"
+              alt="avatar"
+              class="thumb-md shadow-sm rounded-circle"
+            />
+          </a>
+          <a
+            class="user-avatar position-relative d-inline-block ms-n2"
+            href="javascript:void(0);"
+          >
+            <img
+              src="assets/images/users/avatar-2.jpg"
+              alt="avatar"
+              class="thumb-md shadow-sm rounded-circle"
+            />
+          </a>
+          <a
+            class="user-avatar position-relative d-inline-block ms-n2"
+            href="javascript:void(0);"
+          >
+            <img
+              src="assets/images/users/avatar-4.jpg"
+              alt="avatar"
+              class="thumb-md shadow-sm rounded-circle"
+            />
+          </a>
+          <a
+            class="user-avatar position-relative d-inline-block ms-n2"
+            href="javascript:void(0);"
+          >
+            <img
+              src="assets/images/users/avatar-3.jpg"
+              alt="avatar"
+              class="thumb-md shadow-sm rounded-circle"
+            />
+          </a>
+          <a href="" class="user-avatar position-relative d-inline-block ms-1">
+            <span
+              class="thumb-md shadow-sm justify-content-center d-flex align-items-center bg-info-subtle rounded-circle fw-semibold fs-6"
+              >+6</span
+            >
+          </a>
+        </div>
+      </div>
+      <!--end col-->
+    </div>
+    <!--end row-->
+  </div>
+  <div class="card-body pt-0">
+    <div id="customers" class="apex-charts">
+      <apx-chart
+        [chart]="customerChart.chart!"
+        [series]="customerChart.series!"
+        [plotOptions]="customerChart.plotOptions!"
+        [dataLabels]="customerChart.dataLabels!"
+        [stroke]="customerChart.stroke!"
+        [legend]="customerChart.legend!"
+        [labels]="customerChart.labels!"
+        [colors]="customerChart.colors!"
+        [responsive]="customerChart.responsive!"
+        [tooltip]="customerChart.tooltip!"
+      ></apx-chart>
+    </div>
+    <div class="bg-light py-3 px-2 mb-0 mt-3 text-center rounded">
+      <h6 class="mb-0">
+        <i class="icofont-calendar fs-5 me-1"></i> 01 January
+        {{ currentYear }} to 31 December {{ currentYear }}
+      </h6>
+    </div>
+    <p class="text-secondary text-truncate mb-0 rounded mt-2 text-center">
+      To review the new order by Jems.
+      <a
+        href="javascript:void(0);"
+        class="text-primary text-decoration-underline"
+        >detail</a
+      >
+    </p>
+  </div>
+  <!--end card-body-->
+</div>
+<!--end card-->

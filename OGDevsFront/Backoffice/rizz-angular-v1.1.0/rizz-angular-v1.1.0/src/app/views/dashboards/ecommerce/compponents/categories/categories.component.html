@@ -1,0 +1,39 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row align-items-center">
+      <div class="col">
+        <h4 class="card-title">Categories Data</h4>
+      </div>
+      <!--end col-->
+      <div class="col-auto">
+        <div class="text-center">
+          <h6 class="text-uppercase text-muted mt-1 m-0">
+            <span class="fs-16 fw-semibold">24+</span> Categories
+          </h6>
+        </div>
+      </div>
+      <!--end col-->
+    </div>
+    <!--end row-->
+  </div>
+  <div class="card-body pt-0">
+    <div id="categories" class="apex-charts mt-n2">
+      <apx-chart
+        [series]="categoryChart.series!"
+        [chart]="categoryChart.chart!"
+        [plotOptions]="categoryChart.plotOptions!"
+        [dataLabels]="categoryChart.dataLabels!"
+        [xaxis]="categoryChart.xaxis!"
+        [colors]="categoryChart.colors!"
+        [legend]="categoryChart.legend!"
+      ></apx-chart>
+    </div>
+    <div class="text-center">
+      <button type="button" class="btn btn-primary mx-auto">
+        More Detail <i class="fa-solid fa-arrow-right-long"></i>
+      </button>
+    </div>
+  </div>
+  <!--end card-body-->
+</div>
+<!--end card-->

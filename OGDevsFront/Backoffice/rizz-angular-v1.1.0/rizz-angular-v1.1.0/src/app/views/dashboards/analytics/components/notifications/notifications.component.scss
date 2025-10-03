@@ -1,0 +1,87 @@
+:host {
+  ::ng-deep {
+    .toast {
+      transition: transform 0.2s ease-in-out;
+
+      &:hover {
+        transform: translateX(-5px);
+      }
+
+      &.info {
+        background-color: #cce5ff;
+        border-color: #b8daff;
+      }
+
+      &.success {
+        background-color: #d4edda;
+        color: #155724;
+      }
+      &.warning {
+        background-color: #fff3cd;
+        color: #856404;
+      }
+      &.danger {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+    }
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.notifications-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  max-width: 300px;
+}
+
+.notification {
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateX(-5px);
+  }
+
+  &.info {
+    background-color: #2196F3;
+    color: white;
+  }
+
+  &.success {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+  &.error {
+    background-color: #f44336;
+    color: white;
+  }
+}
+
+.notification-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 5px;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}

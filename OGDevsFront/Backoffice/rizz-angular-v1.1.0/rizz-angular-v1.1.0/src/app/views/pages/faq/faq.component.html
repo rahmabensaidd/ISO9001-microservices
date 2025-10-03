@@ -1,0 +1,186 @@
+<div class="row justify-content-center">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header text-center">
+        <h4 class="card-title pt-2 fw-semibold mb-2 fs-18">
+          Most Commonly Asked Questions
+        </h4>
+        <p>
+          <i class="la la-grip-lines text-primary fs-18 me-0.5"></i>
+          <i class="la la-question-circle text-primary fs-18 me-0.5"></i>
+          <i class="la la-grip-lines text-primary fs-18"></i>
+        </p>
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div class="row">
+          <div class="col-lg-6">
+            @for (item of faqData.slice(0, 3); track $index) {
+              <div class="p-4 rounded mb-3 border-dashed border-theme-color">
+                <div class="mb-2">
+                  <div
+                    class="d-inline-flex justify-content-center align-items-center thumb-md card-bg border border border-secondary-subtle rounded mx-auto me-1"
+                  >
+                    <i
+                      class="{{
+                        item.icon
+                      }} h5 align-self-center mb-0 text-dark"
+                    ></i>
+                  </div>
+                  <h6 class="fs-15 d-inline-block ms-0.5">{{ item.title }}</h6>
+                </div>
+                <p class="fs-14 ms-45 text-muted mb-0">{{ item.content }}</p>
+              </div>
+            }
+          </div>
+          <div class="col-lg-6">
+            @for (item of faqData.slice(3, 6); track $index) {
+              <div class="p-4 rounded mb-3 border-dashed border-theme-color">
+                <div class="mb-2">
+                  <div
+                    class="d-inline-flex justify-content-center align-items-center thumb-md card-bg border border border-secondary-subtle rounded mx-auto me-1"
+                  >
+                    <i
+                      class="{{
+                        item.icon
+                      }} h5 align-self-center mb-0 text-dark"
+                    ></i>
+                  </div>
+                  <h6 class="fs-15 d-inline-block ms-0.5">{{ item.title }}</h6>
+                </div>
+                <p class="fs-14 ms-45 text-muted mb-0">{{ item.content }}</p>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Questions With Accordion</h4>
+          </div>
+        </div>
+      </div>
+      <div class="card-body pt-0">
+        <div
+          class="accordion"
+          id="accordionExample-faq"
+          ngbAccordion
+          [closeOthers]="true"
+        >
+          @for (item of faqAccordionData; track $index) {
+            <div class="accordion-item" ngbAccordionItem [collapsed]="false">
+              <h5
+                class="accordion-header m-0"
+                id="headingOne"
+                ngbAccordionHeader
+              >
+                <button
+                  class="accordion-button"
+                  type="button"
+                  ngbAccordionToggle
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseOne"
+                  aria-expanded="true"
+                  aria-controls="collapseOne"
+                >
+                  {{ item.question }}
+                </button>
+              </h5>
+              <div
+                id="collapseOne"
+                class="accordion-collapse collapse show"
+                ngbAccordionCollapse
+                aria-labelledby="headingOne"
+                data-bs-parent="#accordionExample-faq"
+              >
+                <div
+                  class="accordion-body"
+                  ngbAccordionBody
+                  [innerHTML]="item.answer"
+                >
+                  {{ item.answer }}
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Have More Questions</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <form>
+          <div class="form-group row">
+            <div class="col-lg-6">
+              <input
+                class="form-control mb-2"
+                type="text"
+                id="name"
+                placeholder="Name"
+              />
+            </div>
+            <div class="col-lg-6">
+              <input
+                class="form-control mb-2"
+                type="email"
+                id="example-email-input3"
+                placeholder="Email"
+              />
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-12">
+              <input
+                class="form-control mb-2"
+                type="text"
+                id="subject2"
+                placeholder="Subject"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <textarea
+              class="form-control mb-2"
+              id="exampleFormControlTextarea1"
+              rows="4"
+              placeholder="Your message"
+            ></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block px-4">
+            Send Email
+          </button>
+        </form>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->

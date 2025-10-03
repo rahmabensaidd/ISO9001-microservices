@@ -1,0 +1,88 @@
+<app-table-header />
+<div class="table-responsive">
+  <table class="table mb-0 checkbox-all text-nowrap" id="datatable_1">
+    <thead class="table-light">
+      <tr>
+        <th style="width: 16px">
+          <div class="form-check mb-0 ms-n1">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              name="select-all"
+              id="select-all"
+            />
+          </div>
+        </th>
+        <th class="ps-0" [sortable]="'customer'" (sort)="onSort($event)">
+          Customer
+        </th>
+        <th [sortable]="'email'" (sort)="onSort($event)">Email</th>
+        <th [sortable]="'status'" (sort)="onSort($event)">Status</th>
+        <th [sortable]="'order'" (sort)="onSort($event)">Order</th>
+        <th [sortable]="'spent'" (sort)="onSort($event)">Spent</th>
+        <th class="text-end">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (data of customer$ | async; track $index) {
+        <tr>
+          <td style="width: 16px">
+            <div class="form-check">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                name="check"
+                id="customCheck1"
+              />
+            </div>
+          </td>
+          <td class="ps-0">
+            @if (data.customer) {
+              <img
+                [src]="data.customer.avatar"
+                alt=""
+                class="thumb-md d-inline rounded-circle me-1"
+              />
+              <p class="d-inline-block align-middle mb-0">
+                <span class="font-13 fw-medium">{{ data.customer.name }}</span>
+              </p>
+            }
+          </td>
+          <td>
+            <a href="" class="d-inline-block align-middle mb-0 text-body">{{
+              data.email
+            }}</a>
+          </td>
+          <td>
+            <span
+              class="badge"
+              [ngClass]="{
+                'bg-blue-subtle text-blue': data.status == 'Repeat',
+                'bg-secondary-subtle text-secondary': data.status == 'Inactive',
+                'bg-success-subtle text-success':
+                  data.status == 'Loyal' ||
+                  data.status == 'Referral' ||
+                  data.status == 'Re-Order' ||
+                  data.status == 'New' ||
+                  data.status == 'Potential',
+                'bg-danger-subtle text-danger': data.status == 'VIP',
+              }"
+              >{{ data.status }}</span
+            >
+          </td>
+          <td>{{ data.order }}</td>
+          <td>${{ data.spent }}</td>
+          <td class="text-end">
+            <a href="javascript:void(0);"
+              ><i class="las la-pen text-secondary fs-18 me-0.5"></i
+            ></a>
+            <a href="javascript:void(0);"
+              ><i class="las la-trash-alt text-secondary fs-18"></i
+            ></a>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+<app-table-footer [total]="total$" />

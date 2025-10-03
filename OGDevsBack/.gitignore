@@ -1,0 +1,43 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+mvnw
+mvnw.cmd
+nomPrenomClasseExamen.iml
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+/OGDevsBack/.idea/
+/OGDevsBack/.mvn/
+### VS Code ###
+.vscode/
+src/main/resources/application.properties
+
+
+package-lock.json"OGDevsFront/Backoffice/rizz-angular-v1.1.0/rizz-angular-v1.1.0/package-lock.tar.gz" 
+"OGDevsFront/Backoffice/rizz-angular-v1.1.0/rizz-angular-v1.1.0/assets.zip" 
+"OGDevsFront/Backoffice/rizz-angular-v1.1.0/rizz-angular-v1.1.0/assets.rar" 

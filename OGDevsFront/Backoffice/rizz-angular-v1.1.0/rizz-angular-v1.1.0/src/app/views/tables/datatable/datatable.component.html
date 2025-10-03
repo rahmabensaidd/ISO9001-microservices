@@ -1,0 +1,387 @@
+<div class="row justify-content-center">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Basic</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div class="table-responsive">
+          <table class="table datatable">
+            <thead class="table-light">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Country</th>
+                <th scope="col">Area</th>
+                <th scope="col">Population</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (
+                country of basicCountries;
+                track country.name;
+                let i = $index
+              ) {
+                <tr>
+                  <th scope="row">{{ i + 1 }}</th>
+                  <td>
+                    <img
+                      [src]="
+                        'https://upload.wikimedia.org/wikipedia/commons/' +
+                        country.flag
+                      "
+                      [alt]="'The flag of ' + country.name"
+                      class="me-2"
+                      style="width: 20px"
+                    />
+                    {{ country.name }}
+                  </td>
+                  <td>{{ country.area | number }}</td>
+                  <td>{{ country.population | number }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Pagination</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div class="table-responsive">
+          <table class="table datatable">
+            <thead class="table-light">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Country</th>
+                <th scope="col">Area</th>
+                <th scope="col">Population</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (country of countries; track country.name) {
+                <tr>
+                  <th scope="row">{{ country.id }}</th>
+                  <td>
+                    <img
+                      [src]="
+                        'https://upload.wikimedia.org/wikipedia/commons/' +
+                        country.flag
+                      "
+                      [alt]="'The flag of ' + country.name"
+                      class="me-2"
+                      style="width: 20px"
+                    />
+                    {{ country.name }}
+                  </td>
+                  <td>{{ country.area | number }}</td>
+                  <td>{{ country.population | number }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+
+          <div class="d-flex justify-content-between p-2">
+            <ngb-pagination
+              [collectionSize]="collectionSize"
+              [(page)]="page"
+              [pageSize]="pageSize"
+              (pageChange)="refreshCountries()"
+            >
+            </ngb-pagination>
+
+            <select
+              class="form-select"
+              style="width: auto"
+              [(ngModel)]="pageSize"
+              (ngModelChange)="refreshCountries()"
+            >
+              <option [ngValue]="2">2 items per page</option>
+              <option [ngValue]="4">4 items per page</option>
+              <option [ngValue]="6">6 items per page</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Search and Filtering</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div class="mb-3 row">
+          <label
+            for="table-filtering-search"
+            class="col-xs-3 col-sm-auto col-form-label"
+            >Full text search:</label
+          >
+          <div class="col-xs-3 col-sm-auto">
+            <input
+              id="table-filtering-search"
+              class="form-control"
+              type="text"
+              [(ngModel)]="filter"
+              (ngModelChange)="searchfilter()"
+            />
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table datatable">
+            <thead class="table-light">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Country</th>
+                <th scope="col">Area</th>
+                <th scope="col">Population</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (
+                country of searchCountries;
+                track country.name;
+                let i = $index
+              ) {
+                <tr>
+                  <th scope="row">{{ i + 1 }}</th>
+                  <td>
+                    <img
+                      [src]="
+                        'https://upload.wikimedia.org/wikipedia/commons/' +
+                        country.flag
+                      "
+                      [alt]="'The flag of ' + country.name"
+                      class="me-2"
+                      style="width: 20px"
+                    />
+                    <ngb-highlight [result]="country.name" [term]="filter" />
+                  </td>
+                  <td>
+                    <ngb-highlight
+                      [result]="country.area | number"
+                      [term]="filter"
+                    />
+                  </td>
+                  <td>
+                    <ngb-highlight
+                      [result]="country.population | number"
+                      [term]="filter"
+                    />
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="4" style="text-align: center">
+                    No countries found
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Sorting</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div class="table-responsive">
+          <table class="table datatable">
+            <thead class="table-light">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col" sortable="name" (sort)="onSort($event)">
+                  Country
+                </th>
+                <th scope="col" sortable="area" (sort)="onSort($event)">
+                  Area
+                </th>
+                <th scope="col" sortable="population" (sort)="onSort($event)">
+                  Population
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (country of sortCountries; track country.name) {
+                <tr>
+                  <th scope="row">{{ country.id }}</th>
+                  <td>
+                    <img
+                      [src]="
+                        'https://upload.wikimedia.org/wikipedia/commons/' +
+                        country.flag
+                      "
+                      [alt]="'The flag of ' + country.name"
+                      class="me-2"
+                      style="width: 20px"
+                    />
+                    {{ country.name }}
+                  </td>
+                  <td>{{ country.area | number }}</td>
+                  <td>{{ country.population | number }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Complete example</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body">
+        <form>
+          <div class="mb-3 row">
+            <label
+              for="table-complete-search"
+              class="col-xs-3 col-sm-auto col-form-label"
+              >Full text search:</label
+            >
+            <div class="col-xs-3 col-sm-auto">
+              <input
+                id="table-complete-search"
+                type="text"
+                class="form-control"
+                name="searchTerm"
+                [(ngModel)]="tableService.searchTerm"
+              />
+            </div>
+            @if (tableService.loading$ | async) {
+              <span class="col col-form-label">Loading...</span>
+            }
+          </div>
+          <div class="table-responsive">
+            <table class="table datatable">
+              <thead class="table-light">
+                <tr>
+                  <th scope="col">#</th>
+                  <th
+                    scope="col"
+                    sortable="name"
+                    (sort)="onCompleteSort($event)"
+                  >
+                    Country
+                  </th>
+                  <th
+                    scope="col"
+                    sortable="area"
+                    (sort)="onCompleteSort($event)"
+                  >
+                    Area
+                  </th>
+                  <th
+                    scope="col"
+                    sortable="population"
+                    (sort)="onCompleteSort($event)"
+                  >
+                    Population
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (country of records$ | async; track country) {
+                  <tr>
+                    <th scope="row">{{ country.id }}</th>
+                    <td>
+                      <img
+                        [src]="
+                          'https://upload.wikimedia.org/wikipedia/commons/' +
+                          country.flag
+                        "
+                        [alt]="'The flag of ' + country.name"
+                        class="me-2"
+                        style="width: 20px"
+                      />
+                      <ngb-highlight
+                        [result]="country.name"
+                        [term]="tableService.searchTerm"
+                      />
+                    </td>
+                    <td>
+                      <ngb-highlight
+                        [result]="country.area | number"
+                        [term]="tableService.searchTerm"
+                      />
+                    </td>
+                    <td>
+                      <ngb-highlight
+                        [result]="country.population | number"
+                        [term]="tableService.searchTerm"
+                      />
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="4" style="text-align: center">
+                      No countries found
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          <div class="d-flex justify-content-between p-2">
+            <ngb-pagination
+              [collectionSize]="(total$ | async)!"
+              [(page)]="tableService.page"
+              [pageSize]="tableService.pageSize"
+            >
+            </ngb-pagination>
+
+            <select
+              class="form-select"
+              style="width: auto"
+              name="pageSize"
+              [(ngModel)]="tableService.pageSize"
+            >
+              <option [ngValue]="2">2 items per page</option>
+              <option [ngValue]="4">4 items per page</option>
+              <option [ngValue]="6">6 items per page</option>
+            </select>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

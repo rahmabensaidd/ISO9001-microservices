@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Coconult</title>
+  <base href="/" />
+  <!-- <base href="/rizz-angular/" /> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" sizes="128x128" type="image/png" href="/assets/FrontOffice/assets/img/favicon.png" />
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbvyBxmMbFhrzP9Z8moyYr6dCr-pzjhBE"></script>
+  <style>
+    #splash-screen {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      background: white;
+      display: flex;
+      height: 100%;
+      width: 100%;
+      transform: translate(-50%, -50%);
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 1;
+      transition: all 15s linear;
+      overflow: hidden;
+    }
+
+    #splash-screen.remove {
+      animation: fadeout 0.7s forwards;
+      z-index: 0;
+    }
+
+    @keyframes fadeout {
+      to {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <app-root></app-root>
+  <div id="splash-screen">
+    <img src="/assets/FrontOffice/assets/img/favicon.png"alt="logo-" width="46" height="46" />
+    <img alt="Logo" src="/assets/FrontOffice/assets/img/favicon.png" width="59" height="24" style="margin-left: 6px" />
+  </div>
+  <script>
+     const splashScreen = document.querySelector('#splash-screen')
+      if (splashScreen) {
+        splashScreen.classList.add('remove')
+      }
+  </script>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+</body>
+
+</html>

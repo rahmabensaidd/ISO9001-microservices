@@ -1,0 +1,166 @@
+<div class="card mb-3">
+  <div class="card-body">
+    <div ngbDropdown class="dropdown d-inline-block float-end">
+      <a
+        ngbDropdownToggle
+        class="dropdown-toggle arrow-none text-secondary"
+        data-bs-toggle="dropdown"
+        role="button"
+        aria-haspopup="false"
+        aria-expanded="false"
+      >
+        <i class="fa-solid fa-ellipsis fs-18"></i>
+      </a>
+      <div
+        ngbDropdownMenu
+        class="dropdown-menu dropdown-menu-end"
+        data-popper-placement="bottom-end"
+      >
+        <a class="dropdown-item" href="javascript:void(0);"
+          ><i class="las la-pen fs-16 me-1 align-text-bottom"></i> Edit</a
+        >
+        <a class="dropdown-item text-danger"
+          ><i class="las la-trash fs-16 me-1 align-text-bottom"></i> Delete</a
+        >
+      </div>
+    </div>
+    <!--end dropdown-->
+    <span
+      class="badge rounded fw-normal mb-1"
+      [ngClass]="{
+        'text-success bg-success-subtle px-2': task.priority == 'Completed',
+        'text-info bg-info-subtle px-1': task.priority == 'Medium',
+        'text-warning bg-warning-subtle px-2': task.priority == 'Low',
+        'text-danger bg-danger-subtle px-1': task.priority == 'High',
+      }"
+      >{{ task.priority }}</span
+    >
+    <h5 class="my-2 font-14">{{ task.title }}</h5>
+    @if (task.image) {
+      <p class="p-3 rounded-md">
+        <img [src]="task.image" alt="" class="img-fluid mx-auto" />
+      </p>
+    } @else {
+      <p
+        class="text-muted"
+        [ngClass]="task.completedTasks || task.tags ? 'mb-3' : 'mb-0'"
+      >
+        {{ task.description }}
+      </p>
+    }
+
+    @if (task.completedTasks > 0) {
+      <div
+        class="d-flex justify-content-between fw-semibold align-items-center"
+      >
+        <p class="mb-1 d-inline-flex align-items-center">
+          <i class="iconoir-task-list fs-18 text-muted me-1"></i
+          >{{ task.totalTasks }} Tasks
+        </p>
+        <small class="text-end text-body-emphasis d-block ms-auto"
+          >{{
+            calculateProgress(task.completedTasks, task.totalTasks)
+          }}
+          %</small
+        >
+      </div>
+      <ngb-progressbar-stacked
+        class="progress bg-secondary-subtle"
+        style="height: 5px"
+      >
+        <ngb-progressbar
+          class="progress-bar bg-secondary rounded-pill"
+          [value]="service.dividePercentage(progress)"
+          style="margin-right: 2px; height: 5px"
+        ></ngb-progressbar>
+        <ngb-progressbar
+          class="progress-bar bg-secondary rounded-pill"
+          [value]="service.dividePercentage(progress)"
+          style="margin-right: 2px; height: 5px"
+        ></ngb-progressbar>
+        <ngb-progressbar
+          class="progress-bar bg-secondary rounded-pill"
+          [value]="service.dividePercentage(progress)"
+          style="margin-right: 2px; height: 5px"
+        ></ngb-progressbar>
+      </ngb-progressbar-stacked>
+    }
+    @if (task.tags) {
+      <div>
+        @for (tag of task.tags; track $index) {
+          <span
+            class="badge rounded fw-normal px-1 mb-1 me-0.5"
+            [ngClass]="{
+              'text-primary bg-primary-subtle': tag == 'API',
+              'text-info bg-info-subtle': tag == 'Form Submit',
+              'text-danger bg-danger-subtle': tag == 'Responsive',
+            }"
+            >{{ tag }}</span
+          >
+        }
+      </div>
+    }
+    <hr class="hr-dashed" />
+    <div class="row justify-content-center">
+      <div class="col-auto align-self-center">
+        <ul class="list-inline mb-0">
+          <li class="list-item d-inline-block me-2">
+            <a class="" href="javascript:void(0);">
+              <i class="fa-solid fa-list-check text-muted"></i>
+              <span class="text-muted font-weight-bold">
+                {{ task.completedTasks }}/{{ task.totalTasks }} Tasks</span
+              >
+            </a>
+          </li>
+          <li class="list-item d-inline-block">
+            <a class="" href="javascript:void(0);">
+              <i class="fa-regular fa-message text-muted"></i>
+              <span class="text-muted font-weight-bold">
+                {{ task.commentsCount }} Comments</span
+              >
+            </a>
+          </li>
+        </ul>
+      </div>
+      <!--end col-->
+      <div class="col align-self-center">
+        <div class="img-group d-flex justify-content-center">
+          <a
+            class="user-avatar position-relative d-inline-block"
+            href="javascript:void(0);"
+          >
+            <img
+              src="assets/images/users/avatar-1.jpg"
+              alt="avatar"
+              class="thumb-sm shadow-sm rounded-circle"
+            />
+          </a>
+          <a
+            class="user-avatar position-relative d-inline-block ms-n2"
+            href="javascript:void(0);"
+          >
+            <img
+              src="assets/images/users/avatar-2.jpg"
+              alt="avatar"
+              class="thumb-sm shadow-sm rounded-circle"
+            />
+          </a>
+          <a
+            class="user-avatar position-relative d-inline-block ms-n2"
+            href="javascript:void(0);"
+          >
+            <img
+              src="assets/images/users/avatar-6.jpg"
+              alt="avatar"
+              class="thumb-sm shadow-sm rounded-circle"
+            />
+          </a>
+        </div>
+      </div>
+      <!--end col-->
+    </div>
+    <!--end row-->
+  </div>
+  <!--end card-body-->
+</div>
+<!--end card-->

@@ -1,0 +1,123 @@
+<div class="card">
+  <div class="card-body">
+    <div class="position-absolute end-0 me-3">
+      <span
+        class="badge rounded text-primary bg-transparent border border-primary ms-1 p-1"
+        >{{ projects.status }}</span
+      >
+    </div>
+    <div class="text-center border-dashed-bottom pb-3">
+      <img
+        [src]="projects.logo"
+        alt=""
+        height="80"
+        class="rounded-circle d-inline-block"
+      />
+      <h5 class="fw-bold my-2 fs-20">{{ projects.title }}</h5>
+      <p class="text-dark fs-13 fw-semibold">
+        <span class="text-muted">Client : </span>{{ projects.client }}
+      </p>
+      <div
+        class="d-flex justify-content-between fw-semibold align-items-center"
+      >
+        <p class="mb-1 d-inline-flex align-items-center">
+          <i class="iconoir-task-list fs-18 text-muted me-1"></i
+          >{{ projects.tasks }} Tasks
+        </p>
+        <small class="text-end text-body-emphasis d-block ms-auto"
+          >{{ projects.completion_percentage }}%</small
+        >
+      </div>
+      <ngb-progressbar-stacked
+        class="progress bg-secondary-subtle"
+        style="height: 5px"
+      >
+        <ngb-progressbar
+          class="progress-bar bg-secondary rounded-pill"
+          [value]="service.dividePercentage(projects.completion_percentage)"
+          style="margin-right: 2px; height: 5px"
+        ></ngb-progressbar>
+        <ngb-progressbar
+          class="progress-bar bg-secondary rounded-pill"
+          [value]="service.dividePercentage(projects.completion_percentage)"
+          style="margin-right: 2px; height: 5px"
+        ></ngb-progressbar>
+        <ngb-progressbar
+          class="progress-bar bg-secondary rounded-pill"
+          [value]="service.dividePercentage(projects.completion_percentage)"
+          style="margin-right: 2px; height: 5px"
+        ></ngb-progressbar>
+      </ngb-progressbar-stacked>
+
+      <div class="row mt-3 align-items-center">
+        <div class="col-auto col-md-6">
+          <div class="text-start">
+            <h5 class="fs-18 fw-semibold mb-1">
+              {{ currency }}{{ projects.budget }}
+            </h5>
+            <p class="mb-0 text-muted">Total Budget</p>
+          </div>
+        </div>
+        <div class="col col-md-6 text-end align-self-center">
+          <h6 class="fw-normal text-muted">
+            Start :
+            <span class="text-dark fw-semibold">
+              {{ projects.start_date }}</span
+            >
+          </h6>
+          <h6 class="fw-normal text-muted">
+            Deadline :
+            <span class="text-dark fw-semibold"> {{ projects.deadline }}</span>
+          </h6>
+        </div>
+        <!--end col-->
+      </div>
+      <!--end row-->
+
+      <p class="text-muted mt-3 mb-0">{{ projects.description }}</p>
+    </div>
+    <div
+      class="d-flex justify-content-between fw-semibold align-items-center mt-3"
+    >
+      <div class="img-group d-flex justify-content-center">
+        @for (member of projects.team; track $index; let first = $first) {
+          @if (
+            (projects.team.length >= 6 && $index < 5) ||
+            (projects.team.length < 6 && $index < projects.team.length - 1)
+          ) {
+            <a
+              class="user-avatar position-relative d-inline-block"
+              [ngClass]="{ 'ms-n2': !first }"
+              href="javascript:void(0);"
+            >
+              <img
+                [src]="member"
+                alt="avatar"
+                class="thumb-md shadow-sm rounded-circle"
+              />
+            </a>
+          }
+        }
+        @if (projects.team.length >= 2) {
+          <a href="" class="user-avatar position-relative d-inline-block ms-1">
+            <span
+              class="thumb-md shadow-sm justify-content-center d-flex align-items-center bg-info-subtle rounded-circle fw-semibold fs-6"
+            >
+              +{{
+                projects.team.length >= 6 ? projects.team.length - 5 : 1
+              }}</span
+            >
+          </a>
+        }
+      </div>
+      <button
+        type="button"
+        class="btn bg-secondary-subtle text-dark btn-sm px-3"
+      >
+        Details
+      </button>
+    </div>
+  </div>
+  <!--end card-body-->
+</div>
+<!--end card-->

@@ -1,0 +1,265 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+:root {
+  --primary-green: #e6f4ea;
+  --secondary-green: #4caf50;
+  --hover-green: #c8e6c9;
+  --text-green: #2e7d32;
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --transition: all 0.2s ease-in-out;
+  --border-radius: 0.5rem;
+  --bg-light: #f8f9fa;
+  --text-color: #333;
+  --bg-color: #fff;
+  --card-bg: #fff;
+  --table-header-bg: rgba(208, 208, 208, 0.58);
+  --table-hover-bg: var(--hover-green);
+  --form-border: #ced4da;
+  --form-focus-shadow: rgba(148, 211, 149, 0.4);
+  --modal-close-color: #6c757d;
+  --modal-close-hover-color: #8a9ba8;
+  --button-secondary-color: #6c757d;
+  --button-danger-color: #e3342f;
+  --chat-body-bot-message-background: #e6f4ea;
+  --chatbot-scrollbar-color: #c5e8cc;
+  --chatbot-input-placeholder: #0aa62f;
+  --chatbot-controls-color: #0aa62f;
+  --chatbot-controls-hover-bg: #e6f4ea;
+  --chatbot-controls-hover-color: #087a23;
+}
+
+[data-theme="dark"] {
+  --bg-color: #1a202c;
+  --card-bg: #2d3748;
+  --text-color: #e2e8f0;
+  --table-header-bg: rgba(60, 70, 83, 0.8);
+  --table-hover-bg: rgba(40, 50, 65, 0.8);
+  --form-border: #4a5568;
+  --form-focus-shadow: rgba(23, 189, 89, 0.4);
+  --modal-close-color: #a0aec0;
+  --modal-close-hover-color: #b0c2d0;
+  --button-secondary-color: #a0aec0;
+  --button-danger-color: #eb5757;
+  --chat-body-bot-message-text-background: #0b0b0f;
+  --chatbot-scrollbar-color: #5a6b7d;
+  --chatbot-input-placeholder: #66bb6a;
+  --chatbot-controls-color: #66bb6a;
+  --chatbot-controls-hover-bg: #455565;
+  --chatbot-controls-hover-color: #4caf50;
+}
+
+/* Modal backdrop */
+.modal-backdrop {
+  z-index: 1040 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 520px) {
+  #chatbot-toggler {
+    right: 30px;
+    bottom: 30px;
+  }
+
+  ::ng-deep .modal.chatbot-modal .chatbot-popup {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .chat-header {
+    padding: 12px 15px;
+  }
+
+  .chat-body {
+    padding: 25px 15px;
+    padding-bottom: 80px; /* Maintain padding for mobile */
+  }
+
+  .chat-footer {
+    padding: 10px 15px 15px;
+  }
+}
+
+
+/* General Container */
+.container {
+  max-width: 1200px;
+}
+
+/* Card Styling */
+.card {
+  border: none;
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+}
+
+/* Section Styling */
+.section-item {
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--card-bg);
+}
+
+.section-header {
+  margin: 0;
+  color: var(--text-color);
+}
+
+.section-button {
+  width: 100%;
+  text-align: left;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-color);
+  background-color: #f9f9f9;
+  border: none;
+  padding: 1.25rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.section-button:hover {
+  background-color: rgba(178, 245, 180, 0.4);
+}
+
+.section-button.active {
+  color: rgba(9, 31, 9, 0.93);
+  background-color: rgba(178, 245, 180, 0.4);
+}
+
+.section-content {
+  animation: slideDown 0.3s ease;
+}
+
+.section-body {
+  padding: 1.5rem;
+  background-color: var(--card-bg);
+}
+
+/* Table Styling */
+.table.datatable {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table thead.table-light th {
+  background-color: var(--table-header-bg);
+  color: var(--text-color);
+  font-weight: 600;
+  padding: 1rem;
+  text-align: left;
+}
+
+.table tbody td {
+  padding: 1rem;
+  vertical-align: middle;
+  color: var(--text-color);
+}
+
+.table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background-color: var(--table-hover-bg);
+  cursor: pointer;
+}
+
+/* Badges */
+.badge {
+  padding: 0.4em 1em;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 0.9rem;
+  transition: transform 0.3s ease;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  color: #fff;
+}
+
+.badge:hover {
+  transform: scale(1.05);
+}
+
+.bg-success {
+  background-color: #34c759 !important;
+}
+
+.bg-warning {
+  background-color: #f6c107 !important;
+  color: var(--text-color) !important;
+}
+
+.bg-danger {
+  background-color: #ff000d;
+}
+
+/* Specific rule for "Open" status */
+.badge.status-open {
+  color: var(--button-danger-color) !important; /* Red text */
+  background-color: rgba(227, 52, 47, 0.2) !important; /* Lighter red background for contrast */
+}
+
+/* Buttons */
+.button-container {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.btn {
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  color: #fff;
+}
+
+.btn-primary {
+  background-color: rgba(23, 189, 89, 0.6);
+  border-color: rgba(23, 189, 89, 0.6);
+}
+
+.btn-primary:hover {
+  background-color: rgba(23, 189, 89, 0.8);
+  border-color: rgba(23, 189, 89, 0.8);
+}
+
+.btn-outline-secondary {
+  border-color: var(--button-secondary-color);
+  color: var(--button-secondary-color);
+}
+
+.btn-outline-secondary:hover {
+  background-color: var(--button-secondary-color);
+  color: #ff000d;
+}
+
+.btn-danger {
+  background-color: var(--button-danger-color);
+  border-color: var(--button-danger-color);
+}
+
+.btn-danger:hover {
+  background-color: #d32f2f;
+  border-color: #d32f2f;
+}
+
+.btn-outline-danger {
+  border-color: var(--button-danger-color);
+  color: var(--button-danger-color);
+}
+
+.btn-outline-danger:hover {
+  background-color: var(--button-danger-color);
+  color: #ff000d;
+}
+
+
+
+

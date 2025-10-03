@@ -1,0 +1,492 @@
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Defaults</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <p class="text-muted mb-3"></p>
+        <div class="row">
+          <div class="col-md-6">
+            <div
+              id="gg1"
+              class="gauge"
+              [appJustGage]="{
+                value: 125,
+                min: 0,
+                max: 200,
+                title: 'javascript call',
+                donut: true,
+                gaugeWidthScale: 0.6,
+                counter: true,
+                hideInnerShadow: true,
+                gaugeColor: ['rgba(42, 118, 244, .1)'],
+                levelColors: ['#22c55e'],
+              }"
+            ></div>
+          </div>
+          <div class="col-md-6">
+            <div
+              id="gg2"
+              class="gauge"
+              [appJustGage]="{
+                value: 25,
+                min: 0,
+                max: 200,
+                title: 'data-attributes',
+                donut: true,
+                gaugeWidthScale: 0.6,
+                counter: true,
+                hideInnerShadow: true,
+                gaugeColor: ['rgba(42, 118, 244, .1)'],
+                levelColors: ['#22c55e'],
+              }"
+              data-value="25"
+            ></div>
+          </div>
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Counter</h4>
+          </div>
+          <!--end col-->
+          <div class="col-auto">
+            <button
+              type="button"
+              class="btn btn-outline-light btn-sm"
+              id="Counter_2_refresh"
+              (click)="refreshGauge('Counter_2')"
+            >
+              Random Refresh
+            </button>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div
+          id="Counter_2"
+          class="gauge mt-2"
+          [appJustGage]="{
+            value: 72,
+            min: 0,
+            max: 100,
+            donut: true,
+            gaugeWidthScale: 0.6,
+            counter: true,
+            hideInnerShadow: true,
+            gaugeColor: ['rgba(42, 118, 244, .1)'],
+            levelColors: ['#22c55e'],
+          }"
+        ></div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Animation Events</h4>
+          </div>
+          <!--end col-->
+          <div class="col-auto">
+            <button
+              type="button"
+              (click)="refreshGauge('Animation_Events')"
+              class="btn btn-outline-light btn-sm"
+              id="Animation_Events_refresh"
+            >
+              Random Refresh
+            </button>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div
+          id="Animation_Events"
+          [appJustGage]="animationEvents"
+          class="gauge mt-3"
+        ></div>
+        <p class="text-muted">
+          After every animation end, function will log it below.
+        </p>
+        <p id="log"></p>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Text Avatars Square</h4>
+          </div>
+          <!--end col-->
+          <div class="col-auto">
+            <button
+              type="button"
+              class="btn btn-outline-light btn-sm"
+              (click)="refreshAvatar('Counter')"
+              id="Counter_refresh"
+            >
+              Random Refresh
+            </button>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div
+          id="Counter"
+          [appJustGage]="{
+            value: 40960,
+            min: 1024,
+            max: 1000000,
+            gaugeWidthScale: 0.6,
+            counter: true,
+            formatNumber: true,
+            gaugeColor: ['rgba(42, 118, 244, .1)'],
+            levelColors: ['#22c55e'],
+          }"
+          class="gauge mt-3"
+        ></div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Icon Avatars Circle</h4>
+          </div>
+          <!--end col-->
+          <div class="col-auto">
+            <button
+              type="button"
+              class="btn btn-outline-light btn-sm"
+              (click)="refreshGauge('Custom_wether')"
+              id="Custom_wether_refresh"
+            >
+              Random Refresh
+            </button>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div
+          id="Custom_wether"
+          appJustGage
+          class="gauge mt-3"
+          [appJustGage]="fontOption"
+        ></div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Icon Avatars Square</h4>
+          </div>
+          <!--end col-->
+          <div class="col-auto">
+            <button
+              type="button"
+              class="btn btn-outline-light btn-sm"
+              (click)="refreshGauge('font_option')"
+              id="font_option_refresh"
+            >
+              Random Refresh
+            </button>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div
+          id="font_option"
+          class="gauge mt-3"
+          [appJustGage]="{
+            title: 'Font Options',
+            value: 72,
+            min: 0,
+            minTxt: 'min',
+            max: 100,
+            maxTxt: 'max',
+            gaugeWidthScale: 0.6,
+            counter: true,
+            gaugeColor: ['rgba(42, 118, 244, .1)'],
+            levelColors: ['#22c55e'],
+            titleFontColor: 'red',
+            titleFontFamily: 'Georgia',
+            titlePosition: 'below',
+            valueFontColor: 'blue',
+            valueFontFamily: 'Georgia',
+          }"
+        ></div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Justgage Half Size</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div class="row mt-3">
+          <div class="col-md-4">
+            <div class="size-3">
+              <div
+                id="jg1"
+                class="gauge"
+                [appJustGage]="{
+                  label: 'label',
+                  value: 65,
+                  min: 0,
+                  max: 100,
+                  decimals: 0,
+                  gaugeWidthScale: 0.6,
+                  pointer: true,
+                  gaugeColor: ['rgba(42, 118, 244, .1)'],
+                  levelColors: ['#22c55e'],
+                  pointerOptions: {
+                    toplength: 10,
+                    bottomlength: 10,
+                    bottomwidth: 2,
+                  },
+                  counter: true,
+                }"
+              ></div>
+            </div>
+          </div>
+          <!--end col-->
+          <div class="col-md-4">
+            <div class="size-2">
+              <div
+                id="jg2"
+                class="gauge"
+                [appJustGage]="{
+                  label: 'label',
+                  value: 65,
+                  min: 0,
+                  max: 100,
+                  decimals: 0,
+                  gaugeWidthScale: 0.6,
+                  pointer: true,
+                  gaugeColor: ['rgba(42, 118, 244, .1)'],
+                  levelColors: ['#22c55e'],
+                  pointerOptions: {
+                    toplength: 10,
+                    bottomlength: 10,
+                    bottomwidth: 2,
+                  },
+                  counter: true,
+                }"
+              ></div>
+            </div>
+          </div>
+          <!--end col-->
+          <div class="col-md-4">
+            <div class="size-1">
+              <div
+                id="jg3"
+                class="gauge"
+                [appJustGage]="{
+                  label: 'label',
+                  value: 65,
+                  min: 0,
+                  max: 100,
+                  decimals: 0,
+                  gaugeWidthScale: 0.6,
+                  pointer: true,
+                  gaugeColor: ['rgba(42, 118, 244, .1)'],
+                  levelColors: ['#22c55e'],
+                  pointerOptions: {
+                    toplength: 10,
+                    bottomlength: 10,
+                    bottomwidth: 2,
+                  },
+                  counter: true,
+                }"
+              ></div>
+            </div>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Justgage Full Size</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div class="row mt-3">
+          <div class="col-md-4">
+            <div class="size-1">
+              <div
+                id="jg4"
+                class="gauge"
+                [appJustGage]="{
+                  label: 'label',
+                  value: 35,
+                  min: 0,
+                  max: 100,
+                  decimals: 0,
+                  gaugeWidthScale: 0.6,
+                  pointer: true,
+                  gaugeColor: ['rgba(42, 118, 244, .1)'],
+                  levelColors: ['#22c55e'],
+                  pointerOptions: {
+                    toplength: 5,
+                    bottomlength: 15,
+                    bottomwidth: 2,
+                  },
+                  counter: true,
+                  donut: true,
+                }"
+              ></div>
+            </div>
+          </div>
+          <!--end col-->
+          <div class="col-md-4">
+            <div class="size-2">
+              <div
+                id="jg5"
+                class="gauge"
+                [appJustGage]="{
+                  label: 'label',
+                  value: 35,
+                  min: 0,
+                  max: 100,
+                  decimals: 0,
+                  gaugeWidthScale: 0.6,
+                  pointer: true,
+                  gaugeColor: ['rgba(42, 118, 244, .1)'],
+                  levelColors: ['#22c55e'],
+                  pointerOptions: {
+                    toplength: 5,
+                    bottomlength: 15,
+                    bottomwidth: 2,
+                  },
+                  counter: true,
+                  donut: true,
+                }"
+              ></div>
+            </div>
+          </div>
+          <!--end col-->
+          <div class="col-md-4">
+            <div class="size-3">
+              <div
+                id="jg6"
+                class="gauge"
+                [appJustGage]="{
+                  label: 'label',
+                  value: 35,
+                  min: 0,
+                  max: 100,
+                  decimals: 0,
+                  gaugeWidthScale: 0.6,
+                  pointer: true,
+                  gaugeColor: ['rgba(42, 118, 244, .1)'],
+                  levelColors: ['#22c55e'],
+                  pointerOptions: {
+                    toplength: 5,
+                    bottomlength: 15,
+                    bottomwidth: 2,
+                  },
+                  counter: true,
+                  donut: true,
+                }"
+              ></div>
+            </div>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->

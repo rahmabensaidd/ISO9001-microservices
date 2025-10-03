@@ -1,0 +1,240 @@
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Default Slider</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="slider">
+          <nouislider
+            class="m-0"
+            [connect]="true"
+            [min]="0"
+            [max]="10"
+            [ngModel]="5"
+          ></nouislider>
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">
+              Only showing tooltips when sliding handles
+            </h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="slider_2">
+          <nouislider
+            class="m-0"
+            [config]="slider_2config"
+            [(ngModel)]="range"
+          ></nouislider>
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Using HTML5 input elements</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="html5" class="mb-3">
+          <nouislider
+            class="m-0"
+            [config]="htmlRangeConfig"
+            [(ngModel)]="htmlRange"
+            (change)="htmlRangeSLiderChange()"
+          ></nouislider>
+        </div>
+        <div class="row">
+          <div class="col-3">
+            <select
+              class="form-select"
+              [(ngModel)]="htmlRange[0]"
+              id="input-select"
+              (change)="htmlRangeSLiderChange()"
+            >
+              @for (option of options; track $index) {
+                <option [value]="option">{{ option }}</option>
+              }
+            </select>
+          </div>
+          <div class="col-3">
+            <input
+              type="number"
+              class="form-control"
+              min="-20"
+              max="40"
+              [(ngModel)]="htmlRange[1]"
+              (change)="htmlRangeSLiderChange()"
+              step="1"
+              id="input-number"
+            />
+          </div>
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Working with dates</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="slider-date" class="mb-2">
+          <nouislider
+            class="m-0"
+            [min]="timestamp('2010')"
+            [max]="timestamp('2016')"
+            [(ngModel)]="dateRange"
+          ></nouislider>
+        </div>
+        <span class="example-val d-block fw-semibold" id="event-start">{{
+          dateRange[0] | date: 'EEEE, d MMMM yyyy'
+        }}</span>
+        <span class="example-val d-block fw-semibold" id="event-end">{{
+          dateRange[1] | date: 'EEEE, d MMMM yyyy'
+        }}</span>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Skipping steps</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="skipstep" class="mb-2">
+          <nouislider
+            class="m-0"
+            [config]="skipConfig"
+            [(ngModel)]="skipRange"
+          ></nouislider>
+        </div>
+        <span class="example-val d-block fw-semibold" id="skip-value-lower">{{
+          skipRange[0].toFixed(2)
+        }}</span>
+        <span class="example-val d-block fw-semibold" id="skip-value-upper">{{
+          skipRange[1].toFixed(2)
+        }}</span>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Moving the slider by clicking pips</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0 pb-5">
+        <div id="slider-pips">
+          <nouislider
+            class="m-0"
+            [config]="pipsSliderConfig"
+            [ngModel]="50"
+          ></nouislider>
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+<div class="row">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Soft limits</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0 pb-5">
+        <div id="soft">
+          <nouislider
+            class="m-0"
+            [config]="softSliderConfig"
+            [ngModel]="50"
+          ></nouislider>
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->

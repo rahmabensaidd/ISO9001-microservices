@@ -1,0 +1,172 @@
+<div class="row">
+  <!-- Data List -->
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h4 class="card-title">Data List</h4>
+          <a class="btn btn-primary" (click)="openAddDataModal(addDataModal)">
+            <i class="fa-solid fa-plus me-1"></i> Add Data
+          </a>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+
+              <th>Type</th>
+              <th>Content</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+              @for (data of dataList; track data.id) {
+                <tr>
+
+                  <td>{{ data.datatype }}</td>
+                  <td>{{ data.content }}</td>
+                  <td>{{ data.registrationDate }}</td>
+                  <td>
+                    <button class="btn btn-primary btn-sm me-1" (click)="openModifyDataModal(modifyDataModal, data)">
+                      <i class="las la-pen"></i> Edit
+                    </button>
+                    <button class="btn btn-danger btn-sm" (click)="deleteData(data.id)">
+                      <i class="las la-trash-alt"></i> Delete
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Adding Data -->
+  <ng-template #addDataModal let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title m-0">Add New Data</h6>
+      <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="dataForm" (ngSubmit)="createData()">
+        <div class="mb-3 row">
+          <label for="datatype" class="col-sm-3 col-form-label text-end fw-medium">Type:</label>
+          <div class="col-sm-9">
+            <select
+              formControlName="datatype"
+              class="form-select"
+              id="datatype"
+              [ngClass]="{ 'is-invalid': submitted && form['datatype'].errors }"
+            >
+              <option *ngFor="let type of typeDataOptions" [value]="type">{{ type }}</option>
+            </select>
+            @if (submitted && form['datatype'].errors) {
+              <div class="invalid-feedback">Type is required</div>
+            }
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="content" class="col-sm-3 col-form-label text-end fw-medium">Content:</label>
+          <div class="col-sm-9">
+            <input
+              type="text"
+              formControlName="content"
+              class="form-control"
+              id="content"
+              placeholder="Enter content"
+              [ngClass]="{ 'is-invalid': submitted && form['content'].errors }"
+            />
+            @if (submitted && form['content'].errors) {
+              <div class="invalid-feedback">Content is required</div>
+            }
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="registrationDate" class="col-sm-3 col-form-label text-end fw-medium">Date:</label>
+          <div class="col-sm-9">
+            <input
+              type="date"
+              formControlName="registrationDate"
+              class="form-control"
+              id="registrationDate"
+              [ngClass]="{ 'is-invalid': submitted && form['registrationDate'].errors }"
+            />
+            @if (submitted && form['registrationDate'].errors) {
+              <div class="invalid-feedback">Date is required</div>
+            }
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary btn-sm" (click)="createData()">Save</button>
+      <button type="button" class="btn btn-outline-danger btn-sm" (click)="modal.dismiss()">Close</button>
+    </div>
+  </ng-template>
+
+  <!-- Modal for Editing Data -->
+  <ng-template #modifyDataModal let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title m-0">Edit Data</h6>
+      <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="modifyForm" (ngSubmit)="modifyData()">
+        <div class="mb-3 row">
+          <label for="modifyDatatype" class="col-sm-3 col-form-label text-end fw-medium">Type:</label>
+          <div class="col-sm-9">
+            <select
+              formControlName="datatype"
+              class="form-select"
+              id="modifyDatatype"
+              [ngClass]="{ 'is-invalid': submitted && modifyFormControls['datatype'].errors }"
+            >
+              <option *ngFor="let type of typeDataOptions" [value]="type">{{ type }}</option>
+            </select>
+            @if (submitted && modifyFormControls['datatype'].errors) {
+              <div class="invalid-feedback">Type is required</div>
+            }
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="modifyContent" class="col-sm-3 col-form-label text-end fw-medium">Content:</label>
+          <div class="col-sm-9">
+            <input
+              type="text"
+              formControlName="content"
+              class="form-control"
+              id="modifyContent"
+              placeholder="Enter content"
+              [ngClass]="{ 'is-invalid': submitted && modifyFormControls['content'].errors }"
+            />
+            @if (submitted && modifyFormControls['content'].errors) {
+              <div class="invalid-feedback">Content is required</div>
+            }
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="modifyRegistrationDate" class="col-sm-3 col-form-label text-end fw-medium">Date:</label>
+          <div class="col-sm-9">
+            <input
+              type="date"
+              formControlName="registrationDate"
+              class="form-control"
+              id="modifyRegistrationDate"
+              [ngClass]="{ 'is-invalid': submitted && modifyFormControls['registrationDate'].errors }"
+            />
+            @if (submitted && modifyFormControls['registrationDate'].errors) {
+              <div class="invalid-feedback">Date is required</div>
+            }
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary btn-sm" (click)="modifyData()">Save</button>
+      <button type="button" class="btn btn-outline-danger btn-sm" (click)="modal.dismiss()">Close</button>
+    </div>
+  </ng-template>
+</div>

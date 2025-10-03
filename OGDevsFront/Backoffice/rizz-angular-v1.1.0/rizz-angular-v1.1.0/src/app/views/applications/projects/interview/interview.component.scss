@@ -1,0 +1,52 @@
+.modal.fade.show {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.activity-info {
+  display: flex;
+  margin-bottom: 1.5rem;
+}
+
+.icon-info-activity {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 50%;
+  background: #f3f4f6;
+  margin-right: 1rem;
+  font-size: 18px;
+}
+
+.activity-info-text {
+  flex: 1;
+}
+
+.badge-soft-secondary {
+  background: #e5e7eb;
+  color: #374151;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  margin-right: 0.5rem;
+}
+
+.btn-info,
+.btn-primary,
+.btn-warning,
+.btn-danger {
+  padding: 0.25rem 0.5rem;
+}
+
+.table th,
+.table td {
+  vertical-align: middle;
+}
+
+.btn-sm {
+  font-size: 0.875rem;
+}
+.swal2-custom-popup {
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}

@@ -1,0 +1,175 @@
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-8">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Line Chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <canvas
+          class="chartjs-chart"
+          height="300"
+          baseChart
+          [data]="lineAreaChart.data"
+          [options]="lineAreaChart.options"
+          [type]="'line'"
+        >
+        </canvas>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Donut Chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <canvas
+          id="doughnut"
+          height="300"
+          baseChart
+          [data]="donutChartConfig.data"
+          [options]="donutChartConfig.options"
+          [type]="'doughnut'"
+        ></canvas>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-8">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Bar Chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <canvas
+          id="bar"
+          height="300"
+          baseChart
+          [data]="barCharts.data"
+          [options]="barCharts.options"
+          [type]="'bar'"
+        ></canvas>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Polar Chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <canvas
+          id="polarArea"
+          height="300"
+          baseChart
+          [data]="polarChart.data"
+          [options]="polarChart.options"
+          [type]="'polarArea'"
+        >
+        </canvas>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Pie Chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <canvas
+          id="pie"
+          height="300"
+          baseChart
+          [data]="pieChart.data"
+          [options]="pieChart.options"
+          [type]="'pie'"
+        ></canvas>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Radar Chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <canvas
+          id="radar"
+          height="300"
+          baseChart
+          [data]="radarChart.data"
+          [options]="radarChart.options"
+          [type]="'radar'"
+        ></canvas>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->

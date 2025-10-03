@@ -1,0 +1,49 @@
+<div class="card">
+  <div class="card-body">
+    <div class="row g-3">
+      @for (item of stateList; track $index) {
+        <div class="col-md-6 col-lg-6">
+          <div class="card shadow-none border mb-3 mb-lg-0">
+            <div class="card-body">
+              <div class="d-flex align-items-center">
+                <i class="{{ item.icon }} fs-24 align-self-center me-2"></i>
+                <div class="flex-grow-1 text-truncate">
+                  <p class="text-dark mb-0 fw-semibold fs-13">
+                    {{ item.title }}
+                  </p>
+                  <h3 class="mt-1 mb-0 fs-18 fw-bold">
+                    {{ item.prefix }}{{ item.amount }}{{ item.suffix }}
+                    <span class="fs-11 text-muted fw-normal">{{
+                      item.subtitle
+                    }}</span>
+                  </h3>
+                </div>
+                <!--end media body-->
+              </div>
+            </div>
+            <!--end card-body-->
+          </div>
+          <!--end card-body-->
+        </div>
+        <!--end col-->
+      }
+    </div>
+    <!--end row-->
+    <div
+      class="bg-primary-subtle p-2 border-dashed border-primary rounded mt-3"
+    >
+      <img
+        src="assets/images/extra/party.gif"
+        alt=""
+        class="d-inline-block me-1"
+        height="30"
+      />
+      <span class="text-primary fw-semibold"> Karen Savage's</span
+      ><span class="text-primary fw-normal">
+        best performance from last year</span
+      >
+    </div>
+  </div>
+  <!--end card-body-->
+</div>
+<!--end card-->

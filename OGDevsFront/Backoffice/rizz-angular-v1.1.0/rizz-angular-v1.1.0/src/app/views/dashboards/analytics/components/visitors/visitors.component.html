@@ -1,0 +1,81 @@
+<div class="card">
+  <div class="card-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <p class="text-dark mb-0 fw-semibold fs-14">New Visitors</p>
+        <h2 class="mt-0 mb-0 fw-bold">1,282</h2>
+      </div>
+      <!--end col-->
+      <div class="col-auto align-self-center">
+        <div class="img-group d-flex">
+          <a
+            class="user-avatar position-relative d-inline-block"
+            href="javascript:void(0);"
+          >
+            <img
+              src="assets/images/users/avatar-1.jpg"
+              alt="avatar"
+              class="thumb-md shadow-sm rounded-circle"
+            />
+          </a>
+          <a
+            class="user-avatar position-relative d-inline-block ms-n2"
+            href="javascript:void(0);"
+          >
+            <img
+              src="assets/images/users/avatar-2.jpg"
+              alt="avatar"
+              class="thumb-md shadow-sm rounded-circle"
+            />
+          </a>
+          <a
+            class="user-avatar position-relative d-inline-block ms-n2"
+            href="javascript:void(0);"
+          >
+            <img
+              src="assets/images/users/avatar-4.jpg"
+              alt="avatar"
+              class="thumb-md shadow-sm rounded-circle"
+            />
+          </a>
+          <a
+            class="user-avatar position-relative d-inline-block ms-n2"
+            href="javascript:void(0);"
+          >
+            <img
+              src="assets/images/users/avatar-3.jpg"
+              alt="avatar"
+              class="thumb-md shadow-sm rounded-circle"
+            />
+          </a>
+          <a href class="user-avatar position-relative d-inline-block ms-1">
+            <span
+              class="thumb-md shadow-sm justify-content-center d-flex align-items-center bg-info-subtle rounded-circle fw-semibold fs-6"
+              >+6</span
+            >
+          </a>
+        </div>
+        <small class="text-muted">Logined Visitors</small>
+      </div>
+      <!--end col-->
+    </div>
+    <!--end row-->
+    <div id="visitors_report" class="apex-charts mb-2">
+      <apx-chart
+        [chart]="visitorChart.chart!"
+        [series]="visitorChart.series!"
+        [fill]="visitorChart.fill!"
+        [plotOptions]="visitorChart.plotOptions!"
+        [dataLabels]="visitorChart.dataLabels!"
+        [legend]="visitorChart.legend!"
+        [yaxis]="visitorChart.yaxis!"
+        [grid]="visitorChart.grid!"
+        [xaxis]="visitorChart.xaxis!"
+      ></apx-chart>
+    </div>
+    <button type="button" class="btn btn-primary w-100 btn-lg fs-14">
+      More Detail <i class="fa-solid fa-arrow-right-long"></i>
+    </button>
+  </div>
+  <!--end card-body-->
+</div>

@@ -1,0 +1,272 @@
+<div class="container mt-4">
+  <h2 class="text-center">Resource Management</h2>
+
+  <!-- Add Resource Form -->
+  <div class="add-resource-form mb-4">
+    <h3>Add a Resource</h3>
+    <form (ngSubmit)="addResource(resourceForm)" #resourceForm="ngForm">
+      <div class="row">
+        <div class="col-md-3 form-group mb-3">
+          <label for="resourceName">Resource Name</label>
+          <input
+            type="text"
+            id="resourceName"
+            class="form-control"
+            [(ngModel)]="newResource.resourceName"
+            name="resourceName"
+            required
+            #resourceName="ngModel"
+            [ngClass]="{'is-invalid': formSubmitted && resourceName.invalid}"
+          >
+          <div *ngIf="formSubmitted && resourceName.invalid" class="invalid-feedback">
+            Resource name is required.
+          </div>
+        </div>
+        <div class="col-md-3 form-group mb-3">
+          <label for="price">Price</label>
+          <input
+            type="number"
+            id="price"
+            class="form-control"
+            [(ngModel)]="newResource.price"
+            name="price"
+            required
+            min="0"
+            #price="ngModel"
+            [ngClass]="{'is-invalid': formSubmitted && price.invalid}"
+          >
+          <div *ngIf="formSubmitted && price.invalid" class="invalid-feedback">
+            Please enter a valid price.
+          </div>
+        </div>
+        <div class="col-md-3 form-group mb-3">
+          <label for="status">Status</label>
+          <select
+            id="status"
+            class="form-select"
+            [(ngModel)]="newResource.status"
+            name="status"
+            required
+            #status="ngModel"
+            [ngClass]="{'is-invalid': formSubmitted && status.invalid}"
+          >
+            <option value="" disabled>Select a status</option>
+            <option value="Available">Available</option>
+            <option value="In Use">In Use</option>
+            <option value="Maintenance">Maintenance</option>
+          </select>
+          <div *ngIf="formSubmitted && status.invalid" class="invalid-feedback">
+            Status is required.
+          </div>
+        </div>
+        <div class="col-md-3 form-group mb-3">
+          <label for="type">Type</label>
+          <select
+            id="type"
+            class="form-control"
+            [(ngModel)]="newResource.type"
+            name="type"
+            required
+            #type="ngModel"
+            [ngClass]="{'is-invalid': formSubmitted && type.invalid}"
+          >
+            <option value="" disabled selected>Select Type</option>
+            <option value="Mobile">Mobile</option>
+            <option value="Laptop">Laptop</option>
+            <option value="Infrastructure">Infrastructure</option>
+          </select>
+          <div *ngIf="formSubmitted && type.invalid" class="invalid-feedback">
+            Type is required.
+          </div>
+        </div>
+
+      </div>
+      <button type="submit" class="btn btn-primary">Add Resource</button>
+    </form>
+  </div>
+
+  <!-- Resource Table -->
+  <div class="resource-table" *ngIf="resources && resources.length > 0; else noResources">
+    <h3>Resource List</h3>
+    <div class="d-flex justify-content-between p-2 align-items-center">
+      <ngb-pagination
+        [collectionSize]="resources.length"
+        [(page)]="currentPage"
+        [pageSize]="pageSize"
+        [maxSize]="5"
+        [rotate]="true"
+
+        (pageChange)="onPageChange($event)"
+      ></ngb-pagination>
+      <select class="form-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="onPageChange(1)">
+        <option [ngValue]="5">5 items per page</option>
+        <option [ngValue]="10">10 items per page</option>
+        <option [ngValue]="20">20 items per page</option>
+      </select>
+    </div>
+    <div class="table-responsive">
+      <table class="table datatable">
+        <thead class="table-light">
+        <tr>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Status</th>
+          <th>Type</th>
+          <th>Owner</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let resource of getResourcesForCurrentPage()">
+          <td>{{ resource.resourceName }}</td>
+          <td>{{ resource.price | currency:'USD' }}</td>
+          <td>
+              <span class="badge badge-lg" [ngClass]="getStatusClass(resource.status)">
+                {{ resource.status }}
+              </span>
+          </td>
+          <td>{{ resource.type }}</td>
+
+          <td>
+            {{ resource.user?.email || 'N/A' }}
+            <button
+              *ngIf="resource.user"
+              (click)="unassignResource(resource.resourceId!, resource.user!.id)"
+              class="btn btn-light"  ngbTooltip="Unassign current user"
+              [disabled]="!resource.resourceId || !resource.user?.id">
+              <i class="fas fa-user-alt-slash me-2"></i>
+
+            </button>
+
+          </td>
+
+          <td>
+            <!-- EDIT ICON -->
+            <a href="javascript:void(0);"
+               ngbTooltip="Edit Resource"
+               placement="bottom"
+               (click)="openEditModal(editResourceTemplate, resource)">
+              <i class="las la-pen text-secondary fs-20 me-2"></i>
+            </a>
+
+            <!-- DELETE ICON -->
+            <a *ngIf="resource.resourceId !== undefined"
+               href="javascript:void(0);"
+               ngbTooltip="Delete Resource"
+               placement="bottom"
+               (click)="deleteResource(resource.resourceId)">
+              <i class="las la-trash-alt text-secondary fs-20 me-2"></i>
+            </a>
+
+            <button
+              *ngIf=" resource.resourceId !== undefined && resource.type !== 'Infrastructure'"
+              class="btn btn-light"   ngbTooltip="Assign User"
+              (click)="showAddUserModal(resource.resourceId, adduserModal)"
+            >
+              <i class="las la-user text-secondary fs-18 me-0.5"></i>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <ng-template #noResources>
+    <p class="text-danger">No resources found.</p>
+  </ng-template>
+</div>
+
+<!-- Edit Resource Modal -->
+<ng-template #editResourceTemplate let-modal>
+  <div class="modal-header bg-warning text-white">
+    <h5 class="modal-title">Edit Resource #{{ selectedResource?.resourceId }}</h5>
+    <button type="button" class="btn-close btn-close-white" (click)="modal.dismiss()" aria-label="Close"></button>
+  </div>
+  <div class="modal-body" *ngIf="selectedResource">
+    <form (ngSubmit)="updateResource(editForm)" #editForm="ngForm">
+      <div class="form-group mb-3">
+        <label for="editResourceName">Resource Name</label>
+        <input
+          type="text"
+          id="editResourceName"
+          class="form-control"
+          [(ngModel)]="selectedResource.resourceName"
+          name="editResourceName"
+          required
+          #editResourceName="ngModel"
+          [ngClass]="{'is-invalid': editResourceName.invalid && editResourceName.dirty}"
+        >
+        <div *ngIf="editResourceName.invalid && editResourceName.dirty" class="invalid-feedback">
+          Resource name is required.
+        </div>
+      </div>
+      <div class="form-group mb-3">
+        <label for="editPrice">Price</label>
+        <input
+          type="number"
+          id="editPrice"
+          class="form-control"
+          [(ngModel)]="selectedResource.price"
+          name="editPrice"
+          required
+          min="0"
+          #editPrice="ngModel"
+          [ngClass]="{'is-invalid': editPrice.invalid && editPrice.dirty}"
+        >
+        <div *ngIf="editPrice.invalid && editPrice.dirty" class="invalid-feedback">
+          Please enter a valid price.
+        </div>
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="editType">Type</label>
+        <select
+          id="editType"
+          class="form-control"
+          [(ngModel)]="selectedResource.type"
+          name="editType"
+          required
+          #editType="ngModel"
+          [ngClass]="{'is-invalid': editType.invalid && editType.dirty}"
+        >
+          <option value="" disabled>Select Type</option>
+          <option value="Mobile">Mobile</option>
+          <option value="Laptop">Laptop</option>
+          <option value="Infrastructure">Infrastructure</option>
+        </select>
+        <div *ngIf="editType.invalid && editType.dirty" class="invalid-feedback">
+          Type is required.
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">Save Changes</button>
+      <button type="button" class="btn btn-secondary ms-2" (click)="modal.dismiss()">Cancel</button>
+    </form>
+  </div>
+</ng-template>
+
+<!-- Add User Modal -->
+<ng-template #adduserModal let-modal>
+  <div class="modal-header">
+    <h6 class="modal-title m-0">Assign a User</h6>
+    <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="userForm">
+      <div class="mb-3 row">
+        <label for="modifyUserId" class="col-sm-3 col-form-label text-end fw-medium">Utilisateur :</label>
+        <div class="col-sm-9">
+          <select formControlName="userId" class="form-select" id="modifyUserId">
+            <option value="" disabled>Sélectionnez un utilisateur</option>
+            <option *ngFor="let user of users" [value]="user.email">{{ user.username }} - {{ user.email }}</option>
+            <option value="">Aucun utilisateur</option>
+          </select>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary btn-sm" (click)="saveUserAssignment()">Save</button>
+    <button type="button" class="btn btn-outline-danger btn-sm" (click)="modal.dismiss()">Close</button>
+  </div>
+</ng-template>

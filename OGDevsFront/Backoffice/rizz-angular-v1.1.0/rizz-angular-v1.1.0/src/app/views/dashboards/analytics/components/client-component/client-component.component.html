@@ -1,0 +1,450 @@
+<!-- Gamification Info -->
+<!-- Gamification Info -->
+<div class="mb-6 gamification-container">
+  <h2 class="text-2xl font-semibold mb-4 d-flex align-items-center">
+    <i class="fas fa-trophy me-2 text-primary"></i>Your Gamification Progress
+  </h2>
+  @if (gamificationInfo) {
+    <div class="card shadow gamification-card">
+      <div class="card-body p-4">
+        <!-- Points Section with Progress Bar -->
+        <div class="gamification-item mb-4">
+          <div class="d-flex align-items-center mb-2">
+            <i class="fas fa-coins fa-lg me-2 text-warning"></i>
+            <h3 class="fs-5 mb-0">Points: {{ gamificationInfo.points }}</h3>
+          </div>
+          <div class="progress" style="height: 20px;">
+            <div class="progress-bar bg-success" role="progressbar"
+                 [style.width]="(gamificationInfo.points / 1000 * 100) + '%'"
+                 [attr.aria-valuenow]="gamificationInfo.points"
+                 aria-valuemin="0" aria-valuemax="1000">
+              {{ gamificationInfo.points }} / 1000
+            </div>
+          </div>
+          <small class="text-muted">Earn more points by completing surveys and tasks!</small>
+        </div>
+
+        <!-- Badges Section -->
+        <div class="gamification-item mb-4">
+          <div class="d-flex align-items-center mb-2">
+            <i class="fas fa-medal fa-lg me-2 text-primary"></i>
+            <h3 class="fs-5 mb-0">Badges</h3>
+          </div>
+          @if (gamificationInfo.badges.length > 0) {
+            <div class="badge-container d-flex flex-wrap gap-3">
+              @for (badge of gamificationInfo.badges; track badge) {
+                <div class="badge-item text-center">
+                  <div class="badge-icon bg-primary">
+                    <i class="fas fa-award fa-2x"></i>
+                  </div>
+                  <span class="badge-name">{{ badge }}</span>
+                </div>
+              }
+            </div>
+          } @else {
+            <p class="text-muted">No badges earned yet. Keep engaging to unlock some!</p>
+          }
+        </div>
+
+        <!-- Rewards Section -->
+        <div class="gamification-item">
+          <div class="d-flex align-items-center mb-2">
+            <i class="fas fa-gift fa-lg me-2 text-success"></i>
+            <h3 class="fs-5 mb-0">Rewards</h3>
+          </div>
+          @if (gamificationInfo.rewards.length > 0) {
+            <div class="reward-container d-flex flex-wrap gap-3">
+              @for (reward of gamificationInfo.rewards; track reward) {
+                <div class="reward-item text-center">
+                  <div class="reward-icon bg-success">
+                    <i class="fas fa-trophy fa-2x"></i>
+                  </div>
+                  <span class="reward-name">{{ reward }}</span>
+                </div>
+              }
+            </div>
+          } @else {
+            <p class="text-muted">No rewards unlocked yet. Complete more tasks to earn rewards!</p>
+          }
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="text-center text-muted">
+      <i class="fas fa-spinner fa-spin me-2"></i>Loading gamification info...
+    </div>
+  }
+</div>
+
+<!-- Tickets -->
+<div class="container mb-5">
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-4">
+      <!-- Header -->
+      <h2 class="section-header d-flex align-items-center mb-4 border-bottom pb-2">
+        <i class="las la-ticket-alt me-2 fs-5 text-primary"></i>
+        <span class="fs-5 text-dark">Your Tickets</span>
+      </h2>
+
+      <!-- Loading State -->
+      @if (!tickets) {
+        <div class="text-center text-muted mb-4">
+          <i class="las la-spinner la-spin me-2"></i>Loading, please wait...
+        </div>
+      }
+
+      <!-- No Tickets Message -->
+      @if (tickets && tickets.length === 0) {
+        <div class="alert alert-info">
+          No tickets found.
+        </div>
+      }
+
+      <!-- Tickets Table -->
+      @if (tickets && tickets.length > 0) {
+        <div class="table-responsive">
+          <table class="table datatable table-striped">
+            <thead class="table-light">
+            <tr>
+              <th>Title</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+              @for (ticket of displayedTickets; track ticket.id) {
+                <tr class="align-middle">
+                  <td>{{ ticket.title }}</td>
+                  <td>
+                    <button class="btn btn-primary btn-sm" (click)="submitSurveyForItem(SurveyType.TICKET, ticket.id)">
+                      <i class="las la-poll me-2"></i>Submit Survey
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+
+          <div class="d-flex justify-content-between p-2">
+            <ngb-pagination
+              [collectionSize]="ticketsCollectionSize"
+              [(page)]="ticketsPage"
+              [pageSize]="ticketsPageSize"
+              (pageChange)="refreshTickets()"
+              [boundaryLinks]="false"
+              [maxSize]="0"
+            >
+              <ng-template ngbPaginationPrevious>
+                <span>« </span>
+              </ng-template>
+              <ng-template ngbPaginationNext>
+                <span> »</span>
+              </ng-template>
+            </ngb-pagination>
+
+            <select
+              class="form-select"
+              style="width: auto"
+              [(ngModel)]="ticketsPageSize"
+              (ngModelChange)="refreshTickets()"
+            >
+              <option [ngValue]="2">2 items per page</option>
+              <option [ngValue]="4">4 items per page</option>
+              <option [ngValue]="6">6 items per page</option>
+            </select>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+<!-- Meetings -->
+<div class="container mb-5">
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-4">
+      <!-- Header -->
+      <h2 class="section-header d-flex align-items-center mb-4 border-bottom pb-2">
+        <i class="las la-calendar me-2 fs-5 text-primary"></i>
+        <span class="fs-5 text-dark">My Meetings with CRM Manager</span>
+      </h2>
+
+      <!-- Loading State -->
+      @if (!meetings) {
+        <div class="text-center text-muted mb-4">
+          <i class="las la-spinner la-spin me-2"></i>Loading, please wait...
+        </div>
+      }
+
+      <!-- No Meetings Message -->
+      @if (meetings && meetings.length === 0) {
+        <div class="alert alert-info">
+          No meetings found.
+        </div>
+      }
+
+      <!-- Meetings Table -->
+      @if (meetings && meetings.length > 0) {
+        <div class="table-responsive">
+          <table class="table datatable table-striped">
+            <thead class="table-light">
+            <tr>
+              <th>Title</th> <!-- Updated column header -->
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+              @for (meeting of displayedMeetings; track meeting.meetingid) {
+                <tr class="align-middle">
+                  <td>{{ getMeetingTitle(meeting) }}</td> <!-- Use getMeetingTitle -->
+                  <td>{{ meeting.meetingDate | date:'medium' }}</td>
+                  <td>
+                    <button class="btn btn-primary btn-sm" (click)="submitSurveyForItem(SurveyType.MEETING, meeting.meetingid)">
+                      <i class="las la-poll me-2"></i>Submit Survey
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+
+          <div class="d-flex justify-content-between p-2">
+            <ngb-pagination
+              [collectionSize]="meetingsCollectionSize"
+              [(page)]="meetingsPage"
+              [pageSize]="meetingsPageSize"
+              (pageChange)="refreshMeetings()"
+              [boundaryLinks]="false"
+              [maxSize]="0"
+            >
+              <ng-template ngbPaginationPrevious>
+                <span>« </span>
+              </ng-template>
+              <ng-template ngbPaginationNext>
+                <span> »</span>
+              </ng-template>
+            </ngb-pagination>
+
+            <select
+              class="form-select"
+              style="width: auto"
+              [(ngModel)]="meetingsPageSize"
+              (ngModelChange)="refreshMeetings()"
+            >
+              <option [ngValue]="2">2 items per page</option>
+              <option [ngValue]="4">4 items per page</option>
+              <option [ngValue]="6">6 items per page</option>
+            </select>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+<!-- Projects -->
+<div class="mb-6">
+  <h2 class="text-2xl font-semibold mb-4">My Projects with CoConsult</h2>
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-4">
+      <div class="table-responsive">
+        <table class="table datatable table-striped">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+            @if (projects) {
+              @for (project of displayedProjects; track project.idProjet) {
+                <tr>
+                  <td>{{ project.name }}</td>
+                  <td>
+                    <button class="btn btn-primary" (click)="submitSurveyForItem(SurveyType.PROJECT, project.idProjet)">Submit Survey</button>
+                  </td>
+                </tr>
+              }
+            } @else {
+              <tr>
+                <td colspan="3">Loading projects...</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+
+        <div class="d-flex justify-content-between p-2">
+          <ngb-pagination
+            [collectionSize]="projectsCollectionSize"
+            [(page)]="projectsPage"
+            [pageSize]="projectsPageSize"
+            (pageChange)="refreshProjects()"
+            [boundaryLinks]="false"
+            [maxSize]="0"
+          >
+            <ng-template ngbPaginationPrevious>
+              <span>« </span>
+            </ng-template>
+            <ng-template ngbPaginationNext>
+              <span> »</span>
+            </ng-template>
+          </ngb-pagination>
+
+          <select
+            class="form-select"
+            style="width: auto"
+            [(ngModel)]="projectsPageSize"
+            (ngModelChange)="refreshProjects()"
+          >
+            <option [ngValue]="2">2 items per page</option>
+            <option [ngValue]="4">4 items per page</option>
+            <option [ngValue]="6">6 items per page</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Contracts -->
+<div class="mb-6">
+  <div class="container">
+    <!-- Titre -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>My Contracts</h2>
+    </div>
+
+    <!-- Table with Pagination -->
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-4">
+        <div class="table-responsive">
+          <table class="table datatable">
+            <thead class="table-light">
+            <tr>
+              <th scope="col">Contract Number</th>
+              <th scope="col">Title</th>
+              <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+              @if (contracts) {
+                @for (contract of displayedContracts; track contract.id) {
+                  <tr>
+                    <td>{{ contract.contractNumber }}</td>
+                    <td>{{ contract.title }}</td>
+                    <td>
+                      <button class="btn btn-primary btn-sm me-1" (click)="submitSurveyForItem(SurveyType.CONTRACT, contract.id)">
+                        <i class="las la-poll me-2"></i>Submit Survey
+                      </button>
+                    </td>
+                  </tr>
+                }
+              } @else {
+                <tr>
+                  <td colspan="4">Loading contracts...</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+
+          <div class="d-flex justify-content-between p-2">
+            <ngb-pagination
+              [collectionSize]="contractsCollectionSize"
+              [(page)]="contractsPage"
+              [pageSize]="contractsPageSize"
+              (pageChange)="refreshContracts()"
+              [boundaryLinks]="false"
+              [maxSize]="0"
+            >
+              <ng-template ngbPaginationPrevious>
+                <span>« </span>
+              </ng-template>
+              <ng-template ngbPaginationNext>
+                <span> »</span>
+              </ng-template>
+            </ngb-pagination>
+
+            <select
+              class="form-select"
+              style="width: auto"
+              [(ngModel)]="contractsPageSize"
+              (ngModelChange)="refreshContracts()"
+            >
+              <option [ngValue]="2">2 items per page</option>
+              <option [ngValue]="4">4 items per page</option>
+              <option [ngValue]="6">6 items per page</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Surveys -->
+<div class="mb-6">
+  <h2 class="text-2xl font-semibold mb-4">Your Submitted Surveys</h2>
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-4">
+      <div class="table-responsive">
+        <table class="table datatable table-striped">
+          <thead>
+          <tr>
+            <th>Title</th>
+            <th>Type</th>
+            <th>Score</th>
+            <th>Status</th>
+            <th>Response Date</th>
+          </tr>
+          </thead>
+          <tbody>
+            @if (surveys) {
+              @for (survey of displayedSurveys; track survey.title) {
+                <tr>
+                  <td>{{ survey.title }}</td>
+                  <td>{{ survey.type }}</td>
+                  <td>{{ survey.score?.toFixed(2) || 'N/A' }}</td>
+                  <td>{{ survey.status }}</td>
+                  <td>{{ survey.responseDate | date:'medium' }}</td>
+                </tr>
+              }
+            } @else {
+              <tr>
+                <td colspan="6">Loading surveys...</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+
+        <div class="d-flex justify-content-between p-2">
+          <ngb-pagination
+            [collectionSize]="surveysCollectionSize"
+            [(page)]="surveysPage"
+            [pageSize]="surveysPageSize"
+            (pageChange)="refreshSurveys()"
+            [boundaryLinks]="false"
+            [maxSize]="0"
+          >
+            <ng-template ngbPaginationPrevious>
+              <span>« </span>
+            </ng-template>
+            <ng-template ngbPaginationNext>
+              <span> »</span>
+            </ng-template>
+          </ngb-pagination>
+
+          <select
+            class="form-select"
+            style="width: auto"
+            [(ngModel)]="surveysPageSize"
+            (ngModelChange)="refreshSurveys()"
+          >
+            <option [ngValue]="2">2 items per page</option>
+            <option [ngValue]="4">4 items per page</option>
+            <option [ngValue]="6">6 items per page</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,246 @@
+<div class="row">
+  <div class="col-12">
+    <div class="mb-3">
+      <div class="card-body">
+        <div class="d-flex justify-content-between mb-3">
+          <h4 class="card-title">Audit Calendar</h4>
+          <button class="btn btn-primary" (click)="openAddAuditModal(addAuditModal)">
+            <i class="fa-solid fa-plus me-1"></i> Add Audit
+          </button>
+        </div>
+        <div id="calendar">
+          <full-calendar
+            [options]="calendarOptions"
+            [events]="this.calendarEvents"
+          ></full-calendar>
+        </div>
+        <div style="clear: both"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Adding an Audit -->
+  <ng-template #addAuditModal let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title m-0">Add New Audit</h6>
+      <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="auditForm" (ngSubmit)="createAudit()">
+        <div class="mb-3 row">
+          <label for="title" class="col-sm-3 col-form-label text-end fw-medium">Title:</label>
+          <div class="col-sm-9">
+            <input
+              type="text"
+              formControlName="title"
+              class="form-control"
+              id="title"
+              placeholder="Enter the title"
+              [ngClass]="{ 'is-invalid': submitted && form['title'].errors }"
+            />
+            @if (submitted && form['title'].errors) {
+              <div class="invalid-feedback">Title is required</div>
+            }
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="description" class="col-sm-3 col-form-label text-end fw-medium">Description:</label>
+          <div class="col-sm-9">
+            <textarea
+              formControlName="description"
+              class="form-control"
+              id="description"
+              placeholder="Enter the description"
+            ></textarea>
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="startDate" class="col-sm-3 col-form-label text-end fw-medium">Start Date:</label>
+          <div class="col-sm-9">
+            <input
+              type="date"
+              formControlName="startDate"
+              class="form-control"
+              id="startDate"
+              [ngClass]="{ 'is-invalid': submitted && form['startDate'].errors }"
+            />
+            @if (submitted && form['startDate'].errors) {
+              <div class="invalid-feedback">Start date is required</div>
+            }
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="endDate" class="col-sm-3 col-form-label text-end fw-medium">End Date:</label>
+          <div class="col-sm-9">
+            <input
+              type="date"
+              formControlName="endDate"
+              class="form-control"
+              id="endDate"
+              [ngClass]="{ 'is-invalid': submitted && form['endDate'].errors }"
+            />
+            @if (submitted && form['endDate'].errors) {
+              <div class="invalid-feedback">End date is required</div>
+            }
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary btn-sm" (click)="createAudit()">Save</button>
+      <button type="button" class="btn btn-outline-danger btn-sm" (click)="modal.dismiss()">Close</button>
+    </div>
+  </ng-template>
+
+  <!-- Modal for Editing an Audit -->
+  <ng-template #modifyAuditModal let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title m-0">Edit Audit</h6>
+      <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="modifyForm" (ngSubmit)="modifyAudit()">
+        <div class="mb-3 row">
+          <label for="modifyTitle" class="col-sm-3 col-form-label text-end fw-medium">Title:</label>
+          <div class="col-sm-9">
+            <input
+              type="text"
+              formControlName="title"
+              class="form-control"
+              id="modifyTitle"
+              placeholder="Enter the title"
+              [ngClass]="{ 'is-invalid': submitted && modifyFormControls['title'].errors }"
+            />
+            @if (submitted && modifyFormControls['title'].errors) {
+              <div class="invalid-feedback">Title is required</div>
+            }
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="modifyDescription" class="col-sm-3 col-form-label text-end fw-medium">Description:</label>
+          <div class="col-sm-9">
+            <textarea
+              formControlName="description"
+              class="form-control"
+              id="modifyDescription"
+              placeholder="Enter the description"
+            ></textarea>
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="modifyStartDate" class="col-sm-3 col-form-label text-end fw-medium">Start Date:</label>
+          <div class="col-sm-9">
+            <input
+              type="date"
+              formControlName="startDate"
+              class="form-control"
+              id="modifyStartDate"
+              [ngClass]="{ 'is-invalid': submitted && modifyFormControls['startDate'].errors }"
+            />
+            @if (submitted && modifyFormControls['startDate'].errors) {
+              <div class="invalid-feedback">Start date is required</div>
+            }
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="modifyEndDate" class="col-sm-3 col-form-label text-end fw-medium">End Date:</label>
+          <div class="col-sm-9">
+            <input
+              type="date"
+              formControlName="endDate"
+              class="form-control"
+              id="modifyEndDate"
+              [ngClass]="{ 'is-invalid': submitted && modifyFormControls['endDate'].errors }"
+            />
+            @if (submitted && modifyFormControls['endDate'].errors) {
+              <div class="invalid-feedback">End date is required</div>
+            }
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary btn-sm" (click)="modifyAudit()">Save</button>
+      <button type="button" class="btn btn-outline-danger btn-sm" (click)="modal.dismiss()">Close</button>
+    </div>
+  </ng-template>
+
+  <!-- Modal for Viewing Audit Details -->
+  <ng-template #detailModal let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title m-0">Audit Details</h6>
+      <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="detailForm">
+        <div class="mb-3 row">
+          <label for="detailTitle" class="col-sm-3 col-form-label text-end fw-medium">Title:</label>
+          <div class="col-sm-9">
+            <input
+              type="text"
+              formControlName="title"
+              class="form-control"
+              id="detailTitle"
+              readonly
+            />
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="detailDescription" class="col-sm-3 col-form-label text-end fw-medium">Description:</label>
+          <div class="col-sm-9">
+            <textarea
+              formControlName="description"
+              class="form-control"
+              id="detailDescription"
+              readonly
+            ></textarea>
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="detailStartDate" class="col-sm-3 col-form-label text-end fw-medium">Start Date:</label>
+          <div class="col-sm-9">
+            <input
+              type="date"
+              formControlName="startDate"
+              class="form-control"
+              id="detailStartDate"
+              readonly
+            />
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="detailEndDate" class="col-sm-3 col-form-label text-end fw-medium">End Date:</label>
+          <div class="col-sm-9">
+            <input
+              type="date"
+              formControlName="endDate"
+              class="form-control"
+              id="detailEndDate"
+              readonly
+            />
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary btn-sm me-2" (click)="modal.close('update')">Edit</button>
+      <button type="button" class="btn btn-danger btn-sm" (click)="modal.close('delete')">Delete</button>
+      <button type="button" class="btn btn-outline-danger btn-sm" (click)="modal.dismiss()">Close</button>
+    </div>
+  </ng-template>
+
+  <!-- Modal for Confirming Deletion -->
+  <ng-template #deleteAuditModal let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title m-0">Confirm Deletion</h6>
+      <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      Are you sure you want to delete this audit? This action is irreversible.
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary btn-sm" (click)="confirmDeleteAudit()">Delete</button>
+      <button type="button" class="btn btn-outline-danger btn-sm" (click)="modal.dismiss()">Cancel</button>
+    </div>
+  </ng-template>
+</div>

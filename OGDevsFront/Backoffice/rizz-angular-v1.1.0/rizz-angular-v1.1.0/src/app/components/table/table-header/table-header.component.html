@@ -1,0 +1,25 @@
+<div class="d-flex flex-wrap justify-content-between gap-3 mb-1">
+  <div class="d-flex align-items-center">
+    <select
+      class="form-select me-2"
+      style="width: auto"
+      [(ngModel)]="tableService.pageSize"
+    >
+      <option [ngValue]="5">5</option>
+      <option [ngValue]="10" selected>10</option>
+      <option [ngValue]="15">15</option>
+      <option [ngValue]="20">20</option>
+      <option [ngValue]="25">25</option></select
+    >entries per page
+  </div>
+  <div class="search-bar">
+    <span><i class="bx bx-search-alt"></i></span>
+    <input
+      type="search"
+      class="form-control"
+      id="search"
+      [(ngModel)]="tableService.searchTerm"
+      placeholder="Search ..."
+    />
+  </div>
+</div>

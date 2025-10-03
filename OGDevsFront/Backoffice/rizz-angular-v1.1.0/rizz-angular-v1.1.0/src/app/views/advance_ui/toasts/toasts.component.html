@@ -1,0 +1,328 @@
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Basic</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        @if (show) {
+          <ngb-toast [autohide]="false" (hidden)="show = false">
+            <ng-template ngbToastHeader>
+              <img
+                src="assets/images/logo-sm.png"
+                alt=""
+                height="20"
+                class="me-1"
+              />
+              <h5 class="me-auto my-0">Rizz</h5>
+              <small>11 mins ago</small>
+            </ng-template>
+            Hello, world! This is a toast message.
+          </ngb-toast>
+        }
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Stacking</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div class="bg-light rounded p-3">
+          @if (stacking) {
+            <ngb-toast
+              [autohide]="false"
+              (hidden)="stacking = false"
+              class="mb-3"
+            >
+              <ng-template ngbToastHeader>
+                <img
+                  src="assets/images/logo-sm.png"
+                  alt=""
+                  height="20"
+                  class="me-1"
+                />
+                <h5 class="me-auto my-0">Rizz</h5>
+                <small>11 mins ago</small>
+              </ng-template>
+              Hello, world! This is a toast message.
+            </ngb-toast>
+          }
+          @if (stackingsecond) {
+            <ngb-toast [autohide]="false" (hidden)="stackingsecond = false">
+              <ng-template ngbToastHeader>
+                <img
+                  src="assets/images/logo-sm.png"
+                  alt=""
+                  height="20"
+                  class="me-1"
+                />
+                <h5 class="me-auto my-0">Rizz</h5>
+                <small>11 mins ago</small>
+              </ng-template>
+              Hello, world! This is a toast message.
+            </ngb-toast>
+          }
+        </div>
+        <!--end /div-->
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Toast Placement</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div class="form-group mb-3">
+          <select
+            class="form-select"
+            [(ngModel)]="toastPlacement"
+            id="selectToastPlacement"
+          >
+            <option value="" selected>Select a position...</option>
+            <option value="top-0 start-0">Top left</option>
+            <option value="top-0 start-50 translate-middle-x">
+              Top center
+            </option>
+            <option value="top-0 end-0">Top right</option>
+            <option value="top-50 start-0 translate-middle-y">
+              Middle left
+            </option>
+            <option value="top-50 start-50 translate-middle">
+              Middle center
+            </option>
+            <option value="top-50 end-0 translate-middle-y">
+              Middle right
+            </option>
+            <option value="bottom-0 start-0">Bottom left</option>
+            <option value="bottom-0 start-50 translate-middle-x">
+              Bottom center
+            </option>
+            <option value="bottom-0 end-0">Bottom right</option>
+          </select>
+        </div>
+        <div
+          aria-live="polite"
+          aria-atomic="true"
+          class="position-relative bd-example-toasts"
+          style="height: 260px; background-color: rgba(235, 240, 247, 0.1)"
+        >
+          @if (placement) {
+            <ngb-toast
+              [autohide]="false"
+              (hidden)="placement = false"
+              class="position-absolute {{ toastPlacement }}"
+            >
+              <ng-template ngbToastHeader>
+                <img
+                  src="assets/images/logo-sm.png"
+                  alt=""
+                  height="20"
+                  class="me-1"
+                />
+                <h5 class="me-auto my-0">Rizz</h5>
+                <small>11 mins ago</small>
+              </ng-template>
+              Hello, world! This is a toast message.
+            </ngb-toast>
+          }
+        </div>
+        <!--end toast-->
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Translucent</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div class="bg-light rounded p-3">
+          @if (translucent) {
+            <ngb-toast [autohide]="false" (hidden)="translucent = false">
+              <ng-template ngbToastHeader>
+                <img
+                  src="assets/images/logo-sm.png"
+                  alt=""
+                  height="20"
+                  class="me-1"
+                />
+                <h5 class="me-auto my-0">Rizz</h5>
+                <small>11 mins ago</small>
+              </ng-template>
+              Hello, world! This is a toast message.
+            </ngb-toast>
+          }
+        </div>
+        <!--end /div-->
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Custom Content</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div class="bg-light rounded p-3">
+          @if (content1Toast) {
+            <ngb-toast [autohide]="false" class="toast mb-2">
+              <div class="d-flex align-items-center">
+                <div class="text-body">
+                  Hello, world! This is a toast message.
+                </div>
+                <button
+                  type="button"
+                  class="btn-close ms-auto"
+                  (click)="content1Toast = false"
+                  data-bs-dismiss="toast"
+                  aria-label="Close"
+                ></button>
+              </div>
+            </ngb-toast>
+          }
+
+          @if (contentToast) {
+            <ngb-toast [autohide]="false" class="mb-2">
+              Hello, world! This is a toast message.
+              <div class="mt-2 pt-2 border-top">
+                <button type="button" class="btn btn-primary btn-sm me-0.5">
+                  Take action
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-secondary btn-sm"
+                  (click)="contentToast = false"
+                >
+                  Close
+                </button>
+              </div>
+            </ngb-toast>
+          }
+
+          @if (content2Toast) {
+            <ngb-toast
+              [autohide]="false"
+              class="text-white bg-primary border-0"
+            >
+              <div class="d-flex align-items-center">
+                <div class="text-white">
+                  Hello, world! This is a toast message.
+                </div>
+                <button
+                  type="button"
+                  class="btn-close btn-close-white ms-auto"
+                  (click)="content2Toast = false"
+                  data-bs-dismiss="toast"
+                  aria-label="Close"
+                ></button>
+              </div>
+            </ngb-toast>
+          }
+        </div>
+        <!--end /div-->
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Custom Toast</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        @if (customToast) {
+          <ngb-toast
+            [autohide]="false"
+            (hidden)="customToast = false"
+            class="toast"
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+          >
+            <ng-template ngbToastHeader class="border-0"></ng-template>
+            <div class="text-center">
+              <img
+                src="assets/images/users/avatar-5.jpg"
+                alt=""
+                class="d-block mx-auto rounded-circle thumb-xl"
+              />
+              <h5 class="fw-bold mt-2 mb-1">Charles Smith</h5>
+              <p class="text-muted mb-0">UI/UX front end developer</p>
+              <div class="mt-3 mb-2">
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-icon-circle btn-icon-circle-sm me-0.5"
+                >
+                  <i class="fab fa-facebook-f"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-info btn-icon-circle btn-icon-circle-sm me-0.5"
+                >
+                  <i class="fab fa-twitter"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-pink btn-icon-circle btn-icon-circle-sm"
+                >
+                  <i class="fab fa-dribbble"></i>
+                </button>
+              </div>
+            </div> </ngb-toast
+          ><!--end toast-->
+        }
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->

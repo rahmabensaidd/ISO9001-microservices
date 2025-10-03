@@ -1,0 +1,148 @@
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Default Map</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="gmaps-basic" class="gmaps">
+          <google-map
+            [latitude]="latitude"
+            [longitude]="longitude"
+            [zoom]="15"
+            width="100%"
+            height="300px"
+          ></google-map>
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Map With Marker</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="gmaps-marker" class="gmaps">
+          <google-map height="300px" width="100%" [options]="mapOptions">
+            @for (marker of markers; track $index) {
+              <map-marker [position]="marker.position"></map-marker>
+            }
+          </google-map>
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Overlays Map</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="gmaps-overlay" class="gmaps">
+          <google-map
+            [latitude]="latitude"
+            [longitude]="longitude"
+            [zoom]="15"
+            width="100%"
+            height="300px"
+          ></google-map>
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Map Types</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <google-map
+          [latitude]="latitude"
+          [options]="options"
+          [longitude]="longitude"
+          [zoom]="15"
+          width="100%"
+          height="300px"
+        ></google-map>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row justify-content-center">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Layer Map</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="gmaps-layers" class="gmaps">
+          <google-map
+            [latitude]="latitude"
+            [longitude]="longitude"
+            [zoom]="3"
+            width="100%"
+            height="300px"
+          ></google-map>
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->

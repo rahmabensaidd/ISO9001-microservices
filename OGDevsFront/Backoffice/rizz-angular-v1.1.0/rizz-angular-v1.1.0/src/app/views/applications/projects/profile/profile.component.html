@@ -1,0 +1,393 @@
+<div class="container mt-5">
+  <div *ngIf="isLoading" class="text-center my-5">
+    <h4>Loading profile...</h4>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="userProfile && !isLoading && !errorMessage">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-4 align-self-center mb-3 mb-lg-0">
+                <div class="d-flex align-items-center flex-row flex-wrap">
+                  <div class="position-relative me-3">
+                    <img
+                      [src]="profilePhotoUrl"
+                      alt="Profile photo"
+                      class="profile-photo rounded-circle"
+                    />
+                    <a
+                      *ngIf="isOwnProfile"
+                      href="javascript:void(0);"
+                      class="thumb-md justify-content-center d-flex align-items-center bg-primary text-white rounded-circle position-absolute end-0 bottom-0 border border-3 border-card-bg camera-icon"
+                      (click)="triggerFileInput()"
+                    >
+                      <i class="fas fa-camera"></i>
+                    </a>
+                    <input
+                      *ngIf="isOwnProfile"
+                      type="file"
+                      accept="image/jpeg,image/png"
+                      style="display: none"
+                      #fileInput
+                      (change)="onFileSelected($event)"
+                    />
+                  </div>
+                  <div>
+                    <p><strong>Name:</strong> {{ userName }}</p>
+                    <p><strong>Email:</strong> {{ userEmail }}</p>
+                    <div class="mt-2">
+                      <span class="me-3"><strong>{{ followerCount }}</strong> Followers</span>
+                      <span><strong>{{ followingCount }}</strong> Following</span>
+                    </div>
+                    <div *ngIf="!isOwnProfile" class="mt-2">
+                      <button
+                        class="btn"
+                        [ngClass]="isFollowing ? 'btn-danger' : 'btn-primary'"
+                        (click)="toggleFollow()"
+                      >
+                        {{ isFollowing ? 'Unfollow' : 'Follow' }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-md-4 profile-section">
+        <div class="card">
+          <div class="card-header">
+            <div class="row align-items-center">
+              <div class="col">
+                <h4 class="card-title">Personal Information</h4>
+              </div>
+              <div class="col-auto">
+                <a
+                  *ngIf="isOwnProfile"
+                  href="javascript:void(0);"
+                  class="float-end text-muted d-inline-flex text-decoration-underline"
+                  (click)="toggleEdit()"
+                >
+                  <i class="iconoir-edit-pencil fs-18 me-1"></i>
+                  {{ isEditing ? 'Cancel' : 'Edit' }}
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="card-body pt-0">
+            <p class="text-muted fw-medium mb-3">
+              Here is the personal information associated with this profile.
+            </p>
+            <div class="mb-3">
+              <span
+                *ngFor="let skill of skills"
+                class="badge bg-transparent borderLight text-gray-700 fs-12 fw-medium mb-1 me-0.5"
+              >
+                {{ skill }}
+              </span>
+            </div>
+
+            <div *ngIf="userProfile && !isEditing">
+              <ul class="list-unstyled mb-0">
+                <li>
+                  <i class="las la-birthday-cake me-2 text-secondary fs-22 align-middle"></i>
+                  <b>Date of Birth:</b> {{ userProfile.birthdate ? (userProfile.birthdate | date: 'dd MMMM yyyy') : 'Not specified' }}
+                </li>
+                <li class="mt-2">
+                  <i class="las la-briefcase me-2 text-secondary fs-22 align-middle"></i>
+                  <b>Position:</b> {{ userProfile.position ? userProfile.position : 'Not specified' }}
+                </li>
+                <li class="mt-2">
+                  <i class="las la-university me-2 text-secondary fs-22 align-middle"></i>
+                  <b>Education:</b> {{ userProfile.education ? userProfile.education : 'Not specified' }}
+                </li>
+                <li class="mt-2">
+                  <i class="las la-language me-2 text-secondary fs-22 align-middle"></i>
+                  <b>Languages:</b> {{ userProfile.languages ? userProfile.languages : 'Not specified' }}
+                </li>
+                <li class="mt-2">
+                  <i class="las la-phone me-2 text-secondary fs-22 align-middle"></i>
+                  <b>Phone:</b> {{ userProfile.phoneNumber ? userProfile.phoneNumber : 'Not available' }}
+                </li>
+                <li class="mt-2">
+                  <i class="las la-envelope text-secondary fs-22 align-middle me-2"></i>
+                  <b>Email:</b> {{ userProfile.email ? userProfile.email : 'Not available' }}
+                </li>
+              </ul>
+            </div>
+
+            <div *ngIf="isEditing">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <h4 class="card-title">Edit Profile</h4>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body pt-0">
+                <form [formGroup]="editForm">
+                  <div class="mb-3 row">
+                    <label for="birthdateInput" class="col-sm-2 col-form-label">
+                      <i class="las la-birthday-cake fs-22 me-2"></i>
+                    </label>
+                    <div class="col-sm-10">
+                      <input
+                        type="date"
+                        class="form-control"
+                        id="birthdateInput"
+                        formControlName="birthdate"
+                      />
+                      <div *ngIf="editForm.get('birthdate')?.invalid && editForm.get('birthdate')?.touched" class="text-danger">
+                        Invalid date format. Use YYYY-MM-DD (e.g., 1989-06-06).
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mb-3 row">
+                    <label for="positionInput" class="col-sm-2 col-form-label">
+                      <i class="las la-briefcase fs-22 me-2"></i>
+                    </label>
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="positionInput"
+                        formControlName="position"
+                        placeholder="e.g., Full Stack Developer"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="mb-3 row">
+                    <label for="educationInput" class="col-sm-2 col-form-label">
+                      <i class="las la-university fs-22 me-2"></i>
+                    </label>
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="educationInput"
+                        formControlName="education"
+                        placeholder="e.g., Stanford University"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="mb-3 row">
+                    <label for="languagesInput" class="col-sm-2 col-form-label">
+                      <i class="las la-language fs-22 me-2"></i>
+                    </label>
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="languagesInput"
+                        formControlName="languages"
+                        placeholder="e.g., English, French, Spanish"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="mb-3 row">
+                    <label for="phoneNumberInput" class="col-sm-2 col-form-label">
+                      <i class="las la-phone fs-22 me-2"></i>
+                    </label>
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="phoneNumberInput"
+                        formControlName="phoneNumber"
+                        placeholder="e.g., +1234567890"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="mb-3 row">
+                    <label for="emailInput" class="col-sm-2 col-form-label">
+                      <i class="las la-envelope fs-22 me-2"></i>
+                    </label>
+                    <div class="col-sm-10">
+                      <input
+                        type="email"
+                        class="form-control"
+                        id="emailInput"
+                        formControlName="email"
+                        placeholder="e.g., user@example.com"
+                      />
+                      <small class="text-muted">The email cannot be changed here.</small>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-sm-10 ms-auto">
+                      <button type="button" class="btn btn-primary me-0.5" (click)="saveProfile()" [disabled]="isFormInvalid">Submit</button>
+                      <button type="button" class="btn btn-danger" (click)="toggleEdit()">Cancel</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div class="row justify-content-center mt-4" *ngIf="!isEditing">
+              <div class="col-auto text-end border-end">
+                <span
+                  class="thumb-md justify-content-center d-flex align-items-center bg-blue text-white rounded-circle ms-auto mb-1"
+                >
+                  <i class="fab fa-facebook-f"></i>
+                </span>
+                <p class="mb-0 fw-semibold">Facebook</p>
+                <h4 class="m-0 fw-bold">
+                  {{ socialMedia.facebook.followers }}
+                  <span class="text-muted fs-12 fw-normal">Followers</span>
+                </h4>
+              </div>
+              <div class="col-auto">
+                <span
+                  class="thumb-md justify-content-center d-flex align-items-center bg-black text-white rounded-circle mb-1"
+                >
+                  <i class="fab fa-x-twitter"></i>
+                </span>
+                <p class="mb-0 fw-semibold">Twitter</p>
+                <h4 class="m-0 fw-bold">
+                  {{ socialMedia.twitter.followers }}
+                  <span class="text-muted fs-12 fw-normal">Followers</span>
+                </h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Posts Section -->
+      <div class="col-md-8 right-column">
+        <h4>Posts</h4>
+
+        <!-- Create Post Form (only for own profile) -->
+        <div *ngIf="isOwnProfile" class="card mb-3">
+          <div class="card-body">
+            <form [formGroup]="postForm" (ngSubmit)="createPost()">
+              <div class="mb-3">
+                <textarea
+                  class="form-control"
+                  formControlName="content"
+                  placeholder="What's new?"
+                  rows="3"
+                ></textarea>
+                <div
+                  *ngIf="postForm.get('content')?.invalid && postForm.get('content')?.touched"
+                  class="text-danger"
+                >
+                  Content is required.
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" [disabled]="postForm.invalid">
+                Post
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Posts List -->
+        <div *ngIf="posts.length === 0 && !isLoading" class="alert alert-info">
+          No posts at the moment.
+        </div>
+
+        <div *ngFor="let post of posts" class="card mb-3">
+          <div class="card-body">
+            <p>{{ post.content }}</p>
+            <small class="text-muted">Posted on {{ post.createdAt | date: 'dd MMMM yyyy HH:mm' }}</small>
+
+            <!-- Comments -->
+            <div class="comments mt-3">
+              <h6>Comments</h6>
+              <div *ngIf="!post.comments || post.comments.length === 0" class="text-muted">
+                No comments.
+              </div>
+              <div *ngFor="let comment of post.comments" class="comment ms-3 mt-2">
+                <p>{{ comment.text }}</p>
+                <small class="text-muted">By {{ comment.user?.username || 'Unknown' }} on {{ comment.createdAt | date: 'dd MMMM yyyy HH:mm' }}</small>
+
+                <!-- Replies -->
+                <div *ngIf="comment.replies && comment.replies.length > 0" class="replies ms-4">
+                  <div *ngFor="let reply of comment.replies" class="reply mt-1">
+                    <p>{{ reply.text }}</p>
+                    <small class="text-muted">By {{ reply.user?.username || 'Unknown' }} on {{ reply.createdAt | date: 'dd MMMM yyyy HH:mm' }}</small>
+                  </div>
+                </div>
+
+                <!-- Reply Form -->
+                <form
+                  [formGroup]="replyForms[post.id + '-' + comment.id]"
+                  (ngSubmit)="addReply(post.id!, comment.id!)"
+                  class="mt-2"
+                >
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="text"
+                      placeholder="Reply..."
+                    />
+                    <button
+                      type="submit"
+                      class="btn btn-primary"
+                      [disabled]="replyForms[post.id + '-' + comment.id]?.invalid"
+                    >
+                      Reply
+                    </button>
+                  </div>
+                  <div
+                    *ngIf="replyForms[post.id + '-' + comment.id]?.get('text')?.invalid && replyForms[post.id + '-' + comment.id]?.get('text')?.touched"
+                    class="text-danger"
+                  >
+                    Content is required.
+                  </div>
+                </form>
+              </div>
+
+              <!-- Comment Form -->
+              <form
+                [formGroup]="commentForms[post.id!]"
+                (ngSubmit)="addComment(post.id!)"
+                class="mt-3"
+              >
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="text"
+                    placeholder="Add a comment..."
+                  />
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    [disabled]="commentForms[post.id!]?.invalid"
+                  >
+                    Comment
+                  </button>
+                </div>
+                <div
+                  *ngIf="commentForms[post.id!]?.get('text')?.invalid && commentForms[post.id!]?.get('text')?.touched"
+                  class="text-danger"
+                >
+                  Content is required.
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

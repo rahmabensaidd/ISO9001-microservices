@@ -1,0 +1,36 @@
+<div class="notification-container position-fixed top-0 end-0 p-3" style="z-index: 1200">
+  <div *ngFor="let notification of notifications">
+    <ngb-toast
+      [autohide]="false"
+      (click)="navigateTo(notification)"
+      class="cursor-pointer mb-2"
+      [class]="notification.type">
+      <ng-template ngbToastHeader>
+        <img src="assets/images/logo-sm.png" alt="" height="20" class="me-1" />
+        <h5 class="me-auto my-0">
+          {{ notification.notificationType === 'objective' ? 'Objective Alert' : 'Non-Conformity Alert' }}
+        </h5>
+        <small>New</small>
+      </ng-template>
+      {{ notification.message }}
+      <div *ngIf="notification.objectiveId || notification.nonConformityId" class="mt-1">
+        ID: {{ notification.objectiveId || notification.nonConformityId }}
+      </div>
+      <div class="mt-2 pt-2 border-top">
+        <button
+          *ngIf="notification.objectiveId || notification.nonConformityId"
+          type="button"
+          class="btn btn-sm btn-primary me-1"
+          (click)="$event.stopPropagation(); navigateTo(notification)">
+          View Details
+        </button>
+        <button
+          type="button"
+          class="btn btn-sm btn-secondary"
+          (click)="$event.stopPropagation(); removeNotification(notification.id)">
+          Dismiss
+        </button>
+      </div>
+    </ngb-toast>
+  </div>
+</div>

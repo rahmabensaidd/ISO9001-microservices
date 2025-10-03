@@ -1,0 +1,176 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+:root {
+  --primary-green: #e6f4ea;
+  --secondary-green: #4caf50;
+  --hover-green: #c8e6c9;
+  --text-green: #2e7d32;
+  --card-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  --card-shadow-hover: 0 10px 28px rgba(0, 0, 0, 0.25);
+  --transition: all 0.2s ease-in-out;
+  --border-radius: 0.5rem;
+  --bg-light: #f8f9fa;
+  --text-color: #333;
+  --bg-color: #fff;
+  --card-bg: #ffffff;
+  --table-header-bg: rgba(208, 208, 208, 0.58);
+  --table-hover-bg: var(--hover-green);
+  --form-border: #ced4da;
+  --form-focus-shadow: rgba(148, 211, 149, 0.4);
+  --button-secondary-color: #6c757d;
+  --button-danger-color: #e3342f;
+}
+
+[data-theme="dark"] {
+  --bg-color: #1a202c;
+  --card-bg: #2d3748;
+  --text-color: #e2e8f0;
+  --table-header-bg: rgba(60, 70, 83, 0.8);
+  --table-hover-bg: rgba(40, 50, 65, 0.8);
+  --form-border: #4a5568;
+  --form-focus-shadow: rgba(23, 189, 89, 0.4);
+  --button-secondary-color: #a0aec0;
+  --button-danger-color: #eb5757;
+  --card-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  --card-shadow-hover: 0 10px 28px rgba(0, 0, 0, 0.5);
+}
+
+/* Gamification Specific Styling */
+.gamification-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.gamification-card {
+  border-radius: var(--border-radius);
+  background: linear-gradient(145deg, var(--card-bg), var(--bg-light));
+  transition: var(--transition);
+}
+
+.gamification-card:hover {
+  transform: translateY(-5px);
+}
+
+.gamification-item {
+  border-bottom: 1px solid var(--form-border);
+  padding-bottom: 1rem;
+}
+
+.gamification-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+/* Progress Bar */
+.progress {
+  background-color: #e9ecef;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  transition: width 0.6s ease;
+  font-weight: 500;
+}
+
+/* Badge Styling */
+.badge-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.badge-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: var(--transition);
+}
+
+.badge-item:hover {
+  transform: scale(1.1);
+}
+
+.badge-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: var(--transition);
+}
+
+.badge-name {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-color);
+  text-align: center;
+}
+
+/* Reward Styling */
+.reward-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.reward-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: var(--transition);
+}
+
+.reward-item:hover {
+  transform: scale(1.1);
+}
+
+.reward-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: var(--transition);
+}
+
+.reward-name {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-color);
+  text-align: center;
+}
+
+/* Icon Animations */
+.fas {
+  transition: transform 0.3s ease;
+}
+
+.fas:hover {
+  transform: scale(1.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .badge-container, .reward-container {
+    justify-content: center;
+  }
+
+  .badge-icon, .reward-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .badge-name, .reward-name {
+    font-size: 0.75rem;
+  }
+}

@@ -1,0 +1,195 @@
+<div class="chat-box-left">
+  <ul
+    ngbNav
+    #nav="ngbNav"
+    class="nav nav-tabs nav-justified"
+    id="myTab"
+    role="tablist"
+  >
+    <li ngbNavItem class="nav-item" role="presentation">
+      <a
+        ngbNavLink
+        class="nav-link py-2"
+        id="messages_chat_tab"
+        data-bs-toggle="tab"
+        role="tab"
+        >Messages</a
+      >
+      <ng-template ngbNavContent>
+        <div class="tab-pane fade show" id="messages_chat">
+          <div class="row">
+            <div class="col">
+              @for (item of contactList; track $index) {
+                <div class="p-2 border-dashed border-theme-color rounded mb-2">
+                  <a (click)="getDetail(item)">
+                    <div class="d-flex align-items-start">
+                      <div class="position-relative">
+                        <img
+                          [src]="item.image"
+                          alt=""
+                          class="thumb-lg rounded-circle"
+                        />
+                        <span class="position-absolute bottom-0 end-0"
+                          ><i
+                            class="fa-solid fa-circle fs-10 border-2 border-theme-color"
+                            [ngClass]="
+                              item.status == 'online'
+                                ? 'text-success'
+                                : 'text-secondary'
+                            "
+                          ></i
+                        ></span>
+                      </div>
+                      <div
+                        class="flex-grow-1 ms-2 text-truncate align-self-center"
+                      >
+                        <h6 class="my-0 fw-medium text-dark fs-14">
+                          {{ item.name }}
+                          <small class="float-end text-muted fs-11">{{
+                            item.time
+                          }}</small>
+                        </h6>
+                        <p class="text-muted mb-0">
+                          @if (item.message == 'Voice message!') {
+                            <i class="iconoir-microphone"></i>
+                          }
+                          <span
+                            [class]="
+                              item.message == 'Typing...' ? 'text-primary' : ''
+                            "
+                          >
+                            {{ item.message }}</span
+                          >
+                          @if (item.unread_messages) {
+                            <span
+                              class="badge float-end rounded text-white bg-success"
+                              >{{ item.unread_messages }}</span
+                            >
+                          }
+                        </p>
+                      </div>
+                      <!--end media-body-->
+                    </div>
+                    <!--end media-->
+                  </a>
+                  <!--end-->
+                </div>
+                <!--end div-->
+              }
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </li>
+    <li ngbNavItem class="nav-item" role="presentation">
+      <a
+        ngbNavLink
+        class="nav-link py-2"
+        id="active_chat_tab"
+        data-bs-toggle="tab"
+        href="#active_chat"
+        role="tab"
+        >Active</a
+      >
+      <ng-template ngbNavContent>
+        <div class="tab-pane fade show active" id="messages_chat">
+          <div class="row">
+            <div class="col">
+              @for (item of contactList; track $index) {
+                @if (item.status == 'online') {
+                  <div
+                    class="p-2 border-dashed border-theme-color rounded mb-2"
+                  >
+                    <a (click)="getDetail(item)">
+                      <div class="d-flex align-items-start">
+                        <div class="position-relative">
+                          <img
+                            [src]="item.image"
+                            alt=""
+                            class="thumb-lg rounded-circle"
+                          />
+                          <span class="position-absolute bottom-0 end-0"
+                            ><i
+                              class="fa-solid fa-circle fs-10 border-2 border-theme-color"
+                              [ngClass]="
+                                item.status == 'online'
+                                  ? 'text-success'
+                                  : 'text-secondary '
+                              "
+                            ></i
+                          ></span>
+                        </div>
+                        <div
+                          class="flex-grow-1 ms-2 text-truncate align-self-center"
+                        >
+                          <h6 class="my-0 fw-medium text-dark fs-14">
+                            {{ item.name }}
+                            <small class="float-end text-muted fs-11">{{
+                              item.time
+                            }}</small>
+                          </h6>
+                          <p class="text-muted mb-0">
+                            @if (item.message == 'Voice message!') {
+                              <i class="iconoir-microphone"></i>
+                            }
+                            <span
+                              [class]="
+                                item.message == 'Typing...'
+                                  ? 'text-primary'
+                                  : ''
+                              "
+                            >
+                              {{ item.message }}</span
+                            >
+                            @if (item.unread_messages) {
+                              <span
+                                class="badge float-end rounded text-white bg-success"
+                                >{{ item.unread_messages }}</span
+                              >
+                            }
+                          </p>
+                        </div>
+                        <!--end media-body-->
+                      </div>
+                      <!--end media-->
+                    </a>
+                    <!--end-->
+                  </div>
+                  <!--end div-->
+                }
+              }
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </li>
+  </ul>
+  <div class="chat-search p-3">
+    <div class="p-1 bg-light rounded rounded-pill">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <button
+            id="button-addon2"
+            type="submit"
+            class="btn btn-link text-secondary"
+          >
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
+        <input
+          type="search"
+          placeholder="Searching.."
+          aria-describedby="button-addon2"
+          class="form-control border-0 bg-light"
+        />
+      </div>
+    </div>
+  </div>
+  <!--end chat-search-->
+
+  <ngx-simplebar class="chat-body-left px-3" data-simplebar>
+    <div class="tab-content" [ngbNavOutlet]="nav" id="pills-tabContent"></div>
+    <!--end tab-content-->
+  </ngx-simplebar>
+</div>
+<!--end chat-box-left -->

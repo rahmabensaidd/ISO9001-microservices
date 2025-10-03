@@ -1,0 +1,8 @@
+<div class="row">
+  @for (data of ProjectList; track $index) {
+    <div class="col-md-6 col-lg-4">
+      <project-card [projects]="data" />
+    </div>
+  }
+</div>
+<!--end row-->

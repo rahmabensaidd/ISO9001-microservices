@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-lg-8">
+    <refund-order />
+  </div>
+  <div class="col-lg-4">
+    <refund-summary />
+    <div class="card">
+      <div class="card-body">
+        <form>
+          <div class="form-groupmb-3">
+            <label for="amount" class="form-label">Amount</label>
+            <input
+              type="text"
+              class="form-control"
+              id="amount"
+              placeholder="Amount"
+            />
+          </div>
+          <!--end form-group-->
+          <div class="form-group mb-3">
+            <label class="form-label mt-2" for="customer-message"
+              >Message</label
+            >
+            <textarea
+              class="form-control"
+              rows="3"
+              id="customer-message"
+              placeholder="writing here.."
+            ></textarea>
+          </div>
+          <!--end form-group-->
+          <button type="submit" class="btn btn-primary me-0.5">Refund</button>
+          <button type="button" class="btn btn-danger">Decline</button>
+        </form>
+        <!--end form-->
+      </div>
+      <!--card-body-->
+    </div>
+    <!--end card-->
+  </div>
+</div>

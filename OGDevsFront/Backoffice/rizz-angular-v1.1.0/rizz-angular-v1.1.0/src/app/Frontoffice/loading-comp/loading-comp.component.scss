@@ -1,0 +1,15 @@
+.container {
+  color: white !important;
+}
+.row, .hero-content, .hero-image {
+  display: block !important;
+  height: auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+
+.row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+}

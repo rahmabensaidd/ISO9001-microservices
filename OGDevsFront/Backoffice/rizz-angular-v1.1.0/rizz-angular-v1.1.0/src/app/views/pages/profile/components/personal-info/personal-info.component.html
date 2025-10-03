@@ -1,0 +1,210 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row align-items-center">
+      <div class="col">
+        <h4 class="card-title">Personal Information</h4>
+      </div>
+      <div class="col-auto">
+        <a
+          href="javascript:void(0);"
+          class="float-end text-muted d-inline-flex text-decoration-underline"
+          (click)="toggleEdit()"
+        >
+          <i class="iconoir-edit-pencil fs-18 me-1"></i>
+          {{ isEditing ? 'Cancel' : 'Edit' }}
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="card-body pt-0">
+    <p class="text-muted fw-medium mb-3">
+      It is a long established fact that a reader will be distracted by the
+      readable content of a page when looking at its layout.
+    </p>
+    <div class="mb-3">
+      <span
+        *ngFor="let skill of skills"
+        class="badge bg-transparent borderLight text-gray-700 fs-12 fw-medium mb-1 me-0.5"
+      >
+        {{ skill }}
+      </span>
+    </div>
+
+    <!-- Display mode -->
+    <div *ngIf="userProfile && !isEditing">
+      <ul class="list-unstyled mb-0">
+        <li>
+          <i class="las la-birthday-cake me-2 text-secondary fs-22 align-middle"></i>
+          <b>Birth Date</b> : {{ userProfile.birthdate ? (userProfile.birthdate | date: 'dd MMMM yyyy') : 'Not set' }}
+        </li>
+        <li class="mt-2">
+          <i class="las la-briefcase me-2 text-secondary fs-22 align-middle"></i>
+          <b>Position</b> : {{ userProfile.position ? userProfile.position : 'Not set' }}
+        </li>
+        <li class="mt-2">
+          <i class="las la-university me-2 text-secondary fs-22 align-middle"></i>
+          <b>Education</b> : {{ userProfile.education ? userProfile.education : 'Not set' }}
+        </li>
+        <li class="mt-2">
+          <i class="las la-language me-2 text-secondary fs-22 align-middle"></i>
+          <b>Languages</b> : {{ userProfile.languages ? userProfile.languages : 'Not set' }}
+        </li>
+        <li class="mt-2">
+          <i class="las la-phone me-2 text-secondary fs-22 align-middle"></i>
+          <b>Phone Number:</b> {{ userProfile.phoneNumber ? userProfile.phoneNumber : 'Not set' }}
+        </li>
+        <li class="mt-2">
+          <i class="las la-envelope text-secondary fs-22 align-middle me-2"></i>
+          <b>Email:</b> {{ userProfile.email ? userProfile.email : 'Not set' }}
+        </li>
+      </ul>
+    </div>
+
+    <!-- Edit mode with horizontal form -->
+    <div *ngIf="isEditing">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Edit Profile</h4>
+          </div>
+        </div>
+      </div>
+      <div class="card-body pt-0">
+        <form [formGroup]="editForm">
+          <div class="mb-3 row">
+            <label for="birthdateInput" class="col-sm-2 col-form-label">
+              <i class="las la-birthday-cake fs-22 me-2"></i>
+            </label>
+            <div class="col-sm-10">
+              <input
+                type="date"
+                class="form-control"
+                id="birthdateInput"
+                formControlName="birthdate"
+              />
+              <div *ngIf="editForm.get('birthdate')?.invalid && editForm.get('birthdate')?.touched" class="text-danger">
+                Invalid birthdate format. Use YYYY-MM-DD (e.g., 1989-06-06).
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3 row">
+            <label for="positionInput" class="col-sm-2 col-form-label">
+              <i class="las la-briefcase fs-22 me-2"></i>
+            </label>
+            <div class="col-sm-10">
+              <input
+                type="text"
+                class="form-control"
+                id="positionInput"
+                formControlName="position"
+                placeholder="e.g., Full Stack Developer"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3 row">
+            <label for="educationInput" class="col-sm-2 col-form-label">
+              <i class="las la-university fs-22 me-2"></i>
+            </label>
+            <div class="col-sm-10">
+              <input
+                type="text"
+                class="form-control"
+                id="educationInput"
+                formControlName="education"
+                placeholder="e.g., Stanford University"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3 row">
+            <label for="languagesInput" class="col-sm-2 col-form-label">
+              <i class="las la-language fs-22 me-2"></i>
+            </label>
+            <div class="col-sm-10">
+              <input
+                type="text"
+                class="form-control"
+                id="languagesInput"
+                formControlName="languages"
+                placeholder="e.g., English, French, Spanish"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3 row">
+            <label for="phoneNumberInput" class="col-sm-2 col-form-label">
+              <i class="las la-phone fs-22 me-2"></i>
+            </label>
+            <div class="col-sm-10">
+              <input
+                type="text"
+                class="form-control"
+                id="phoneNumberInput"
+                formControlName="phoneNumber"
+                placeholder="e.g., +1234567890"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3 row">
+            <label for="emailInput" class="col-sm-2 col-form-label">
+              <i class="las la-envelope fs-22 me-2"></i>
+            </label>
+            <div class="col-sm-10">
+              <input
+                type="email"
+                class="form-control"
+                id="emailInput"
+                formControlName="email"
+                placeholder="e.g., user[at]example.com"
+              />
+              <small class="text-muted">Email cannot be edited here.</small>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-10 ms-auto">
+              <button type="button" class="btn btn-primary me-0.5" (click)="saveProfile()" [disabled]="isFormInvalid">Submit</button>
+              <button type="button" class="btn btn-danger" (click)="toggleEdit()">Cancel</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Social Media Section -->
+    <div class="row justify-content-center mt-4" *ngIf="!isEditing">
+      <div class="col-auto text-end border-end">
+        <span
+          class="thumb-md justify-content-center d-flex align-items-center bg-blue text-white rounded-circle ms-auto mb-1"
+        >
+          <i class="fab fa-facebook-f"></i>
+        </span>
+        <p class="mb-0 fw-semibold">Facebook</p>
+        <h4 class="m-0 fw-bold">
+          {{ socialMedia.facebook.followers }}
+          <span class="text-muted fs-12 fw-normal">Followers</span>
+        </h4>
+      </div>
+      <div class="col-auto">
+        <span
+          class="thumb-md justify-content-center d-flex align-items-center bg-black text-white rounded-circle mb-1"
+        >
+          <i class="fab fa-x-twitter"></i>
+        </span>
+        <p class="mb-0 fw-semibold">Twitter</p>
+        <h4 class="m-0 fw-bold">
+          {{ socialMedia.twitter.followers }}
+          <span class="text-muted fs-12 fw-normal">Followers</span>
+        </h4>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Error Message -->
+<div *ngIf="error" class="alert alert-danger mt-3">
+  {{ error }}
+</div>

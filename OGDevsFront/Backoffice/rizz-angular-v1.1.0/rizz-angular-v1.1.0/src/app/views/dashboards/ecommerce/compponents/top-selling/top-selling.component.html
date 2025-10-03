@@ -1,0 +1,49 @@
+<div class="card">
+  <card-title title="Top Selling by Country" selected="This Month" />
+  <div class="card-body pt-0">
+    <div class="table-responsive">
+      <table class="table mb-0">
+        <tbody>
+          @for (item of sellingList; track $index) {
+            <tr class="">
+              <td class="px-0">
+                <div class="d-flex align-items-center">
+                  <img
+                    [src]="item.flag"
+                    class="me-2 align-self-center thumb-md rounded-circle"
+                    alt="..."
+                  />
+                  <div class="flex-grow-1 text-truncate">
+                    <h6 class="m-0 text-truncate">{{ item.name }}</h6>
+                    <div class="d-flex align-items-center">
+                      <ngb-progressbar
+                        class="progress bg-primary-subtle w-100"
+                        [value]="item.progress"
+                        style="height: 5px"
+                      />
+                      <small class="flex-shrink-1 ms-1"
+                        >{{ item.progress }}%</small
+                      >
+                    </div>
+                  </div>
+                  <!--end media body-->
+                </div>
+                <!--end media-->
+              </td>
+              <td class="px-0 text-end">
+                <span class="text-body ps-2 align-self-center text-end"
+                  >{{ currency }}{{ item.sales.toFixed(2) }}</span
+                >
+              </td>
+            </tr>
+            <!--end tr-->
+          }
+        </tbody>
+      </table>
+      <!--end table-->
+    </div>
+    <!--end /div-->
+  </div>
+  <!--end card-body-->
+</div>
+<!--end card-->

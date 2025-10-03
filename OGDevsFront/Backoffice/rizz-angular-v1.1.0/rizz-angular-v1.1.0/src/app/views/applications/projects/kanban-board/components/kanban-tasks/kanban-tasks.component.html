@@ -1,0 +1,202 @@
+  <div class="kanban-board">
+    @for (data of sectionsData; track $index) {
+      <div class="kanban-col" [attr.data-section-id]="data.id">
+        <div class="my-3">
+          <div
+            class="d-flex justify-content-between align-items-center border-bottom border-2 border-{{
+              getTaskVarient(data.title)
+            }}"
+          >
+            <div>
+              <h6 class="fw-semibold fs-16 text-muted mb-1">{{ data.title }}</h6>
+              <h6 class="fs-13 fw-semibold">
+                {{ getTaskPerSection(data.id).length }} Tasks
+              </h6>
+            </div>
+            <div ngbDropdown>
+              <a
+                class="text-secondary me-1 add-btn cursor-pointer"
+                (click)="OpenTaskModel(addtask, data.id)"
+              >
+                <i class="fa-solid fa-plus fs-18"></i>
+              </a>
+              <a
+                ngbDropdownToggle
+                class="dropdown-toggle arrow-none text-secondary"
+                data-bs-toggle="dropdown"
+                role="button"
+                aria-haspopup="false"
+                aria-expanded="false"
+              >
+                <i class="fa-solid fa-ellipsis fs-18"></i>
+              </a>
+              <div
+                ngbDropdownMenu
+                class="dropdown-menu dropdown-menu-end"
+                data-popper-placement="bottom-end"
+              >
+                <a class="dropdown-item" href="javascript:void(0);"
+                  ><i class="las la-pen fs-16 me-1 align-text-bottom"></i> Edit</a
+                >
+                <a class="dropdown-item text-danger" (click)="deleteTask(data.id)"
+                  ><i class="las la-trash fs-16 me-1 align-text-bottom"></i>
+                  Delete</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--end /div-->
+
+        <div
+          id="project-list-left"
+          dragula="DRAGULA_FACTS"
+          [dragulaModel]="taskList"
+          [attr.data-section-id]="data.id"
+          class="pt-1"
+        >
+          @for (task of taskList; track $index) {
+            @if (task.sectionId == data.id) {
+              <app-kanban-card [task]="task" [attr.data-task-id]="task.id" />
+            }
+          }
+        </div>
+        <!--end project-list-left-->
+        <a
+          class="btn btn-outline-primary w-100"
+          (click)="OpenTaskModel(addtask, data.id)"
+        >
+          <i class="fa-solid fa-plus me-1"></i> Add New Task</a
+        >
+      </div>
+      <!--end kanban-col-->
+    }
+  </div>
+  <!--end kanban-->
+
+  <ng-template #addtask let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title m-0">Add New Task</h6>
+      <button
+        type="button"
+        class="btn-close"
+        (click)="modal.dismiss()"
+        aria-label="Close"
+      ></button>
+    </div>
+    <!--end modal-header-->
+    <div class="modal-body">
+      <form [formGroup]="taskForm">
+        <div class="mb-3 row">
+          <label
+            for="inputTaskTitle1"
+            class="col-sm-3 col-form-label text-end fw-medium"
+            >Task Title :</label
+          >
+          <div class="col-sm-9">
+            <input
+              type="text"
+              formControlName="title"
+              class="form-control"
+              id="inputTaskTitle1"
+              [ngClass]="{ 'is-invalid': submitted && form['title'].errors }"
+            />
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+        <div class="mb-3 row">
+          <label
+            for="inputTaskID"
+            class="col-sm-3 col-form-label text-end fw-medium"
+            >Task ID :</label
+          >
+          <div class="col-sm-9">
+            <input
+              type="text"
+              formControlName="id"
+              class="form-control"
+              id="inputTaskID"
+              [ngClass]="{ 'is-invalid': submitted && form['id'].errors }"
+            />
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+        <div class="mb-3 row">
+          <label
+            for="inputAssigned"
+            class="col-sm-3 col-form-label text-end fw-medium"
+            >Assigned to:</label
+          >
+          <div class="col-sm-9">
+            <input
+              type="text"
+              formControlName="assigned"
+              class="form-control"
+              id="inputAssigned"
+              [ngClass]="{ 'is-invalid': submitted && form['assigned'].errors }"
+            />
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+        <div class="mb-3 row">
+          <label
+            for="inputDescription"
+            class="col-sm-3 col-form-label text-end fw-medium"
+            >Description:</label
+          >
+          <div class="col-sm-9">
+            <textarea
+              type="text"
+              formControlName="description"
+              class="form-control"
+              id="inputDescription"
+              rows="2"
+              [ngClass]="{
+                'is-invalid': submitted && form['description'].errors,
+              }"
+            ></textarea>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+        <div class="row">
+          <label
+            for="inputPriority"
+            class="col-sm-3 col-form-label text-end fw-medium"
+            >Priority:</label
+          >
+          <div class="col-sm-9">
+            <select
+              class="form-select"
+              formControlName="priority"
+              aria-label=""
+              [ngClass]="{ 'is-invalid': submitted && form['priority'].errors }"
+            >
+              <option value="Low" selected>Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </form>
+    </div>
+    <!--end modal-body-->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary btn-sm" (click)="addTask()">
+        Save
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-danger btn-sm"
+        (click)="modal.dismiss()"
+      >
+        Close
+      </button>
+    </div>
+    <!--end modal-footer--> </ng-template
+  ><!--end modal-->

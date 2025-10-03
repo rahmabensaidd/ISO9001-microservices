@@ -1,0 +1,216 @@
+<div>
+  <div class="card-body">
+    <div class="d-block d-md-flex justify-content-between align-items-center">
+      <div class="d-flex align-self-center mb-2 mb-md-0">
+        <div class="img-group d-inline-flex justify-content-center">
+          <a
+            class="user-avatar position-relative d-inline-block"
+            href="javascript:void(0);"
+          >
+            <img
+              src="assets/images/users/avatar-1.jpg"
+              alt="avatar"
+              class="thumb-md shadow-sm rounded-circle"
+            />
+          </a>
+          <a
+            class="user-avatar position-relative d-inline-block ms-n2"
+            href="javascript:void(0);"
+          >
+            <img
+              src="assets/images/users/avatar-2.jpg"
+              alt="avatar"
+              class="thumb-md shadow-sm rounded-circle"
+            />
+          </a>
+          <a
+            class="user-avatar position-relative d-inline-block ms-n2"
+            href="javascript:void(0);"
+          >
+            <img
+              src="assets/images/users/avatar-4.jpg"
+              alt="avatar"
+              class="thumb-md shadow-sm rounded-circle"
+            />
+          </a>
+          <a
+            class="user-avatar position-relative d-inline-block ms-n2"
+            href="javascript:void(0);"
+          >
+            <img
+              src="assets/images/users/avatar-5.jpg"
+              alt="avatar"
+              class="thumb-md shadow-sm rounded-circle"
+            />
+          </a>
+          <a
+            class="user-avatar position-relative d-inline-block ms-n2"
+            href="javascript:void(0);"
+          >
+            <img
+              src="assets/images/users/avatar-4.jpg"
+              alt="avatar"
+              class="thumb-md shadow-sm rounded-circle"
+            />
+          </a>
+          <a
+            class="user-avatar position-relative d-inline-block ms-n2"
+            href="javascript:void(0);"
+          >
+            <img
+              src="assets/images/users/avatar-6.jpg"
+              alt="avatar"
+              class="thumb-md shadow-sm rounded-circle"
+            />
+          </a>
+          <a href="" class="user-avatar position-relative d-inline-block ms-1">
+            <span
+              class="thumb-md shadow-sm justify-content-center d-flex align-items-center bg-info-subtle rounded-circle fw-semibold fs-6"
+              >+6</span
+            >
+          </a>
+        </div>
+        <button type="button" class="btn card-bg text-primary shadow-sm ms-2">
+          <i class="fa-solid fa-plus me-1"></i> Invite
+        </button>
+      </div>
+      <div class="align-self-center">
+        <form class="row g-2">
+          <div class="col-auto">
+            <label for="inputsearch" class="visually-hidden">Search</label>
+            <input
+              type="search"
+              class="form-control"
+              id="inputsearch"
+              placeholder="Search"
+            />
+          </div>
+          <!--end col-->
+          <div ngbDropdown class="col-auto">
+            <a
+              ngbDropdownToggle
+              class="btn card-bg text-primary shadow-sm dropdown-toggle arrow-none"
+              data-bs-toggle="dropdown"
+              role="button"
+              aria-haspopup="false"
+              aria-expanded="false"
+              data-bs-auto-close="outside"
+            >
+              <i class="iconoir-filter-alt"></i> Filter
+            </a>
+            <div ngbDropdownMenu class="dropdown-menu dropdown-menu-start">
+              <div class="p-2">
+                <div class="form-check mb-2">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    checked
+                    id="filter-all"
+                  />
+                  <label class="form-check-label" for="filter-all"> All </label>
+                </div>
+                <div class="form-check mb-2">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    checked
+                    id="filter-one"
+                  />
+                  <label class="form-check-label" for="filter-one">
+                    Design
+                  </label>
+                </div>
+                <div class="form-check mb-2">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    checked
+                    id="filter-two"
+                  />
+                  <label class="form-check-label" for="filter-two">
+                    UI/UX
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    checked
+                    id="filter-three"
+                  />
+                  <label class="form-check-label" for="filter-three">
+                    Backend
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--end col-->
+
+          <div class="col-auto">
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="open(addBoard)"
+            >
+              <i class="fa-solid fa-plus me-1"></i> Add Task
+            </button>
+          </div>
+          <!--end col-->
+        </form>
+      </div>
+    </div>
+  </div>
+  <!--end card-body-->
+</div>
+<!--end card-->
+
+<ng-template #addBoard let-modal>
+  <div class="modal-header">
+    <h6 class="modal-title m-0">Add New Board</h6>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="modal.dismiss()"
+      aria-label="Close"
+    ></button>
+  </div>
+  <!--end modal-header-->
+  <div class="modal-body">
+    <div class="row">
+      <label
+        for="inputTaskTitle"
+        class="col-sm-3 col-form-label text-end fw-medium"
+        >Board Title :</label
+      >
+      <div class="col-sm-9">
+        <input
+          type="text"
+          [(ngModel)]="title"
+          class="form-control"
+          id="inputTaskTitle"
+        />
+      </div>
+      <!--end col-->
+    </div>
+    <!--end row-->
+  </div>
+  <!--end modal-body-->
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-primary btn-sm"
+      (click)="addTaskBoard()"
+    >
+      Save
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-danger btn-sm"
+      (click)="modal.dismiss()"
+    >
+      Close
+    </button>
+  </div>
+  <!--end modal-footer--> </ng-template
+><!--end modal-->

@@ -1,0 +1,39 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row align-items-center">
+      <div class="col">
+        <h4 class="card-title">Top Country</h4>
+      </div>
+      <!--end col-->
+    </div>
+    <!--end row-->
+  </div>
+  <!--end card-header-->
+  <div class="card-body pt-0">
+    @for (item of countries; track $index; let last = $last) {
+      <div
+        class="d-flex align-items-center"
+        [ngClass]="last ? 'pt-3' : 'border-dashed-bottom py-3'"
+      >
+        <img
+          [src]="item.flag_image"
+          class="thumb-sm align-self-center rounded-circle"
+          alt="..."
+        />
+        <div class="flex-grow-1 ms-2">
+          <h5 class="m-0">{{ item.value }}</h5>
+          <p class="text-muted mb-0">
+            {{ item.country }} . Last Month
+            <span class="text-success"
+              >{{ item.percentage }}% <i class="mdi mdi-arrow-up"></i
+            ></span>
+          </p>
+        </div>
+        <!--end media-body-->
+      </div>
+      <!--end media-->
+    }
+  </div>
+  <!--end card-body-->
+</div>
+<!--end card-->

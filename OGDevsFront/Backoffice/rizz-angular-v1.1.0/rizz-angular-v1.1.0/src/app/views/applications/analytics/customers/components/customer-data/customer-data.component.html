@@ -1,0 +1,30 @@
+<div class="card">
+  <card-title title="Customers Data" selected="This Year" />
+  <div class="card-body pt-0">
+    <div class="row g-3">
+      @for (item of customerData; track $index) {
+        <div class="col-md-6 col-lg-6">
+          <div class="card shadow-none border mb-3 mb-lg-0">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col text-center">
+                  <span class="fs-18 fw-semibold">{{ item.value }}</span>
+                  <h6 class="text-uppercase text-muted mt-2 m-0">
+                    {{ item.title }}
+                  </h6>
+                </div>
+                <!--end col-->
+              </div>
+            </div>
+            <!--end card-body-->
+          </div>
+          <!--end card-body-->
+        </div>
+      }
+      <!--end col-->
+    </div>
+    <!--end row-->
+  </div>
+  <!--end card-body-->
+</div>
+<!--end card-->

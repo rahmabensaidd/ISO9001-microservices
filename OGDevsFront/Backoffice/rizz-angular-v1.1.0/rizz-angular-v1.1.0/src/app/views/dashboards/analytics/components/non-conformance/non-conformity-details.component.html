@@ -1,0 +1,160 @@
+<div class="container-fluid">
+  <div class="card">
+    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+      <h4 class="mb-0">Non-Conformity Details</h4>
+      <button class="btn btn-secondary" (click)="goBack()">
+        <i class="iconoir-arrow-left me-2"></i>Back to List
+      </button>
+    </div>
+    <div class="card-body">
+      <div *ngIf="selectedNonConformity" class="row">
+        <div class="col-md-8">
+          <!-- Basic Information -->
+          <div class="mb-4">
+            <h5 class="text-primary">Basic Information</h5>
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <tbody>
+                  <tr>
+                    <th width="200">ID</th>
+                    <td>{{ selectedNonConformity.idNonConformity }}</td>
+                  </tr>
+                  <tr>
+                    <th>Source</th>
+                    <td>{{ selectedNonConformity.source }}</td>
+                  </tr>
+                  <tr>
+                    <th>Description</th>
+                    <td>{{ selectedNonConformity.description }}</td>
+                  </tr>
+                  <tr>
+                    <th>Creation Date</th>
+                    <td>{{ selectedNonConformity.date_creation | date:'medium' }}</td>
+                  </tr>
+                  <tr>
+                    <th>Status</th>
+                    <td>
+                      <span [class]="'badge ' + (selectedNonConformity.status === 'OPEN' ? 'bg-danger' : 
+                        selectedNonConformity.status === 'IN_PROGRESS' ? 'bg-warning' : 'bg-success')">
+                        {{ selectedNonConformity.status }}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Indicator Information -->
+          <div class="mb-4">
+            <h5 class="text-primary">Indicator Information</h5>
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <tbody>
+                  <tr>
+                    <th width="200">Indicator ID</th>
+                    <td>{{ selectedNonConformity.indicator?.idIndicateur || 'N/A' }}</td>
+                  </tr>
+                  <tr>
+                    <th>Indicator Code</th>
+                    <td>{{ selectedNonConformity.indicator?.code || 'N/A' }}</td>
+                  </tr>
+                  <tr>
+                    <th>Indicator Name</th>
+                    <td>{{ selectedNonConformity.indicator?.libelle || 'N/A' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Fix Information -->
+          <div class="mb-4" *ngIf="selectedNonConformity.fixDate || selectedNonConformity.fixedBy || selectedNonConformity.actionTaken">
+            <h5 class="text-primary">Fix Information</h5>
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <tbody>
+                  <tr>
+                    <th width="200">Fixed By</th>
+                    <td>{{ selectedNonConformity.fixedBy || 'Not fixed yet' }}</td>
+                  </tr>
+                  <tr>
+                    <th>Fix Date</th>
+                    <td>{{ selectedNonConformity.fixDate | date:'medium' || 'Not fixed yet' }}</td>
+                  </tr>
+                  <tr>
+                    <th>Action Taken</th>
+                    <td>{{ selectedNonConformity.actionTaken || 'No action recorded' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Attachments -->
+          <div class="mb-4" *ngIf="selectedNonConformity.attachments?.length">
+            <h5 class="text-primary">Attachments</h5>
+            <div class="list-group">
+              <a *ngFor="let attachment of selectedNonConformity.attachments" 
+                 href="#" 
+                 class="list-group-item list-group-item-action">
+                <i class="iconoir-attachment me-2"></i>{{ attachment }}
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <!-- Status Card -->
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Current Status</h5>
+              <div [class]="'alert ' + (selectedNonConformity.status === 'OPEN' ? 'alert-danger' : 
+                selectedNonConformity.status === 'IN_PROGRESS' ? 'alert-warning' : 'alert-success')">
+                <h5 class="alert-heading">
+                  <i class="iconoir-warning-circle me-2"></i>{{ selectedNonConformity.status }}
+                </h5>
+                <p class="mb-0" *ngIf="selectedNonConformity.status === 'OPEN'">
+                  This non-conformity requires immediate attention.
+                </p>
+                <p class="mb-0" *ngIf="selectedNonConformity.status === 'IN_PROGRESS'">
+                  This non-conformity is being addressed.
+                </p>
+                <p class="mb-0" *ngIf="selectedNonConformity.status === 'FIXED'">
+                  This non-conformity has been resolved.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="d-grid gap-2">
+            <button class="btn btn-danger" 
+                    (click)="fixNonConformity()"
+                    *ngIf="selectedNonConformity.status !== 'FIXED'">
+              <i class="iconoir-check me-2"></i>Fix Non-Conformity
+            </button>
+            <button class="btn btn-primary" 
+                    (click)="openEditModal()"
+                    *ngIf="selectedNonConformity.status !== 'FIXED'">
+              <i class="iconoir-edit me-2"></i>Edit Details
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading state -->
+      <div *ngIf="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+
+      <!-- Error state -->
+      <div *ngIf="error" class="alert alert-danger">
+        <i class="iconoir-warning-circle me-2"></i>
+        {{ error }}
+      </div>
+    </div>
+  </div>
+</div>

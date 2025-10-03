@@ -1,0 +1,111 @@
+<div class="card">
+  <div class="card-body border-dashed-bottom pb-3">
+    <div class="row d-flex justify-content-between">
+      <div class="col-auto">
+        <div
+          class="d-flex justify-content-center align-items-center thumb-xl border border-secondary rounded-circle"
+        >
+          <i
+            class="icofont-money-bag h1 align-self-center mb-0 text-secondary"
+          ></i>
+        </div>
+        <h5 class="mt-2 mb-0 fs-14">Total Revenue</h5>
+      </div>
+      <!--end col-->
+      <div class="col align-self-center">
+        <div id="line-1" class="apex-charts float-end">
+          <apx-chart
+            [chart]="line1Chart.chart!"
+            [series]="line1Chart.series!"
+            [colors]="line1Chart.colors!"
+            [stroke]="line1Chart.stroke!"
+            [tooltip]="line1Chart.tooltip!"
+          ></apx-chart>
+        </div>
+      </div>
+      <!--end col-->
+    </div>
+    <!--end row-->
+  </div>
+  <!--end card-body-->
+  <div class="card-body">
+    <div class="row d-flex justify-content-center">
+      <div class="col-12 col-md-6">
+        <h2 class="fs-22 mt-0 mb-1 fw-bold">{{ currency }}8365.00</h2>
+        <p class="mb-0 text-truncate text-muted">
+          <span class="text-success"
+            ><i class="mdi mdi-trending-up"></i>8.5%</span
+          >
+          New Sessions Today
+        </p>
+      </div>
+      <!--end col-->
+      <div class="col-12 col-md-6 align-self-center text-start text-md-end">
+        <button type="button" class="btn btn-primary btn-sm px-2 mt-2 mt-md-0">
+          View Report
+        </button>
+      </div>
+      <!--end col-->
+    </div>
+    <!--end row-->
+  </div>
+  <!--end card-body-->
+</div>
+<!--end card-->
+<div class="card">
+  <div class="card-body border-dashed-bottom pb-3">
+    <div class="row d-flex justify-content-between">
+      <div class="col-auto">
+        <div
+          class="d-flex justify-content-center align-items-center thumb-xl border border-secondary rounded-circle"
+        >
+          <i
+            class="icofont-opencart h1 align-self-center mb-0 text-secondary"
+          ></i>
+        </div>
+        <h5 class="mt-2 mb-0 fs-14">New Order</h5>
+      </div>
+      <!--end col-->
+      <div class="col align-self-center">
+        <div id="line-2" class="apex-charts float-end">
+          <apx-chart
+            [chart]="line2Chart.chart!"
+            [series]="line2Chart.series!"
+            [colors]="line2Chart.colors!"
+            [stroke]="line2Chart.stroke!"
+            [tooltip]="line2Chart.tooltip!"
+          ></apx-chart>
+        </div>
+      </div>
+      <!--end col-->
+    </div>
+    <!--end row-->
+  </div>
+  <!--end card-body-->
+  <div class="card-body">
+    <div class="row d-flex justify-content-center">
+      <div class="col-12 col-md-6">
+        <h2 class="fs-22 mt-0 mb-1 fw-bold">722</h2>
+        <p class="mb-0 text-truncate text-muted">
+          <span class="text-success"
+            ><i class="mdi mdi-trending-up"></i>8.5%</span
+          >
+          New Sessions Today
+        </p>
+      </div>
+      <!--end col-->
+      <div class="col-12 col-md-6 align-self-center text-start text-md-end">
+        <button
+          type="button"
+          class="btn btn-outline-secondary btn-sm px-2 mt-2 mt-md-0"
+        >
+          View Report
+        </button>
+      </div>
+      <!--end col-->
+    </div>
+    <!--end row-->
+  </div>
+  <!--end card-body-->
+</div>
+<!--end card-->

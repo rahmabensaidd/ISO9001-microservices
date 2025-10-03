@@ -1,0 +1,61 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row align-items-center">
+      <div class="col">
+        <h4 class="card-title">Traffic Sources</h4>
+      </div>
+      <!--end col-->
+      <div class="col-auto">
+        <div ngbDropdown class="dropdown">
+          <a
+            ngbDropdownToggle
+            class="btn bt btn-light dropdown-toggle"
+            data-bs-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <i class="icofont-search-user fs-5 me-1"></i>
+            Direct<i class="las la-angle-down ms-1"></i>
+          </a>
+          <div ngbDropdownMenu class="dropdown-menu dropdown-menu-end">
+            <a class="dropdown-item" href="javascript:void(0);">Email</a>
+            <a class="dropdown-item" href="javascript:void(0);">Referral</a>
+            <a class="dropdown-item" href="javascript:void(0);">Direct</a>
+            <a class="dropdown-item" href="javascript:void(0);">Organic</a>
+            <a class="dropdown-item" href="javascript:void(0);">Campaign</a>
+          </div>
+        </div>
+      </div>
+      <!--end col-->
+    </div>
+    <!--end row-->
+  </div>
+  <!--end card-header-->
+  <div class="card-body pt-0">
+    <div class>
+      <div id="traffic_sources" class="apex-charts d-block w-90 mx-auto">
+        <apx-chart
+          [chart]="trafficChart.chart!"
+          [series]="trafficChart.series!"
+          [plotOptions]="trafficChart.plotOptions!"
+          [stroke]="trafficChart.stroke!"
+          [colors]="trafficChart.colors!"
+          [grid]="trafficChart.grid!"
+          [labels]="trafficChart.labels!"
+          [responsive]="trafficChart.responsive!"
+        ></apx-chart>
+      </div>
+      <hr class="hr-dashed border-secondary w-25 mt-0 mx-auto" />
+    </div>
+    <div class="text-center">
+      <h4>Direct Visitors</h4>
+      <p class="text-muted mt-2">
+        This is a simple hero unit, a simple jumbotron-style component
+      </p>
+      <button type="button" class="btn btn-outline-primary px-3 mt-2">
+        More details
+      </button>
+    </div>
+  </div>
+  <!--end card-body-->
+</div>

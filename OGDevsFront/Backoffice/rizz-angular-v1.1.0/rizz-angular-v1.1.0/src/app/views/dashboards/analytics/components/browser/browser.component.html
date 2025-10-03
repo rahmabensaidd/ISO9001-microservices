@@ -1,0 +1,52 @@
+<div class="card card-h-100">
+  <div class="card-header">
+    <div class="row align-items-center">
+      <div class="col">
+        <h4 class="card-title">Browser Used & Traffic Reports</h4>
+      </div>
+    </div>
+  </div>
+  <!--end card-header-->
+  <div class="card-body pt-0">
+    <div class="table-responsive browser_users">
+      <table class="table mb-0">
+        <thead class="table-light">
+          <tr>
+            <th class="border-top-0">Browser</th>
+            <th class="border-top-0">Sessions</th>
+            <th class="border-top-0">Bounce Rate</th>
+            <th class="border-top-0">Transactions</th>
+          </tr>
+          <!--end tr-->
+        </thead>
+        <tbody>
+          @for (data of BrowserData; track $index) {
+            <tr>
+              <td>
+                <img [src]="data.image" alt height="24" class="me-2" />{{
+                  data.browser
+                }}
+              </td>
+              <td>
+                {{ data.sessions.split(' ')[0]
+                }}<small class="text-muted">{{
+                  data.sessions.split(' ')[1]
+                }}</small>
+              </td>
+              <td>{{ data.bounce_rate }}</td>
+              <td>
+                {{ data.transactions.split(' ')[0]
+                }}<small class="text-muted">{{
+                  data.transactions.split(' ')[1]
+                }}</small>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <!--end table-->
+    </div>
+    <!--end /div-->
+  </div>
+  <!--end card-body-->
+</div>

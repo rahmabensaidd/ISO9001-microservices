@@ -1,0 +1,80 @@
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-8">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white">
+        <h4 class="card-title">Upload File for Audit</h4>
+      </div>
+      <div class="card-body pt-3">
+        <p class="text-muted">Choose a PDF or TXT file, then click "Confirm Upload".</p>
+
+        <input
+          type="file"
+          id="input-file"
+          accept=".pdf,.txt"
+          (change)="onFileSelected($event)"
+          hidden
+        />
+        <div class="d-grid gap-2">
+          <label class="btn btn-outline-primary" for="input-file">Choose a File</label>
+          <button class="btn btn-primary" (click)="onUpload()" [disabled]="!selectedFile">Confirm Upload</button>
+        </div>
+
+        <div *ngIf="error" class="mt-4 alert alert-danger">
+          {{ error }}
+        </div>
+
+        <div *ngIf="filename" class="mt-4">
+          <h5>Results:</h5>
+          <div class="card">
+            <div class="card-body">
+              <p><strong>File Name:</strong> {{ filename }}</p>
+              <p><strong>Size:</strong> {{ fileSize | number }} bytes</p>
+              <p><strong>Non-Conformity (Text Preview):</strong></p>
+              <pre class="border rounded p-3">{{ textPreview }}</pre>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="suggestions.length > 0" class="mt-4">
+          <h5>Correction Proposals:</h5>
+          <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+            <tr>
+              <th style="width: 5%;">Select</th>
+              <th>Proposal</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let suggestion of suggestions; let i = index; trackBy: trackBySuggestion">
+              <td>
+                <input
+                  type="checkbox"
+                  [(ngModel)]="selectedSuggestions[i]"
+                  (change)="onSuggestionToggle(i)"
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="suggestions[i]"
+                  [disabled]="!selectedSuggestions[i]"
+                />
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <div class="d-grid gap-2 mt-3">
+            <button
+              class="btn btn-success"
+              (click)="onSave()"
+              [disabled]="!selectedSuggestions.includes(true)"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

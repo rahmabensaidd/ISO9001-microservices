@@ -1,0 +1,45 @@
+<div class="card">
+  <card-title title="Recents Order" selected="This Month" />
+  <div class="card-body pt-0">
+    <div class="table-responsive">
+      <table class="table mb-0">
+        <tbody>
+          @for (order of orderList; track $index) {
+            <tr class="">
+              <td class="px-0">
+                <div class="d-flex align-items-center">
+                  <img
+                    [src]="order.avatar"
+                    height="36"
+                    class="me-2 align-self-center rounded"
+                    alt="..."
+                  />
+                  <div class="flex-grow-1 text-truncate">
+                    <h6 class="m-0 text-truncate">{{ order.name }}</h6>
+                    <a
+                      href="javascript:void(0);"
+                      class="font-12 text-muted text-decoration-underline"
+                      >{{ order.id }}</a
+                    >
+                  </div>
+                  <!--end media body-->
+                </div>
+                <!--end media-->
+              </td>
+              <td class="px-0 text-end">
+                <span class="text-primary ps-2 align-self-center text-end"
+                  >{{ currency }}{{ order.amount.toFixed(2) }}</span
+                >
+              </td>
+            </tr>
+            <!--end tr-->
+          }
+        </tbody>
+      </table>
+      <!--end table-->
+    </div>
+    <!--end /div-->
+  </div>
+  <!--end card-body-->
+</div>
+<!--end card-->

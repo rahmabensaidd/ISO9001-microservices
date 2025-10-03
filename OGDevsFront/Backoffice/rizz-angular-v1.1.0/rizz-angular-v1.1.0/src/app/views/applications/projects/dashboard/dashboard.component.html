@@ -1,0 +1,227 @@
+<div class="container mt-4">
+  <div class="row">
+    <!-- Colonne gauche : Conversion et Historique -->
+    <div class="col-lg-6">
+      <!-- Section de conversion -->
+      <div class="card mb-4">
+        <div class="card-header text-center">We Use Mid-Market Exchange Rates</div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3">
+              <input type="number" class="form-control" [(ngModel)]="amount" placeholder="Amount" />
+            </div>
+            <div class="col-md-3" *ngIf="currenciesLoaded && availableCurrencies.length > 0; else loadingCurrencies">
+              <ng-select
+                [items]="availableCurrencies"
+                bindValue="currency"
+                [(ngModel)]="fromCurrency"
+                [disabled]="!ratesLoaded"
+                placeholder="Sélectionner une devise source"
+                [searchable]="true"
+                [clearable]="false"
+                class="custom-ng-select"
+                (change)="fromCurrency = $event">
+              </ng-select>
+            </div>
+            <div class="col-md-3" *ngIf="currenciesLoaded && availableCurrencies.length > 0; else loadingCurrencies">
+              <ng-select
+                [items]="availableCurrencies"
+                bindValue="currency"
+                [(ngModel)]="toCurrency"
+                [disabled]="!ratesLoaded"
+                placeholder="Sélectionner une devise cible"
+                [searchable]="true"
+                [clearable]="false"
+                class="custom-ng-select"
+                (change)="toCurrency = $event">
+              </ng-select>
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-success w-100" (click)="convertCurrency(conversionResultModal)">CONVERT</button>
+            </div>
+          </div>
+          <ng-template #loadingCurrencies>
+            <div class="col-md-3">
+              <p class="text-muted">Chargement des devises...</p>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- Historique des conversions -->
+      <div class="card mb-4">
+        <div class="card-header">Historique des Conversions</div>
+        <div class="card-body">
+          <div *ngIf="conversionHistory.length > 0; else noConversions">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>Montant</th>
+                <th>De</th>
+                <th>À</th>
+                <th>Montant Converti</th>
+                <th>Date</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let history of conversionHistory">
+                <td>{{ history.amount }}</td>
+                <td>{{ history.fromCurrency }}</td>
+                <td>{{ history.toCurrency }}</td>
+                <td>{{ history.convertedAmount | number:'1.6-6' }}</td>
+                <td>{{ history.timestamp | date:'short' }}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <ng-template #noConversions>
+            <p class="text-center">Pas de conversion disponible</p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <!-- Colonne droite : Tableau des taux -->
+    <div class="col-lg-6">
+      <!-- Tableau des taux -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-md-6">
+              <h5>Taux de Change Actuels</h5>
+            </div>
+            <div class="col-md-6">
+              <div class="input-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="searchTerm"
+                  (ngModelChange)="onSearchChange($event)"
+                  placeholder="Rechercher une devise..."
+                  [disabled]="!ratesLoaded"
+                />
+                <button class="btn btn-primary" (click)="loadRates()">Rafraîchir les taux</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <table class="table table-striped" *ngIf="ratesLoaded; else noRatesMessage">
+            <thead>
+            <tr>
+              <th>Devise</th>
+              <th (click)="sortRates('rate', true)">Taux (USD) ↑</th>
+              <th (click)="sortRates('rate', false)">Taux (USD) ↓</th>
+              <th>Variation</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let rate of getPaginatedRates()">
+              <td>{{ rate.currency }}</td>
+              <td>{{ rate.rate | number:'1.4-4' }}</td>
+              <td>{{ rate.rate | number:'1.4-4' }}</td>
+              <td>
+                <span *ngIf="compareRates(rate.rate, rate.previousRate) > 0" class="arrow up">↑</span>
+                <span *ngIf="compareRates(rate.rate, rate.previousRate) < 0" class="arrow down">↓</span>
+                <span *ngIf="compareRates(rate.rate, rate.previousRate) === 0">-</span>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <ng-template #noRatesMessage>
+            <p class="text-center">Veuillez cliquer sur "Rafraîchir les taux" pour charger les données.</p>
+          </ng-template>
+
+          <div class="d-flex justify-content-between p-2" *ngIf="ratesLoaded && totalItems > 0">
+            <ngb-pagination
+              [collectionSize]="totalItems"
+              [(page)]="currentPage"
+              [pageSize]="pageSize"
+              [maxSize]="1"
+              [boundaryLinks]="true"
+              [ellipses]="false"
+              [rotate]="false">
+            </ngb-pagination>
+
+            <select
+              class="form-select"
+              style="width: auto"
+              [(ngModel)]="pageSize"
+              (ngModelChange)="updatePagination()">
+              <option [ngValue]="5">5 items per page</option>
+              <option [ngValue]="10">10 items per page</option>
+              <option [ngValue]="20">20 items per page</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Graphique avec ApexCharts (pleine largeur) -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-4" *ngIf="ratesLoaded">
+        <div class="card-header">Comparaison des Taux Actuels (Top 10)</div>
+        <div class="card-body">
+          <div class="chart-container">
+            <apx-chart
+              [series]="chartOptions.series"
+              [chart]="chartOptions.chart"
+              [plotOptions]="chartOptions.plotOptions"
+              [dataLabels]="chartOptions.dataLabels"
+              [xaxis]="chartOptions.xaxis"
+              [yaxis]="chartOptions.yaxis"
+              [title]="chartOptions.title"
+              [colors]="chartOptions.colors"
+              [grid]="chartOptions.grid"
+              [tooltip]="chartOptions.tooltip">
+            </apx-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal pour le résultat de la conversion -->
+  <ng-template #conversionResultModal let-modal>
+    <div class="modal-header">
+      <h6 class="modal-title m-0">Conversion Result</h6>
+      <button
+        type="button"
+        class="btn-close"
+        (click)="modal.dismiss()"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <div class="row mb-3">
+        <label class="col-sm-4 col-form-label text-end fw-medium">Converted Amount:</label>
+        <div class="col-sm-8">
+          <p class="form-control-static">{{ amount }} {{ fromCurrency }} = {{ convertedAmount | number:'1.6-6' }} {{ toCurrency }}</p>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label class="col-sm-4 col-form-label text-end fw-medium">Conversion Rate:</label>
+        <div class="col-sm-8">
+          <p class="form-control-static">{{ conversionRate }}</p>
+        </div>
+      </div>
+      <div class="row">
+        <label class="col-sm-4 col-form-label text-end fw-medium">Inverse Rate:</label>
+        <div class="col-sm-8">
+          <p class="form-control-static">{{ inverseRate }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline-danger btn-sm"
+        (click)="modal.dismiss()"
+      >
+        Close
+      </button>
+    </div>
+  </ng-template>
+</div>

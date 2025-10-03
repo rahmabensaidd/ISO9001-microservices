@@ -1,0 +1,774 @@
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Basic Line Chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="apex_line1" class="apex-charts">
+          <apx-chart
+            [series]="apexLine1.series!"
+            [chart]="apexLine1.chart!"
+            [colors]="apexLine1.colors!"
+            [dataLabels]="apexLine1.dataLabels!"
+            [stroke]="apexLine1.stroke!"
+            [grid]="apexLine1.grid!"
+            [xaxis]="apexLine1.xaxis!"
+          />
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Line with Data Labels</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="apex_line2" class="apex-charts">
+          <apx-chart
+            [series]="apexLine2.series!"
+            [chart]="apexLine2.chart!"
+            [stroke]="apexLine2.stroke!"
+            [dataLabels]="apexLine2.dataLabels!"
+            [markers]="apexLine2.markers!"
+            [fill]="apexLine2.fill!"
+            [yaxis]="apexLine2.yaxis!"
+            [xaxis]="apexLine2.xaxis!"
+            [colors]="apexLine2.colors!"
+            [tooltip]="apexLine2.tooltip!"
+          />
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Basic Area Chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="apex_area1" class="apex-charts">
+          <apx-chart
+            [markers]="apexArea2.markers!"
+            [tooltip]="apexArea2.tooltip!"
+            [legend]="apexArea1.legend!"
+            [fill]="apexArea1.fill!"
+            [series]="apexArea1.series!"
+            [chart]="apexArea1.chart!"
+            [colors]="apexArea1.colors!"
+            [dataLabels]="apexArea1.dataLabels!"
+            [stroke]="apexArea1.stroke!"
+            [grid]="apexArea1.grid!"
+            [xaxis]="apexArea1.xaxis!"
+          />
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Area Chart - Datetime X-Axis</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div class="toolbar">
+          <button class="btn btn-sm btn-outline-light me-0.5" id="one_month">
+            1M
+          </button>
+          <button class="btn btn-sm btn-outline-light me-0.5" id="six_months">
+            6M
+          </button>
+          <button
+            class="btn btn-sm btn-outline-light active me-0.5"
+            id="one_year"
+          >
+            1Y
+          </button>
+          <button class="btn btn-sm btn-outline-light me-0.5" id="ytd">
+            YTD
+          </button>
+          <button class="btn btn-sm btn-outline-light" id="all">ALL</button>
+        </div>
+        <div id="apex_area2" class="apex-charts">
+          <apx-chart
+            [annotations]="apexArea2.annotations!"
+            [fill]="apexArea2.fill!"
+            [markers]="apexArea2.markers!"
+            [tooltip]="apexArea2.tooltip!"
+            [series]="apexArea2.series!"
+            [chart]="apexArea2.chart!"
+            [colors]="apexArea2.colors!"
+            [dataLabels]="apexArea2.dataLabels!"
+            [stroke]="apexArea2.stroke!"
+            [grid]="apexArea2.grid!"
+            [xaxis]="apexArea2.xaxis!"
+          />
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Basic Column Chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="apex_column1" class="apex-charts">
+          <apx-chart
+            [yaxis]="apexColumn1.yaxis!"
+            [fill]="apexColumn1.fill!"
+            [plotOptions]="apexColumn1.plotOptions!"
+            [tooltip]="apexColumn1.tooltip!"
+            [legend]="apexColumn1.legend!"
+            [series]="apexColumn1.series!"
+            [chart]="apexColumn1.chart!"
+            [colors]="apexColumn1.colors!"
+            [dataLabels]="apexColumn1.dataLabels!"
+            [stroke]="apexColumn1.stroke!"
+            [grid]="apexColumn1.grid!"
+            [xaxis]="apexColumn1.xaxis!"
+          />
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Column Chart With Datalabels</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="apex_column2" class="apex-charts">
+          <apx-chart
+            [series]="apexColumn2.series!"
+            [chart]="apexColumn2.chart!"
+            [colors]="apexColumn2.colors!"
+            [dataLabels]="apexColumn2.dataLabels!"
+            [stroke]="apexColumn2.stroke!"
+            [grid]="apexColumn2.grid!"
+            [xaxis]="apexColumn2.xaxis!"
+            [plotOptions]="apexColumn2.plotOptions!"
+            [xaxis]="apexColumn2.xaxis!"
+            [title]="apexColumn2.title!"
+            [yaxis]="apexColumn2.yaxis!"
+            [fill]="apexColumn2.fill!"
+            [plotOptions]="apexColumn2.plotOptions!"
+          />
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Basic Bar Chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="apex_bar" class="apex-charts">
+          <apx-chart
+            [plotOptions]="apexBar.plotOptions!"
+            [series]="apexBar.series!"
+            [chart]="apexBar.chart!"
+            [colors]="apexBar.colors!"
+            [dataLabels]="apexBar.dataLabels!"
+            [stroke]="apexBar.stroke!"
+            [grid]="apexBar.grid!"
+            [xaxis]="apexBar.xaxis!"
+            [plotOptions]="apexBar.plotOptions!"
+            [yaxis]="apexBar.yaxis!"
+          />
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Multiple Y-Axis Chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="apex_mixed" class="apex-charts">
+          <apx-chart
+            [series]="apexMixed.series!"
+            [chart]="apexMixed.chart!"
+            [colors]="apexMixed.colors!"
+            [dataLabels]="apexMixed.dataLabels!"
+            [legend]="apexMixed.legend!"
+            [responsive]="apexMixed.responsive!"
+            [tooltip]="apexMixed.tooltip!"
+            [yaxis]="apexMixed.yaxis!"
+            [stroke]="apexMixed.stroke!"
+            [grid]="apexMixed.grid!"
+            [xaxis]="apexMixed.xaxis!"
+          />
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">3D Bubble Chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="apex_bubble" class="apex-charts">
+          <apx-chart
+            [series]="apexBubble.series!"
+            [fill]="apexBubble.fill!"
+            [chart]="apexBubble.chart!"
+            [colors]="apexBubble.colors!"
+            [dataLabels]="apexBubble.dataLabels!"
+            [stroke]="apexBubble.stroke!"
+            [grid]="apexBubble.grid!"
+            [xaxis]="apexBubble.xaxis!"
+          />
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Simple Candlestick Chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="apex_candlestick" class="apex-charts">
+          <apx-chart
+            [yaxis]="apexCandlestick.yaxis!"
+            [series]="apexCandlestick.series!"
+            [chart]="apexCandlestick.chart!"
+            [colors]="apexCandlestick.colors!"
+            [dataLabels]="apexCandlestick.dataLabels!"
+            [stroke]="apexCandlestick.stroke!"
+            [grid]="apexCandlestick.grid!"
+            [xaxis]="apexCandlestick.xaxis!"
+          />
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Basic Treemap</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="treemap_1" class="apex-charts">
+          <apx-chart
+            [series]="treemap1.series!"
+            [chart]="treemap1.chart!"
+            [colors]="treemap1.colors!"
+            [dataLabels]="treemap1.dataLabels!"
+            [stroke]="treemap1.stroke!"
+            [grid]="treemap1.grid!"
+            [xaxis]="treemap1.xaxis!"
+          />
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Treemap Color</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="treemap_2" class="apex-charts">
+          <apx-chart
+            [series]="treemap2.series!"
+            [chart]="treemap2.chart!"
+            [colors]="treemap2.colors!"
+            [legend]="treemap2.legend!"
+            [stroke]="treemap2.stroke!"
+            [grid]="treemap2.grid!"
+            [plotOptions]="treemap2.plotOptions!"
+          />
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Polar Area</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="polar_Area_1" class="apex-charts">
+          <apx-chart
+            [responsive]="polarArea1.responsive!"
+            [plotOptions]="polarArea1.plotOptions!"
+            [series]="polarArea1.series!"
+            [fill]="polarArea1.fill!"
+            [chart]="polarArea1.chart!"
+            [colors]="polarArea1.colors!"
+            [dataLabels]="polarArea1.dataLabels!"
+            [stroke]="polarArea1.stroke!"
+            [grid]="polarArea1.grid!"
+            [xaxis]="polarArea1.xaxis!"
+          />
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Monochrome</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="polar_Area_2" class="apex-charts">
+          <apx-chart
+            [legend]="polarArea2.legend!"
+            [plotOptions]="polarArea2.plotOptions!"
+            [labels]="polarArea2.labels!"
+            [series]="polarArea2.series!"
+            [theme]="polarArea2.theme!"
+            [fill]="polarArea2.fill!"
+            [yaxis]="polarArea2.yaxis!"
+            [chart]="polarArea2.chart!"
+            [colors]="polarArea2.colors!"
+            [dataLabels]="polarArea2.dataLabels!"
+            [stroke]="polarArea2.stroke!"
+            [yaxis]="polarArea2.yaxis!"
+          />
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Simple Pie Chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="apex_pie1" class="apex-charts">
+          <apx-chart
+            [noData]="apexPie1.noData!"
+            [responsive]="apexPie1.responsive!"
+            [legend]="apexPie1.legend!"
+            [series]="apexPie1.series!"
+            [chart]="apexPie1.chart!"
+            [colors]="apexPie1.colors!"
+            [dataLabels]="apexPie1.dataLabels!"
+            [stroke]="apexPie1.stroke!"
+            [grid]="apexPie1.grid!"
+            [xaxis]="apexPie1.xaxis!"
+          />
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Gradient Donut Chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="apex_pie2" class="apex-charts">
+          <apx-chart
+            [fill]="apexPie2.fill!"
+            [noData]="apexPie2.noData!"
+            [legend]="apexPie2.legend!"
+            [series]="apexPie2.series!"
+            [chart]="apexPie2.chart!"
+            [labels]="apexPie2.labels!"
+            [responsive]="apexPie2.responsive!"
+            [colors]="apexPie2.colors!"
+            [dataLabels]="apexPie2.dataLabels!"
+            [stroke]="apexPie2.stroke!"
+            [grid]="apexPie2.grid!"
+            [xaxis]="apexPie2.xaxis!"
+          />
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Patterned Donut Chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="apex_pie3" class="apex-charts">
+          <apx-chart
+            [series]="apexPie3.series!"
+            [chart]="apexPie3.chart!"
+            [colors]="apexPie3.colors!"
+            [dataLabels]="apexPie3.dataLabels!"
+            [noData]="apexPie3.noData!"
+            [responsive]="apexPie3.responsive!"
+            [stroke]="apexPie3.stroke!"
+            [legend]="apexPie3.legend!"
+            [fill]="apexPie3.fill!"
+            [grid]="apexPie3.grid!"
+            [xaxis]="apexPie3.xaxis!"
+          />
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Basic RadialBar Chart</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="apex_radialbar1" class="apex-charts">
+          <apx-chart
+            [series]="apexRadialbar1.series!"
+            [chart]="apexRadialbar1.chart!"
+            [colors]="apexRadialbar1.colors!"
+            [dataLabels]="apexRadialbar1.dataLabels!"
+            [stroke]="apexRadialbar1.stroke!"
+            [grid]="apexRadialbar1.grid!"
+            [xaxis]="apexRadialbar1.xaxis!"
+            [plotOptions]="apexRadialbar1.plotOptions!"
+            [labels]="apexRadialbar1.labels!"
+          />
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Multiple RadialBars</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="apex_radialbar2" class="apex-charts">
+          <apx-chart
+            [series]="apexRadialbar2.series!"
+            [plotOptions]="apexRadialbar2.plotOptions!"
+            [chart]="apexRadialbar2.chart!"
+            [dataLabels]="apexRadialbar2.dataLabels!"
+          />
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+  <div class="col-md-6 col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Stroked Circular Guage</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div id="apex_radialbar3" class="apex-charts">
+          <apx-chart
+            [series]="apexRadialbar3.series!"
+            [chart]="apexRadialbar3.chart!"
+            [colors]="apexRadialbar3.colors!"
+            [dataLabels]="apexRadialbar3.dataLabels!"
+            [fill]="apexRadialbar3.fill!"
+            [plotOptions]="apexRadialbar3.plotOptions!"
+            [stroke]="apexRadialbar3.stroke!"
+            [grid]="apexRadialbar3.grid!"
+            [xaxis]="apexRadialbar3.xaxis!"
+            [labels]="apexRadialbar3.labels!"
+          />
+        </div>
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
+
+<div class="row justify-content-center">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Sparkline inline</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div class="row">
+          <div class="col-md-4">
+            <div id="spark1" class="apex-charts">
+              <apx-chart
+                [series]="spark1.series!"
+                [subtitle]="spark1.subtitle!"
+                [yaxis]="spark1.yaxis!"
+                [chart]="spark1.chart!"
+                [title]="spark1.title!"
+                [colors]="spark1.colors!"
+                [fill]="spark1.fill!"
+                [stroke]="spark1.stroke!"
+                [grid]="spark1.grid!"
+                [fill]="spark1.fill!"
+              />
+            </div>
+          </div>
+          <!--end col-->
+          <div class="col-md-4">
+            <div id="spark2" class="apex-charts">
+              <apx-chart
+                [series]="spark2.series!"
+                [subtitle]="spark2.subtitle!"
+                [yaxis]="spark1.yaxis!"
+                [chart]="spark2.chart!"
+                [title]="spark2.title!"
+                [colors]="spark2.colors!"
+                [dataLabels]="spark2.dataLabels!"
+                [stroke]="spark2.stroke!"
+                [grid]="spark2.grid!"
+                [xaxis]="spark2.xaxis!"
+              />
+            </div>
+          </div>
+          <!--end col-->
+          <div class="col-md-4">
+            <div id="spark3" class="apex-charts">
+              <apx-chart
+                [series]="spark3.series!"
+                [subtitle]="spark3.subtitle!"
+                [yaxis]="spark1.yaxis!"
+                [chart]="spark3.chart!"
+                [title]="spark3.title!"
+                [colors]="spark3.colors!"
+                [dataLabels]="spark3.dataLabels!"
+                [stroke]="spark3.stroke!"
+                [grid]="spark3.grid!"
+                [xaxis]="spark3.xaxis!"
+              />
+            </div>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  <!--end col-->
+</div>
+<!--end row-->
